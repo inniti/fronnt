@@ -1,0 +1,14 @@
+.eslintignore
+.gitignore
+.eslintrc.json
+shims.d.ts
+.prettierrc.json
+build.js
+tsconfig.json
+src
+schema
+codegen.yml
+.idea
+.eslintcache
+.husky
+graphql.schema.json

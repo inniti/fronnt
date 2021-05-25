@@ -1,0 +1,757 @@
+"""
+Status of a product
+"""
+enum ProductStatus {
+  DRAFT
+  PUBLISHED
+  DISCONTINUED
+}
+
+"""
+Status of an article
+"""
+enum ArticleStatus {
+  DRAFT
+  PUBLISHED
+  DISCONTINUED
+}
+
+"""
+Type of a media object
+"""
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+"""
+Type of a suggestion entry
+"""
+enum SuggestionType {
+  PRODUCT
+  ARTICLE
+  BRAND
+  CATEGORY
+}
+
+enum SortValue {
+  ASC
+  DESC
+}
+
+enum ResolveUrlResultType {
+  CATEGORY
+  PRODUCT
+  ARTICLE
+  BRAND
+}
+
+interface PagedResult {
+  paging: Paging!
+}
+
+####################################################################################
+# Types
+####################################################################################
+
+"""
+General purpose error object
+"""
+type Error {
+  code: String
+  message: String
+}
+
+"""
+Shop specific settings and configuration
+"""
+type Shop {
+  pricePrecision: Int
+}
+
+"""
+Result of a mutation which deletes objects
+"""
+type DeleteResult {
+  success: Boolean!
+  error: Error
+}
+
+"""
+Paging information
+"""
+type Paging {
+  total: Int
+  limit: Int
+  page: Int
+}
+
+"""
+A media object
+"""
+type Media {
+  type: MediaType!
+  url: String!
+}
+
+"""
+Meta data for SEO
+"""
+type Meta {
+  description: String
+  title: String
+  robots: String
+}
+
+"""
+Tells how many items of an article are available
+"""
+type Availability {
+  value: Int!
+}
+
+"""
+Coupons can be applied to a cart and reduce the grad total
+"""
+type Coupon {
+  key: String!
+  label: String
+  value: Int!
+}
+
+"""
+An Instance of a shopping cart
+"""
+type Cart {
+  id: ID!
+  createdAt: String
+  items: [CartItem!]!
+  coupons: [Coupon!]!
+}
+
+"""
+Custom data which can be set per CartItem
+"""
+type CustomCartItemData {
+  positionText: String
+}
+
+"""
+A cart line item
+"""
+type CartItem {
+  id: ID!
+  cartId: ID!
+  createdAt: String
+  articleId: ID!
+  article: Article
+  parentItemId: ID
+  parent: CartItem
+  quantity: Int!
+  salesUnitId: ID!
+  salesUnit: SalesUnit
+  children: [CartItem!]!
+  customData: CustomCartItemData
+}
+
+"""
+Result of a carts query
+"""
+type CartsResult implements PagedResult {
+  paging: Paging!
+  results: [Cart!]
+}
+
+"""
+The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable.
+"""
+type Product {
+  id: ID!
+  title: String!
+  articleIds: [String!]!
+  categoryIds: [ID!]!
+  media: [Media!]!
+  description: String
+  brandId: ID
+  brand: Brand
+  labels: [String!]!
+  superAttributeDefinitions: [AttributeDefinition!]!
+  attributes: [Attribute]!
+  createdAt: String
+  updatedAt: String
+  slug: String
+  meta: Meta
+  status: ProductStatus
+  articles(
+    filters: [ArticlesSearchFiltersInput!]
+    sort: [SortInput!]
+    paging: PagingInput
+    customQueryConditions: [CustomQueryConditionInput!]
+  ): ArticlesResult
+  categories(customQueryConditions: [CustomQueryConditionInput!]): [Category!]
+}
+
+"""
+Definition of a product attribute
+"""
+type AttributeDefinition {
+  id: ID!
+  name: String!
+  label: String
+  super: Boolean
+  type: String
+}
+
+"""
+A concrete product attribute (value)
+"""
+type Attribute {
+  definition: AttributeDefinition!
+  value: String
+}
+
+"""
+An article is a concrete shape of a product
+"""
+type Article {
+  id: ID!
+  sku: String!
+  title: String!
+  productId: ID!
+  media: [Media!]!
+  description: String
+  brandId: ID
+  brand: Brand
+  isBuyable: Boolean
+  isMaster: Boolean
+  labels: [String!]!
+  attributes: [Attribute!]!
+  meta: Meta
+  prices(quantity: Int): [Price!]!
+  referencePrice: ReferencePrice
+  availabilities: [Availability!]!
+  status: ArticleStatus
+  product: Product
+  salesUnits: [SalesUnit!]!
+  baseUnit: BaseUnit
+}
+
+"""
+Value of a product list filter
+"""
+type ProductListFilterValue {
+  type: String!
+  value: String
+  applied: Boolean!
+  count: Int
+}
+
+"""
+Product list filter
+"""
+type ProductListFilter {
+  id: ID!
+  name: String
+  type: String!
+  values: [ProductListFilterValue!]
+}
+
+"""
+Value of an article list filter
+"""
+type ArticleListFilterValue {
+  type: String!
+  value: String
+  applied: Boolean!
+  count: Int
+}
+
+"""
+Article list filter
+"""
+type ArticleListFilter {
+  id: ID!
+  name: String
+  type: String!
+  values: [ArticleListFilterValue!]
+}
+
+"""
+Sorting option
+"""
+type Sorting {
+  id: String!
+  label: String!
+  applied: Boolean!
+}
+
+"""
+Categories are hierarchical containers for products
+"""
+type Category {
+  id: ID!
+  title: String!
+  media: [Media!]
+  description: String
+  childrenIds: [String]!
+  parentId: ID
+  slug: String
+  meta: Meta
+  products(
+    query: String
+    filters: [ProductsSearchFiltersInput!]
+    sort: [SortInput!]
+    paging: PagingInput
+    customQueryConditions: [CustomQueryConditionInput!]
+  ): ProductsResult
+  parent: Category
+  children(
+    customQueryConditions: [CustomQueryConditionInput!]
+  ): CategoriesResult
+}
+
+"""
+Brand
+"""
+type Brand {
+  id: ID!
+  title: String!
+  media: [Media!]
+  slug: String
+  description: String
+  meta: Meta
+  categoryIds: [String!]!
+  categories(
+    customQueryConditions: [CustomQueryConditionInput!]
+  ): CategoriesResult
+  products(
+    query: String
+    filters: [ProductsSearchFiltersInput!]
+    sort: [SortInput!]
+    paging: PagingInput
+    customQueryConditions: [CustomQueryConditionInput!]
+  ): ProductsResult
+}
+
+"""
+Search Suggestion
+"""
+type Suggestion {
+  type: SuggestionType
+  resultId: ID!
+  title: String
+  slug: String
+}
+
+"""
+Paged result of a product list
+"""
+type ProductsResult implements PagedResult {
+  paging: Paging!
+  results: [Product!]
+  filters: [ProductListFilter!]
+  sortings: [Sorting!]
+}
+
+"""
+Paged result of a category list
+"""
+type CategoriesResult implements PagedResult {
+  paging: Paging!
+  results: [Category!]
+}
+
+"""
+Paged result of an article list
+"""
+type ArticlesResult implements PagedResult {
+  paging: Paging!
+  results: [Article!]
+  filters: [ArticleListFilter!]
+  sortings: [Sorting!]
+}
+
+"""
+Paged result of a brand list
+"""
+type BrandsResult implements PagedResult {
+  paging: Paging!
+  results: [Brand!]
+}
+
+"""
+Container for payment information
+"""
+type PaymentInfo {
+  method: String!
+}
+
+"""
+Checkout state
+"""
+type CheckoutState {
+  id: ID!
+  payment: PaymentInfo
+  shippingAddress: Address
+  billingAddress: Address
+}
+
+interface AddressFields {
+  name: String!
+  street: String!
+  zipCode: String!
+  city: String!
+  country: String!
+}
+
+"""
+An address
+"""
+type Address implements AddressFields {
+  name: String!
+  street: String!
+  zipCode: String!
+  city: String!
+  country: String!
+}
+
+"""
+A saved address of a customer
+"""
+type CustomerAddress implements AddressFields {
+  id: ID!
+  name: String!
+  street: String!
+  zipCode: String!
+  city: String!
+  country: String!
+}
+
+"""
+Order
+"""
+type Order {
+  id: ID!
+  createdAt: String!
+  items: [OrderItem!]
+  billingAddress: Address!
+  shippingAddress: Address!
+  payment: PaymentInfo!
+}
+
+"""
+Order item
+"""
+type OrderItem {
+  id: ID!
+  sku: ID!
+  article: Article
+  quantity: Int!
+  price: Int!
+  orderId: ID!
+}
+
+"""
+Paged result of an order list
+"""
+type OrdersResult implements PagedResult {
+  paging: Paging!
+  results: [Order!]
+}
+
+"""
+Currency
+"""
+type Currency {
+  name: String!
+  symbol: String!
+}
+
+"""
+Tax class
+"""
+type TaxClass {
+  id: ID!
+  name: String!
+  "Fractional value in percent applied to the net amount, e.g. 19"
+  value: Int!
+}
+
+"""
+A sales unit is the unit in which an article is sold. Every article has to have at least SalesUnit, usually "piece"
+"""
+type SalesUnit {
+  id: ID!
+  name: String!
+  "Factor which defines how to convert its BaseUnit to this SalesUnit"
+  conversion: Int!
+}
+
+"""
+The base unit is used for all internal calculations
+"""
+type BaseUnit {
+  id: ID!
+  name: String!
+  minQuantity: Int
+  maxQuantity: Int
+  standardQuantity: Int
+  interval: Int
+}
+
+"""
+A reference price provides a baseline with which prices of different articles can be compared, even though these
+articles might be sond in different SalesUnits.
+"""
+type ReferencePrice {
+  quantity: Int!
+  value: Int!
+  salesUnit: SalesUnit!
+  taxClass: TaxClass!
+  currency: Currency!
+}
+
+"""
+Prices (and their related quantities) always refer to the BaseUnit of an article
+"""
+type Price {
+  currency: Currency!
+  quantity: Int!
+  netValue: Int!
+  taxClass: TaxClass!
+  validFrom: String
+  validUntil: String
+  original: Int
+  discount: Int
+}
+
+"""
+Wishlist
+"""
+type Wishlist {
+  id: ID!
+  items(customQueryConditions: [CustomQueryConditionInput!]): [WishlistItem!]!
+}
+
+"""
+Wishlist item
+"""
+type WishlistItem {
+  id: ID!
+  articleId: ID!
+  article: Article
+}
+
+"""
+Paged result of a wishlist list
+"""
+type WishlistsResult implements PagedResult {
+  paging: Paging!
+  results: [Wishlist!]
+}
+
+"""
+Saved Customer
+"""
+type Customer {
+  id: ID!
+  customerNumber: String!
+  firstname: String
+  lastname: String
+  blocked: Boolean!
+  email: String!
+  addresses: [CustomerAddress!]
+}
+
+type ResolveUrlResult {
+  resolved: Boolean
+  resultId: ID
+  resultType: ResolveUrlResultType
+  redirectUrl: String
+}
+
+####################################################################################
+# Inputs
+####################################################################################
+
+"""
+Sort specifier
+"""
+input SortInput {
+  field: String!
+  value: SortValue!
+}
+
+"""
+Paging specifier
+"""
+input PagingInput {
+  limit: Int!
+  page: Int!
+}
+
+"""
+Custom cart item data
+"""
+input CartItemCustomDataInput {
+  positionText: String
+}
+
+"""
+Update cart item data
+"""
+input UpdateCartItemInput {
+  quantity: Int
+  salesUnitId: ID
+  customData: CartItemCustomDataInput
+}
+
+"""
+One item to be added to the cart
+"""
+input AddToCartItemInput {
+  sku: ID!
+  quantity: Int!
+  salesUnitId: ID
+  parentCartItemId: ID
+  customData: CartItemCustomDataInput
+}
+
+"""
+Product list search filters
+"""
+input ProductsSearchFiltersInput {
+  name: String!
+  values: [String!]!
+}
+
+"""
+Article list search filters
+"""
+input ArticlesSearchFiltersInput {
+  name: String!
+  values: [String!]!
+}
+
+"""
+Address data
+"""
+input AddressInput {
+  name: String!
+  street: String!
+  zipCode: String!
+  city: String!
+  country: String!
+}
+
+"""
+Checkout data to be updated
+"""
+input UpdateCheckoutInput {
+  email: String
+  billingAddress: AddressInput
+  shippingAddress: AddressInput
+}
+
+"""
+Customer data for registration
+"""
+input RegistrationInput {
+  email: String!
+  firstname: String
+  lastname: String
+  password: String
+}
+
+"""
+Customer data to be updated
+"""
+input UpdateCustomerInput {
+  email: String
+  firstname: String
+  lastname: String
+}
+
+"""
+Custom query condition applied to filterable list queries
+"""
+input CustomQueryConditionInput {
+  field: String!
+  operator: String!
+  value: String!
+}
+
+####################################################################################
+# Root
+####################################################################################
+
+type Query {
+  shop: Shop
+
+  products(
+    query: String
+    filters: [ProductsSearchFiltersInput!]
+    sort: [SortInput!]
+    paging: PagingInput
+    customQueryConditions: [CustomQueryConditionInput!]
+  ): ProductsResult
+  product(id: ID!): Product
+  productBySlug(slug: String!): Product
+  article(id: ID!): Article
+  brands(
+    paging: PagingInput
+    customQueryConditions: [CustomQueryConditionInput!]
+  ): BrandsResult
+  brand(id: ID!): Brand
+  brandBySlug(slug: String!): Brand
+  categories(
+    customQueryConditions: [CustomQueryConditionInput!]
+  ): CategoriesResult
+  category(id: ID!): Category
+  categoryBySlug(slug: String!): Category
+  suggestions(
+    searchTerm: String
+    customQueryConditions: [CustomQueryConditionInput!]
+  ): [Suggestion!]!
+
+  carts(customQueryConditions: [CustomQueryConditionInput!]): CartsResult
+  cart(id: ID!): Cart
+
+  wishlists(
+    sort: [SortInput!]
+    customQueryConditions: [CustomQueryConditionInput!]
+  ): WishlistsResult
+  wishlist(id: ID!): Wishlist
+
+  orders(
+    paging: PagingInput
+    sort: [SortInput!]
+    customQueryConditions: [CustomQueryConditionInput!]
+  ): OrdersResult
+  order(id: ID!): Order
+
+  customer: Customer
+
+  resolveUrl(url: String): ResolveUrlResult
+}
+
+type Mutation {
+  createCart: Cart
+  deleteCart(id: ID!): DeleteResult
+  addToCart(cartId: ID!, items: [AddToCartItemInput!]!): [CartItem!]
+  updateCartItem(id: ID!, data: UpdateCartItemInput): CartItem
+  removeFromCart(cartItemId: ID!): DeleteResult
+  applyCoupon(cartId: ID!, coupon: String!): Cart
+
+  createWishlist: Wishlist
+  deleteWishlist: DeleteResult
+  addToWishlist(wishlistId: ID!): Wishlist
+  removeFromWishlist(wishlistItemId: ID!): DeleteResult
+
+  startCheckout(cartId: ID!, data: UpdateCheckoutInput!): CheckoutState
+  updateCheckout(cartId: ID!, data: UpdateCheckoutInput!): CheckoutState
+  finishCheckout(cartId: ID!): Order
+
+  register(data: RegistrationInput!): Customer
+  updateCustomer(id: ID!, data: UpdateCustomerInput!): Customer
+}
