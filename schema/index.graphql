@@ -104,10 +104,20 @@ type Meta {
 }
 
 """
+A warehouse
+"""
+type Warehouse {
+  id: ID!
+  name: String!
+}
+
+"""
 Tells how many items of an article are available
 """
 type Availability {
   value: Int!
+  warehouseId: ID!
+  warehouse: Warehouse!
 }
 
 """

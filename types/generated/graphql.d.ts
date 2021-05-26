@@ -143,6 +143,8 @@ export interface AttributeDefinition {
 export interface Availability {
   __typename?: 'Availability';
   value: Scalars['Int'];
+  warehouseId: Scalars['ID'];
+  warehouse: Warehouse;
 }
 
 /** The base unit is used for all internal calculations */
@@ -778,6 +780,13 @@ export interface UpdateCustomerInput {
   lastname?: Maybe<Scalars['String']>;
 }
 
+/** A warehouse */
+export interface Warehouse {
+  __typename?: 'Warehouse';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+}
+
 /** Wishlist */
 export interface Wishlist {
   __typename?: 'Wishlist';
@@ -997,6 +1006,7 @@ export type ResolversTypes = {
   UpdateCartItemInput: UpdateCartItemInput;
   UpdateCheckoutInput: UpdateCheckoutInput;
   UpdateCustomerInput: UpdateCustomerInput;
+  Warehouse: ResolverTypeWrapper<Warehouse>;
   Wishlist: ResolverTypeWrapper<Wishlist>;
   WishlistItem: ResolverTypeWrapper<WishlistItem>;
   WishlistsResult: ResolverTypeWrapper<WishlistsResult>;
@@ -1076,6 +1086,7 @@ export type ResolversParentTypes = {
   UpdateCartItemInput: UpdateCartItemInput;
   UpdateCheckoutInput: UpdateCheckoutInput;
   UpdateCustomerInput: UpdateCustomerInput;
+  Warehouse: Warehouse;
   Wishlist: Wishlist;
   WishlistItem: WishlistItem;
   WishlistsResult: WishlistsResult;
@@ -1256,6 +1267,8 @@ export type AvailabilityResolvers<
   ParentType extends ResolversParentTypes['Availability'] = ResolversParentTypes['Availability']
 > = {
   value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  warehouseId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  warehouse?: Resolver<ResolversTypes['Warehouse'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2092,6 +2105,15 @@ export type TaxClassResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type WarehouseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Warehouse'] = ResolversParentTypes['Warehouse']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type WishlistResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Wishlist'] = ResolversParentTypes['Wishlist']
@@ -2177,6 +2199,7 @@ export type Resolvers<ContextType = any> = {
   Sorting?: SortingResolvers<ContextType>;
   Suggestion?: SuggestionResolvers<ContextType>;
   TaxClass?: TaxClassResolvers<ContextType>;
+  Warehouse?: WarehouseResolvers<ContextType>;
   Wishlist?: WishlistResolvers<ContextType>;
   WishlistItem?: WishlistItemResolvers<ContextType>;
   WishlistsResult?: WishlistsResultResolvers<ContextType>;
