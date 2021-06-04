@@ -622,7 +622,7 @@ input AddToCartItemInput {
 Product list search filters
 """
 input ProductsSearchFiltersInput {
-  name: String!
+  id: ID!
   values: [String!]!
 }
 
@@ -630,7 +630,7 @@ input ProductsSearchFiltersInput {
 Article list search filters
 """
 input ArticlesSearchFiltersInput {
-  name: String!
+  id: ID!
   values: [String!]!
 }
 

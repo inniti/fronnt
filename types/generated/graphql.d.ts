@@ -118,7 +118,7 @@ export interface ArticlesResult extends PagedResult {
 
 /** Article list search filters */
 export interface ArticlesSearchFiltersInput {
-  name: Scalars['String'];
+  id: Scalars['ID'];
   values: Array<Scalars['String']>;
 }
 
@@ -559,7 +559,7 @@ export interface ProductsResult extends PagedResult {
 
 /** Product list search filters */
 export interface ProductsSearchFiltersInput {
-  name: Scalars['String'];
+  id: Scalars['ID'];
   values: Array<Scalars['String']>;
 }
 

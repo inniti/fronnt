@@ -1084,14 +1084,14 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "name",
+            "name": "id",
             "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "ID",
                 "ofType": null
               }
             },
@@ -4842,14 +4842,14 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "name",
+            "name": "id",
             "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "ID",
                 "ofType": null
               }
             },
