@@ -58,7 +58,7 @@ interface PagedResult {
 General purpose error object
 """
 type Error {
-  code: String
+  code: String!
   message: String
 }
 
@@ -66,7 +66,7 @@ type Error {
 Shop specific settings and configuration
 """
 type Shop {
-  pricePrecision: Int
+  pricePrecision: Int!
 }
 
 """
@@ -81,7 +81,7 @@ type DeleteResult {
 Paging information
 """
 type Paging {
-  total: Int
+  total: Int!
   limit: Int
   page: Int
 }
@@ -98,8 +98,8 @@ type Media {
 Meta data for SEO
 """
 type Meta {
-  description: String
-  title: String
+  description: String!
+  title: String!
   robots: String
 }
 
@@ -159,7 +159,7 @@ type CartItem {
   parent: CartItem
   quantity: Int!
   salesUnitId: ID!
-  salesUnit: SalesUnit
+  salesUnit: SalesUnit!
   children: [CartItem!]!
   customData: CustomCartItemData
 }
@@ -169,7 +169,7 @@ Result of a carts query
 """
 type CartsResult implements PagedResult {
   paging: Paging!
-  results: [Cart!]
+  results: [Cart!]!
 }
 
 """
@@ -181,7 +181,7 @@ type Product {
   articleIds: [String!]!
   categoryIds: [ID!]!
   media: [Media!]!
-  description: String
+  description: String!
   brandId: ID
   brand: Brand
   labels: [String!]!
@@ -189,9 +189,9 @@ type Product {
   attributes: [Attribute]!
   createdAt: String
   updatedAt: String
-  slug: String
-  meta: Meta
-  status: ProductStatus
+  slug: String!
+  meta: Meta!
+  status: ProductStatus!
   articles(
     filters: [ArticlesSearchFiltersInput!]
     sort: [SortInput!]
@@ -208,8 +208,8 @@ type AttributeDefinition {
   id: ID!
   name: String!
   label: String
-  super: Boolean
-  type: String
+  super: Boolean!
+  type: String!
 }
 
 """
@@ -217,7 +217,7 @@ A concrete product attribute (value)
 """
 type Attribute {
   definition: AttributeDefinition!
-  value: String
+  value: String!
 }
 
 """
@@ -232,18 +232,18 @@ type Article {
   description: String
   brandId: ID
   brand: Brand
-  isBuyable: Boolean
-  isMaster: Boolean
+  isBuyable: Boolean!
+  isMaster: Boolean!
   labels: [String!]!
   attributes: [Attribute!]!
-  meta: Meta
+  meta: Meta!
   prices(quantity: Int): [Price!]!
   referencePrice: ReferencePrice
   availabilities: [Availability!]!
-  status: ArticleStatus
+  status: ArticleStatus!
   product: Product
   salesUnits: [SalesUnit!]!
-  baseUnit: BaseUnit
+  baseUnit: BaseUnit!
 }
 
 """
@@ -251,9 +251,9 @@ Value of a product list filter
 """
 type ProductListFilterValue {
   type: String!
-  value: String
+  value: String!
   applied: Boolean!
-  count: Int
+  count: Int!
 }
 
 """
@@ -263,7 +263,7 @@ type ProductListFilter {
   id: ID!
   name: String
   type: String!
-  values: [ProductListFilterValue!]
+  values: [ProductListFilterValue!]!
 }
 
 """
@@ -273,7 +273,7 @@ type ArticleListFilterValue {
   type: String!
   value: String
   applied: Boolean!
-  count: Int
+  count: Int!
 }
 
 """
@@ -283,7 +283,7 @@ type ArticleListFilter {
   id: ID!
   name: String
   type: String!
-  values: [ArticleListFilterValue!]
+  values: [ArticleListFilterValue!]!
 }
 
 """
@@ -305,8 +305,8 @@ type Category {
   description: String
   childrenIds: [String]!
   parentId: ID
-  slug: String
-  meta: Meta
+  slug: String!
+  meta: Meta!
   products(
     query: String
     filters: [ProductsSearchFiltersInput!]
@@ -327,9 +327,9 @@ type Brand {
   id: ID!
   title: String!
   media: [Media!]
-  slug: String
-  description: String
-  meta: Meta
+  slug: String!
+  description: String!
+  meta: Meta!
   categoryIds: [String!]!
   categories(
     customQueryConditions: [CustomQueryConditionInput!]
@@ -347,9 +347,9 @@ type Brand {
 Search Suggestion
 """
 type Suggestion {
-  type: SuggestionType
+  type: SuggestionType!
   resultId: ID!
-  title: String
+  title: String!
   slug: String
 }
 
@@ -358,9 +358,9 @@ Paged result of a product list
 """
 type ProductsResult implements PagedResult {
   paging: Paging!
-  results: [Product!]
-  filters: [ProductListFilter!]
-  sortings: [Sorting!]
+  results: [Product!]!
+  filters: [ProductListFilter!]!
+  sortings: [Sorting!]!
 }
 
 """
@@ -368,7 +368,7 @@ Paged result of a category list
 """
 type CategoriesResult implements PagedResult {
   paging: Paging!
-  results: [Category!]
+  results: [Category!]!
 }
 
 """
@@ -376,9 +376,9 @@ Paged result of an article list
 """
 type ArticlesResult implements PagedResult {
   paging: Paging!
-  results: [Article!]
-  filters: [ArticleListFilter!]
-  sortings: [Sorting!]
+  results: [Article!]!
+  filters: [ArticleListFilter!]!
+  sortings: [Sorting!]!
 }
 
 """
@@ -386,7 +386,7 @@ Paged result of a brand list
 """
 type BrandsResult implements PagedResult {
   paging: Paging!
-  results: [Brand!]
+  results: [Brand!]!
 }
 
 """
