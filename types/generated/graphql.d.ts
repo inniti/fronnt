@@ -90,7 +90,7 @@ export interface ArticlePricesArgs {
 export interface ArticleListFilter {
   __typename?: 'ArticleListFilter';
   id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
+  label?: Maybe<Scalars['String']>;
   type: Scalars['String'];
   values: Array<ArticleListFilterValue>;
 }
@@ -99,7 +99,7 @@ export interface ArticleListFilter {
 export interface ArticleListFilterValue {
   __typename?: 'ArticleListFilterValue';
   type: Scalars['String'];
-  value?: Maybe<Scalars['String']>;
+  value: Scalars['String'];
   applied: Scalars['Boolean'];
   count: Scalars['Int'];
 }
@@ -133,7 +133,6 @@ export interface Attribute {
 export interface AttributeDefinition {
   __typename?: 'AttributeDefinition';
   id: Scalars['ID'];
-  name: Scalars['String'];
   label?: Maybe<Scalars['String']>;
   super: Scalars['Boolean'];
   type: Scalars['String'];
@@ -539,7 +538,7 @@ export interface ProductCategoriesArgs {
 export interface ProductListFilter {
   __typename?: 'ProductListFilter';
   id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
+  label?: Maybe<Scalars['String']>;
   type: Scalars['String'];
   values: Array<ProductListFilterValue>;
 }
@@ -1177,7 +1176,7 @@ export type ArticleListFilterResolvers<
   ParentType extends ResolversParentTypes['ArticleListFilter'] = ResolversParentTypes['ArticleListFilter']
 > = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  label?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   values?: Resolver<
     Array<ResolversTypes['ArticleListFilterValue']>,
@@ -1192,7 +1191,7 @@ export type ArticleListFilterValueResolvers<
   ParentType extends ResolversParentTypes['ArticleListFilterValue'] = ResolversParentTypes['ArticleListFilterValue']
 > = {
   type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   applied?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1235,7 +1234,6 @@ export type AttributeDefinitionResolvers<
   ParentType extends ResolversParentTypes['AttributeDefinition'] = ResolversParentTypes['AttributeDefinition']
 > = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   label?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   super?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1801,7 +1799,7 @@ export type ProductListFilterResolvers<
   ParentType extends ResolversParentTypes['ProductListFilter'] = ResolversParentTypes['ProductListFilter']
 > = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  label?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   values?: Resolver<
     Array<ResolversTypes['ProductListFilterValue']>,

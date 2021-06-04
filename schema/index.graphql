@@ -206,7 +206,6 @@ Definition of a product attribute
 """
 type AttributeDefinition {
   id: ID!
-  name: String!
   label: String
   super: Boolean!
   type: String!
@@ -261,7 +260,7 @@ Product list filter
 """
 type ProductListFilter {
   id: ID!
-  name: String
+  label: String
   type: String!
   values: [ProductListFilterValue!]!
 }
@@ -271,7 +270,7 @@ Value of an article list filter
 """
 type ArticleListFilterValue {
   type: String!
-  value: String
+  value: String!
   applied: Boolean!
   count: Int!
 }
@@ -281,7 +280,7 @@ Article list filter
 """
 type ArticleListFilter {
   id: ID!
-  name: String
+  label: String
   type: String!
   values: [ArticleListFilterValue!]!
 }
