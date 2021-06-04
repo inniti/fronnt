@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.3](https://github.com/inniti/middle/compare/v1.0.0-alpha.2...v1.0.0-alpha.3) (2021-06-04)
+
+
+### Bug Fixes
+
+* **schema:** use `id` instead of `name` for Filter* inputs ([4a9ee48](https://github.com/inniti/middle/commit/4a9ee48ad843c9550a251dd136825317901e9572))
+
 ## [1.0.0-alpha.2](https://github.com/inniti/middle/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2021-06-04)
 
 
