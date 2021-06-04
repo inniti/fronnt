@@ -215,7 +215,6 @@ export interface CartItem {
   salesUnitId: Scalars['ID'];
   salesUnit: SalesUnit;
   children: Array<CartItem>;
-  customData?: Maybe<CustomCartItemData>;
 }
 
 /** Custom cart item data */
@@ -289,12 +288,6 @@ export interface Currency {
   __typename?: 'Currency';
   name: Scalars['String'];
   symbol: Scalars['String'];
-}
-
-/** Custom data which can be set per CartItem */
-export interface CustomCartItemData {
-  __typename?: 'CustomCartItemData';
-  positionText?: Maybe<Scalars['String']>;
 }
 
 /** Custom query condition applied to filterable list queries */
@@ -958,7 +951,6 @@ export type ResolversTypes = {
   CheckoutState: ResolverTypeWrapper<CheckoutState>;
   Coupon: ResolverTypeWrapper<Coupon>;
   Currency: ResolverTypeWrapper<Currency>;
-  CustomCartItemData: ResolverTypeWrapper<CustomCartItemData>;
   CustomQueryConditionInput: CustomQueryConditionInput;
   Customer: ResolverTypeWrapper<Customer>;
   CustomerAddress: ResolverTypeWrapper<CustomerAddress>;
@@ -1043,7 +1035,6 @@ export type ResolversParentTypes = {
   CheckoutState: CheckoutState;
   Coupon: Coupon;
   Currency: Currency;
-  CustomCartItemData: CustomCartItemData;
   CustomQueryConditionInput: CustomQueryConditionInput;
   Customer: Customer;
   CustomerAddress: CustomerAddress;
@@ -1348,11 +1339,6 @@ export type CartItemResolvers<
     ParentType,
     ContextType
   >;
-  customData?: Resolver<
-    Maybe<ResolversTypes['CustomCartItemData']>,
-    ParentType,
-    ContextType
-  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1457,18 +1443,6 @@ export type CurrencyResolvers<
 > = {
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   symbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CustomCartItemDataResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['CustomCartItemData'] = ResolversParentTypes['CustomCartItemData']
-> = {
-  positionText?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2110,7 +2084,6 @@ export type Resolvers<ContextType = any> = {
   CheckoutState?: CheckoutStateResolvers<ContextType>;
   Coupon?: CouponResolvers<ContextType>;
   Currency?: CurrencyResolvers<ContextType>;
-  CustomCartItemData?: CustomCartItemDataResolvers<ContextType>;
   Customer?: CustomerResolvers<ContextType>;
   CustomerAddress?: CustomerAddressResolvers<ContextType>;
   DeleteResult?: DeleteResultResolvers<ContextType>;

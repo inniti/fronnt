@@ -140,13 +140,6 @@ type Cart {
 }
 
 """
-Custom data which can be set per CartItem
-"""
-type CustomCartItemData {
-  positionText: String
-}
-
-"""
 A cart line item
 """
 type CartItem {
@@ -161,7 +154,6 @@ type CartItem {
   salesUnitId: ID!
   salesUnit: SalesUnit!
   children: [CartItem!]!
-  customData: CustomCartItemData
 }
 
 """
