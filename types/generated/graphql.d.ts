@@ -29,6 +29,13 @@ export interface AddToCartItemInput {
   customData?: Maybe<CartItemCustomDataInput>;
 }
 
+/** Result of adding one or many articles to the cart */
+export interface AddToCartResult {
+  __typename?: 'AddToCartResult';
+  errors: Array<Error>;
+  items: Array<CartItem>;
+}
+
 /** An address */
 export interface Address extends AddressFields {
   __typename?: 'Address';
@@ -345,6 +352,7 @@ export interface Error {
   __typename?: 'Error';
   code: Scalars['String'];
   message?: Maybe<Scalars['String']>;
+  ref?: Maybe<Scalars['String']>;
 }
 
 /** A media object */
@@ -369,7 +377,7 @@ export interface Mutation {
   __typename?: 'Mutation';
   createCart?: Maybe<Cart>;
   deleteCart?: Maybe<DeleteResult>;
-  addToCart?: Maybe<Array<CartItem>>;
+  addToCart?: Maybe<AddToCartResult>;
   updateCartItem?: Maybe<CartItem>;
   removeFromCart?: Maybe<DeleteResult>;
   applyCoupon?: Maybe<Cart>;
@@ -954,6 +962,7 @@ export type ResolversTypes = {
   AddToCartItemInput: AddToCartItemInput;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  AddToCartResult: ResolverTypeWrapper<AddToCartResult>;
   Address: ResolverTypeWrapper<Address>;
   String: ResolverTypeWrapper<Scalars['String']>;
   AddressFields: ResolversTypes['Address'] | ResolversTypes['CustomerAddress'];
@@ -1041,6 +1050,7 @@ export type ResolversParentTypes = {
   AddToCartItemInput: AddToCartItemInput;
   ID: Scalars['ID'];
   Int: Scalars['Int'];
+  AddToCartResult: AddToCartResult;
   Address: Address;
   String: Scalars['String'];
   AddressFields:
@@ -1116,6 +1126,15 @@ export type ResolversParentTypes = {
   Wishlist: Wishlist;
   WishlistItem: WishlistItem;
   WishlistsResult: WishlistsResult;
+};
+
+export type AddToCartResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['AddToCartResult'] = ResolversParentTypes['AddToCartResult']
+> = {
+  errors?: Resolver<Array<ResolversTypes['Error']>, ParentType, ContextType>;
+  items?: Resolver<Array<ResolversTypes['CartItem']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type AddressResolvers<
@@ -1545,6 +1564,7 @@ export type ErrorResolvers<
 > = {
   code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  ref?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1579,7 +1599,7 @@ export type MutationResolvers<
     RequireFields<MutationDeleteCartArgs, 'id'>
   >;
   addToCart?: Resolver<
-    Maybe<Array<ResolversTypes['CartItem']>>,
+    Maybe<ResolversTypes['AddToCartResult']>,
     ParentType,
     ContextType,
     RequireFields<MutationAddToCartArgs, 'cartId' | 'items'>
@@ -2141,6 +2161,7 @@ export type WishlistsResultResolvers<
 };
 
 export type Resolvers<ContextType = any> = {
+  AddToCartResult?: AddToCartResultResolvers<ContextType>;
   Address?: AddressResolvers<ContextType>;
   AddressFields?: AddressFieldsResolvers<ContextType>;
   Article?: ArticleResolvers<ContextType>;

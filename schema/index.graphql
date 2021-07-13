@@ -67,6 +67,7 @@ General purpose error object
 type Error {
   code: String!
   message: String
+  ref: String
 }
 
 """
@@ -608,6 +609,14 @@ type ResolveUrlResult {
   redirectUrl: String
 }
 
+"""
+Result of adding one or many articles to the cart
+"""
+type AddToCartResult {
+  errors: [Error!]!
+  items: [CartItem!]!
+}
+
 ####################################################################################
 # Inputs
 ####################################################################################
@@ -776,7 +785,7 @@ type Query {
 type Mutation {
   createCart: Cart
   deleteCart(id: ID!): DeleteResult
-  addToCart(cartId: ID!, items: [AddToCartItemInput!]!): [CartItem!]
+  addToCart(cartId: ID!, items: [AddToCartItemInput!]!): AddToCartResult
   updateCartItem(id: ID!, data: UpdateCartItemInput): CartItem
   removeFromCart(cartItemId: ID!): DeleteResult
   applyCoupon(cartId: ID!, coupon: String!): Cart
