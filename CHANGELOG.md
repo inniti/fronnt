@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.6](https://github.com/inniti/middle/compare/v1.0.0-alpha.5...v1.0.0-alpha.6) (2021-07-13)
+
+
+### Features
+
+* **schema:** introduce AddToCartResult type, add optional reference to custom error type ([5e98d3c](https://github.com/inniti/middle/commit/5e98d3c62d8a0818cf170f0d12837f9c10e97a23))
+
+
+### Bug Fixes
+
+* **schema:** remove obsolete salesUnitId from CartItem ([e3bce32](https://github.com/inniti/middle/commit/e3bce32881f4ef3e122c4dc133d1923f7cc0ce79))
+
 ## [1.0.0-alpha.5](https://github.com/inniti/middle/compare/v1.0.0-alpha.4...v1.0.0-alpha.5) (2021-07-13)
 
 
