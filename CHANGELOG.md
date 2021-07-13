@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.4](https://github.com/inniti/middle/compare/v1.0.0-alpha.3...v1.0.0-alpha.4) (2021-07-13)
+
+
+### Features
+
+* **schema:** introduce Discounts and Total to Cart and CartItem, Add enum for AttributeType ([6da1fbd](https://github.com/inniti/middle/commit/6da1fbd48fcc394178dfc972eeb467ef5580948a))
+
 ## [1.0.0-alpha.3](https://github.com/inniti/middle/compare/v1.0.0-alpha.2...v1.0.0-alpha.3) (2021-06-04)
 
 
