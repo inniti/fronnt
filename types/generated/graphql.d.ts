@@ -223,7 +223,6 @@ export interface CartItem {
   parentItemId?: Maybe<Scalars['ID']>;
   parent?: Maybe<CartItem>;
   quantity: Scalars['Int'];
-  salesUnitId: Scalars['ID'];
   salesUnit: SalesUnit;
   children: Array<CartItem>;
   totals: Totals;
@@ -1389,7 +1388,6 @@ export type CartItemResolvers<
   parentItemId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   parent?: Resolver<Maybe<ResolversTypes['CartItem']>, ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  salesUnitId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   salesUnit?: Resolver<ResolversTypes['SalesUnit'], ParentType, ContextType>;
   children?: Resolver<
     Array<ResolversTypes['CartItem']>,

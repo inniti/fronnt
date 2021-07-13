@@ -187,7 +187,6 @@ type CartItem {
   parentItemId: ID
   parent: CartItem
   quantity: Int!
-  salesUnitId: ID!
   salesUnit: SalesUnit!
   children: [CartItem!]!
   totals: Totals!
