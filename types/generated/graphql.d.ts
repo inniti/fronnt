@@ -135,8 +135,10 @@ export interface AttributeDefinition {
   id: Scalars['ID'];
   label?: Maybe<Scalars['String']>;
   super: Scalars['Boolean'];
-  type: Scalars['String'];
+  type: AttributeType;
 }
+
+export type AttributeType = 'NUMBER' | 'COLOR' | 'STRING' | 'BOOLEAN';
 
 /** Tells how many items of an article are available */
 export interface Availability {
@@ -192,13 +194,14 @@ export interface BrandsResult extends PagedResult {
   results: Array<Brand>;
 }
 
-/** An Instance of a shopping cart */
+/** An instance of a shopping cart */
 export interface Cart {
   __typename?: 'Cart';
   id: Scalars['ID'];
   createdAt?: Maybe<Scalars['String']>;
   items: Array<CartItem>;
   coupons: Array<Coupon>;
+  totals: Totals;
 }
 
 /** A cart line item */
@@ -215,6 +218,7 @@ export interface CartItem {
   salesUnitId: Scalars['ID'];
   salesUnit: SalesUnit;
   children: Array<CartItem>;
+  totals: Totals;
 }
 
 /** Custom cart item data */
@@ -275,7 +279,7 @@ export interface CheckoutState {
   billingAddress?: Maybe<Address>;
 }
 
-/** Coupons can be applied to a cart and reduce the grad total */
+/** Users can apply coupons to a cart */
 export interface Coupon {
   __typename?: 'Coupon';
   key: Scalars['String'];
@@ -325,6 +329,14 @@ export interface DeleteResult {
   __typename?: 'DeleteResult';
   success: Scalars['Boolean'];
   error?: Maybe<Error>;
+}
+
+/** Discounts can be applied by the system to either CartItems or the Cart as a whole */
+export interface Discount {
+  __typename?: 'Discount';
+  id: Scalars['ID'];
+  label?: Maybe<Scalars['String']>;
+  value: Scalars['Int'];
 }
 
 /** General purpose error object */
@@ -751,6 +763,15 @@ export interface TaxClass {
   value: Scalars['Int'];
 }
 
+/** Total amounts of a Cart or a CartItem */
+export interface Totals {
+  __typename?: 'Totals';
+  net: Scalars['Int'];
+  gross: Scalars['Int'];
+  taxes: Array<TaxClass>;
+  discounts: Array<Discount>;
+}
+
 /** Update cart item data */
 export interface UpdateCartItemInput {
   quantity?: Maybe<Scalars['Int']>;
@@ -938,6 +959,7 @@ export type ResolversTypes = {
   ArticlesSearchFiltersInput: ArticlesSearchFiltersInput;
   Attribute: ResolverTypeWrapper<Attribute>;
   AttributeDefinition: ResolverTypeWrapper<AttributeDefinition>;
+  AttributeType: AttributeType;
   Availability: ResolverTypeWrapper<Availability>;
   BaseUnit: ResolverTypeWrapper<BaseUnit>;
   Brand: ResolverTypeWrapper<Brand>;
@@ -955,6 +977,7 @@ export type ResolversTypes = {
   Customer: ResolverTypeWrapper<Customer>;
   CustomerAddress: ResolverTypeWrapper<CustomerAddress>;
   DeleteResult: ResolverTypeWrapper<DeleteResult>;
+  Discount: ResolverTypeWrapper<Discount>;
   Error: ResolverTypeWrapper<Error>;
   Media: ResolverTypeWrapper<Media>;
   MediaType: MediaType;
@@ -994,6 +1017,7 @@ export type ResolversTypes = {
   Suggestion: ResolverTypeWrapper<Suggestion>;
   SuggestionType: SuggestionType;
   TaxClass: ResolverTypeWrapper<TaxClass>;
+  Totals: ResolverTypeWrapper<Totals>;
   UpdateCartItemInput: UpdateCartItemInput;
   UpdateCheckoutInput: UpdateCheckoutInput;
   UpdateCustomerInput: UpdateCustomerInput;
@@ -1039,6 +1063,7 @@ export type ResolversParentTypes = {
   Customer: Customer;
   CustomerAddress: CustomerAddress;
   DeleteResult: DeleteResult;
+  Discount: Discount;
   Error: Error;
   Media: Media;
   Meta: Meta;
@@ -1073,6 +1098,7 @@ export type ResolversParentTypes = {
   Sorting: Sorting;
   Suggestion: Suggestion;
   TaxClass: TaxClass;
+  Totals: Totals;
   UpdateCartItemInput: UpdateCartItemInput;
   UpdateCheckoutInput: UpdateCheckoutInput;
   UpdateCustomerInput: UpdateCustomerInput;
@@ -1227,7 +1253,7 @@ export type AttributeDefinitionResolvers<
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   label?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   super?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['AttributeType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1313,6 +1339,7 @@ export type CartResolvers<
   >;
   items?: Resolver<Array<ResolversTypes['CartItem']>, ParentType, ContextType>;
   coupons?: Resolver<Array<ResolversTypes['Coupon']>, ParentType, ContextType>;
+  totals?: Resolver<ResolversTypes['Totals'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1339,6 +1366,7 @@ export type CartItemResolvers<
     ParentType,
     ContextType
   >;
+  totals?: Resolver<ResolversTypes['Totals'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1487,6 +1515,16 @@ export type DeleteResultResolvers<
 > = {
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   error?: Resolver<Maybe<ResolversTypes['Error']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type DiscountResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Discount'] = ResolversParentTypes['Discount']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  label?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2017,6 +2055,21 @@ export type TaxClassResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type TotalsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Totals'] = ResolversParentTypes['Totals']
+> = {
+  net?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  gross?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  taxes?: Resolver<Array<ResolversTypes['TaxClass']>, ParentType, ContextType>;
+  discounts?: Resolver<
+    Array<ResolversTypes['Discount']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type WarehouseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Warehouse'] = ResolversParentTypes['Warehouse']
@@ -2087,6 +2140,7 @@ export type Resolvers<ContextType = any> = {
   Customer?: CustomerResolvers<ContextType>;
   CustomerAddress?: CustomerAddressResolvers<ContextType>;
   DeleteResult?: DeleteResultResolvers<ContextType>;
+  Discount?: DiscountResolvers<ContextType>;
   Error?: ErrorResolvers<ContextType>;
   Media?: MediaResolvers<ContextType>;
   Meta?: MetaResolvers<ContextType>;
@@ -2110,6 +2164,7 @@ export type Resolvers<ContextType = any> = {
   Sorting?: SortingResolvers<ContextType>;
   Suggestion?: SuggestionResolvers<ContextType>;
   TaxClass?: TaxClassResolvers<ContextType>;
+  Totals?: TotalsResolvers<ContextType>;
   Warehouse?: WarehouseResolvers<ContextType>;
   Wishlist?: WishlistResolvers<ContextType>;
   WishlistItem?: WishlistItemResolvers<ContextType>;

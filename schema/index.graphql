@@ -46,6 +46,13 @@ enum ResolveUrlResultType {
   BRAND
 }
 
+enum AttributeType {
+  NUMBER
+  COLOR
+  STRING
+  BOOLEAN
+}
+
 interface PagedResult {
   paging: Paging!
 }
@@ -121,7 +128,7 @@ type Availability {
 }
 
 """
-Coupons can be applied to a cart and reduce the grad total
+Users can apply coupons to a cart
 """
 type Coupon {
   key: String!
@@ -130,13 +137,33 @@ type Coupon {
 }
 
 """
-An Instance of a shopping cart
+Discounts can be applied by the system to either CartItems or the Cart as a whole
+"""
+type Discount {
+  id: ID!
+  label: String
+  value: Int!
+}
+
+"""
+Total amounts of a Cart or a CartItem
+"""
+type Totals {
+  net: Int!
+  gross: Int!
+  taxes: [TaxClass!]!
+  discounts: [Discount!]!
+}
+
+"""
+An instance of a shopping cart
 """
 type Cart {
   id: ID!
   createdAt: String
   items: [CartItem!]!
   coupons: [Coupon!]!
+  totals: Totals!
 }
 
 """
@@ -154,6 +181,7 @@ type CartItem {
   salesUnitId: ID!
   salesUnit: SalesUnit!
   children: [CartItem!]!
+  totals: Totals!
 }
 
 """
@@ -200,7 +228,7 @@ type AttributeDefinition {
   id: ID!
   label: String
   super: Boolean!
-  type: String!
+  type: AttributeType!
 }
 
 """
