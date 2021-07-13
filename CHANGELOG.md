@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.5](https://github.com/inniti/middle/compare/v1.0.0-alpha.4...v1.0.0-alpha.5) (2021-07-13)
+
+
+### Features
+
+* **schema:** Differentiate between TaxClass and TaxValue ([7b5d7f0](https://github.com/inniti/middle/commit/7b5d7f05c9630814cb928689e328f7fff10cb573))
+
 ## [1.0.0-alpha.4](https://github.com/inniti/middle/compare/v1.0.0-alpha.3...v1.0.0-alpha.4) (2021-07-13)
 
 
