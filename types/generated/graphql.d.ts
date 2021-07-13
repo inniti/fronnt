@@ -74,6 +74,7 @@ export interface Article {
   meta: Meta;
   prices: Array<Price>;
   referencePrice?: Maybe<ReferencePrice>;
+  taxClass: TaxClass;
   availabilities: Array<Availability>;
   status: ArticleStatus;
   product?: Maybe<Product>;
@@ -763,12 +764,19 @@ export interface TaxClass {
   value: Scalars['Int'];
 }
 
+/** An actual tax value, referring to a TaxClass */
+export interface TaxValue {
+  __typename?: 'TaxValue';
+  value: Scalars['Int'];
+  taxClass: TaxClass;
+}
+
 /** Total amounts of a Cart or a CartItem */
 export interface Totals {
   __typename?: 'Totals';
   net: Scalars['Int'];
   gross: Scalars['Int'];
-  taxes: Array<TaxClass>;
+  taxes: Array<Maybe<TaxValue>>;
   discounts: Array<Discount>;
 }
 
@@ -1017,6 +1025,7 @@ export type ResolversTypes = {
   Suggestion: ResolverTypeWrapper<Suggestion>;
   SuggestionType: SuggestionType;
   TaxClass: ResolverTypeWrapper<TaxClass>;
+  TaxValue: ResolverTypeWrapper<TaxValue>;
   Totals: ResolverTypeWrapper<Totals>;
   UpdateCartItemInput: UpdateCartItemInput;
   UpdateCheckoutInput: UpdateCheckoutInput;
@@ -1098,6 +1107,7 @@ export type ResolversParentTypes = {
   Sorting: Sorting;
   Suggestion: Suggestion;
   TaxClass: TaxClass;
+  TaxValue: TaxValue;
   Totals: Totals;
   UpdateCartItemInput: UpdateCartItemInput;
   UpdateCheckoutInput: UpdateCheckoutInput;
@@ -1172,6 +1182,7 @@ export type ArticleResolvers<
     ParentType,
     ContextType
   >;
+  taxClass?: Resolver<ResolversTypes['TaxClass'], ParentType, ContextType>;
   availabilities?: Resolver<
     Array<ResolversTypes['Availability']>,
     ParentType,
@@ -2055,13 +2066,26 @@ export type TaxClassResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type TaxValueResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['TaxValue'] = ResolversParentTypes['TaxValue']
+> = {
+  value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  taxClass?: Resolver<ResolversTypes['TaxClass'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type TotalsResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Totals'] = ResolversParentTypes['Totals']
 > = {
   net?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   gross?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  taxes?: Resolver<Array<ResolversTypes['TaxClass']>, ParentType, ContextType>;
+  taxes?: Resolver<
+    Array<Maybe<ResolversTypes['TaxValue']>>,
+    ParentType,
+    ContextType
+  >;
   discounts?: Resolver<
     Array<ResolversTypes['Discount']>,
     ParentType,
@@ -2164,6 +2188,7 @@ export type Resolvers<ContextType = any> = {
   Sorting?: SortingResolvers<ContextType>;
   Suggestion?: SuggestionResolvers<ContextType>;
   TaxClass?: TaxClassResolvers<ContextType>;
+  TaxValue?: TaxValueResolvers<ContextType>;
   Totals?: TotalsResolvers<ContextType>;
   Warehouse?: WarehouseResolvers<ContextType>;
   Wishlist?: WishlistResolvers<ContextType>;

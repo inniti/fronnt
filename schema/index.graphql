@@ -146,12 +146,20 @@ type Discount {
 }
 
 """
+An actual tax value, referring to a TaxClass
+"""
+type TaxValue {
+  value: Int!
+  taxClass: TaxClass!
+}
+
+"""
 Total amounts of a Cart or a CartItem
 """
 type Totals {
   net: Int!
   gross: Int!
-  taxes: [TaxClass!]!
+  taxes: [TaxValue]!
   discounts: [Discount!]!
 }
 
@@ -258,6 +266,7 @@ type Article {
   meta: Meta!
   prices(quantity: Int): [Price!]!
   referencePrice: ReferencePrice
+  taxClass: TaxClass!
   availabilities: [Availability!]!
   status: ArticleStatus!
   product: Product
