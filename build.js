@@ -10,7 +10,7 @@ const buildConfig = {
   platform: 'node',
   outfile: './dist/index.js',
   minify: false,
-  external: ['express', 'apollo-server'],
+  external: ['express', 'apollo-server', 'apollo-server-core'],
   format: 'cjs',
   plugins: [graphqlLoaderPlugin()],
 };

@@ -1,4 +1,8 @@
 import { ApolloServer } from 'apollo-server';
+import {
+  ApolloServerPluginLandingPageDisabled,
+  ApolloServerPluginLandingPageGraphQLPlayground,
+} from 'apollo-server-core';
 import { MiddleServerOptions } from '../types';
 import baseResolvers from './resolvers';
 import baseTypeDefs from './typeDefs';
@@ -35,6 +39,13 @@ export default class MiddleServer {
       }
     });
 
+    const plugins = [
+      process.env.NODE_ENV === 'production'
+        ? ApolloServerPluginLandingPageDisabled()
+        : ApolloServerPluginLandingPageGraphQLPlayground(),
+      ...(options.plugins || []),
+    ];
+
     this.apolloServer = new ApolloServer({
       // @ts-ignore
       typeDefs,
@@ -49,7 +60,7 @@ export default class MiddleServer {
       },
       dataSources: () => dataSources,
       cache: options.cache,
-      plugins: options.plugins,
+      plugins,
       onHealthCheck: options.onHealthCheck,
     });
   }
@@ -59,8 +70,6 @@ export default class MiddleServer {
       return {
         address: serverInfo.address,
         url: serverInfo.url,
-        subscriptionsUrl: serverInfo.subscriptionsUrl,
-        subscriptionsPath: serverInfo.subscriptionsPath,
         port: serverInfo.port,
       };
     });

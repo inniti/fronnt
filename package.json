@@ -21,8 +21,8 @@
     "release": "standard-version"
   },
   "dependencies": {
-    "apollo-server": "^2.23.0",
-    "graphql": "^15.5.0"
+    "apollo-server": "^3.0.0",
+    "graphql": "^15.5.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.21.4",
