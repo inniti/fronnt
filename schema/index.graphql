@@ -506,6 +506,15 @@ type Currency {
 }
 
 """
+Country
+"""
+type Country {
+  "ISO 3166-1 code"
+  isoCode: String!
+  name: String!
+}
+
+"""
 Tax class
 """
 type TaxClass {
@@ -513,6 +522,7 @@ type TaxClass {
   name: String!
   "Fractional value in percent applied to the net amount, e.g. 19"
   value: Int!
+  country: Country!
 }
 
 """

@@ -286,6 +286,14 @@ export interface CheckoutState {
   billingAddress?: Maybe<Address>;
 }
 
+/** Country */
+export interface Country {
+  __typename?: 'Country';
+  /** ISO 3166-1 code */
+  isoCode: Scalars['String'];
+  name: Scalars['String'];
+}
+
 /** Users can apply coupons to a cart */
 export interface Coupon {
   __typename?: 'Coupon';
@@ -769,6 +777,7 @@ export interface TaxClass {
   name: Scalars['String'];
   /** Fractional value in percent applied to the net amount, e.g. 19 */
   value: Scalars['Int'];
+  country: Country;
 }
 
 /** An actual tax value, referring to a TaxClass */
@@ -987,6 +996,7 @@ export type ResolversTypes = {
   CategoriesResult: ResolverTypeWrapper<CategoriesResult>;
   Category: ResolverTypeWrapper<Category>;
   CheckoutState: ResolverTypeWrapper<CheckoutState>;
+  Country: ResolverTypeWrapper<Country>;
   Coupon: ResolverTypeWrapper<Coupon>;
   Currency: ResolverTypeWrapper<Currency>;
   CustomQueryConditionInput: CustomQueryConditionInput;
@@ -1075,6 +1085,7 @@ export type ResolversParentTypes = {
   CategoriesResult: CategoriesResult;
   Category: Category;
   CheckoutState: CheckoutState;
+  Country: Country;
   Coupon: Coupon;
   Currency: Currency;
   CustomQueryConditionInput: CustomQueryConditionInput;
@@ -1480,6 +1491,15 @@ export type CheckoutStateResolvers<
     ParentType,
     ContextType
   >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CountryResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Country'] = ResolversParentTypes['Country']
+> = {
+  isoCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2081,6 +2101,7 @@ export type TaxClassResolvers<
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  country?: Resolver<ResolversTypes['Country'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2178,6 +2199,7 @@ export type Resolvers<ContextType = any> = {
   CategoriesResult?: CategoriesResultResolvers<ContextType>;
   Category?: CategoryResolvers<ContextType>;
   CheckoutState?: CheckoutStateResolvers<ContextType>;
+  Country?: CountryResolvers<ContextType>;
   Coupon?: CouponResolvers<ContextType>;
   Currency?: CurrencyResolvers<ContextType>;
   Customer?: CustomerResolvers<ContextType>;
