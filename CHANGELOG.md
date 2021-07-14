@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.7](https://github.com/inniti/middle/compare/v1.0.0-alpha.6...v1.0.0-alpha.7) (2021-07-14)
+
+
+### Features
+
+* **schema:** introduce Country type for TaxClass ([f5591fc](https://github.com/inniti/middle/commit/f5591fca9cf0dfc9c479604e174075e50ee9be5d))
+
 ## [1.0.0-alpha.6](https://github.com/inniti/middle/compare/v1.0.0-alpha.5...v1.0.0-alpha.6) (2021-07-13)
 
 
