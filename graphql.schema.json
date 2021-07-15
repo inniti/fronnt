@@ -5885,7 +5885,23 @@
             "deprecationReason": null
           },
           {
-            "name": "value",
+            "name": "netValue",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "grossValue",
             "description": null,
             "args": [],
             "type": {
@@ -5917,7 +5933,7 @@
             "deprecationReason": null
           },
           {
-            "name": "taxClass",
+            "name": "taxValue",
             "description": null,
             "args": [],
             "type": {
@@ -5925,7 +5941,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "TaxClass",
+                "name": "TaxValue",
                 "ofType": null
               }
             },

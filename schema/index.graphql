@@ -552,9 +552,10 @@ articles might be sond in different SalesUnits.
 """
 type ReferencePrice {
   quantity: Int!
-  value: Int!
+  netValue: Int!
+  grossValue: Int!
   salesUnit: SalesUnit!
-  taxClass: TaxClass!
+  taxValue: TaxValue!
   currency: Currency!
 }
 

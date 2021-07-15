@@ -704,9 +704,10 @@ export interface QueryResolveUrlArgs {
 export interface ReferencePrice {
   __typename?: 'ReferencePrice';
   quantity: Scalars['Int'];
-  value: Scalars['Int'];
+  netValue: Scalars['Int'];
+  grossValue: Scalars['Int'];
   salesUnit: SalesUnit;
-  taxClass: TaxClass;
+  taxValue: TaxValue;
   currency: Currency;
 }
 
@@ -2027,9 +2028,10 @@ export type ReferencePriceResolvers<
   ParentType extends ResolversParentTypes['ReferencePrice'] = ResolversParentTypes['ReferencePrice']
 > = {
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  netValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  grossValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   salesUnit?: Resolver<ResolversTypes['SalesUnit'], ParentType, ContextType>;
-  taxClass?: Resolver<ResolversTypes['TaxClass'], ParentType, ContextType>;
+  taxValue?: Resolver<ResolversTypes['TaxValue'], ParentType, ContextType>;
   currency?: Resolver<ResolversTypes['Currency'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
