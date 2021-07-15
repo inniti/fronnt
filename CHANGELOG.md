@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.9](https://github.com/inniti/middle/compare/v1.0.0-alpha.8...v1.0.0-alpha.9) (2021-07-15)
+
+
+### Bug Fixes
+
+* **schema:** add tax related fields to ReferencePrice ([4f927e7](https://github.com/inniti/middle/commit/4f927e7564b1cf083e38efc4dd59a5406cb7054b))
+
 ## [1.0.0-alpha.8](https://github.com/inniti/middle/compare/v1.0.0-alpha.7...v1.0.0-alpha.8) (2021-07-15)
 
 
