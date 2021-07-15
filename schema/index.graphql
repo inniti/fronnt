@@ -265,7 +265,6 @@ type Article {
   attributes: [Attribute!]!
   meta: Meta!
   prices(quantity: Int): [Price!]!
-  referencePrice: ReferencePrice
   taxClass: TaxClass!
   availabilities: [Availability!]!
   status: ArticleStatus!
@@ -566,11 +565,13 @@ type Price {
   currency: Currency!
   quantity: Int!
   netValue: Int!
-  taxClass: TaxClass!
+  grossValue: Int!
+  taxValue: TaxValue!
   validFrom: String
   validUntil: String
   original: Int
   discount: Int
+  referencePrice: ReferencePrice
 }
 
 """

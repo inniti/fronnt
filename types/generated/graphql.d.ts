@@ -80,7 +80,6 @@ export interface Article {
   attributes: Array<Attribute>;
   meta: Meta;
   prices: Array<Price>;
-  referencePrice?: Maybe<ReferencePrice>;
   taxClass: TaxClass;
   availabilities: Array<Availability>;
   status: ArticleStatus;
@@ -512,11 +511,13 @@ export interface Price {
   currency: Currency;
   quantity: Scalars['Int'];
   netValue: Scalars['Int'];
-  taxClass: TaxClass;
+  grossValue: Scalars['Int'];
+  taxValue: TaxValue;
   validFrom?: Maybe<Scalars['String']>;
   validUntil?: Maybe<Scalars['String']>;
   original?: Maybe<Scalars['Int']>;
   discount?: Maybe<Scalars['Int']>;
+  referencePrice?: Maybe<ReferencePrice>;
 }
 
 /** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
@@ -1206,11 +1207,6 @@ export type ArticleResolvers<
     ContextType,
     RequireFields<ArticlePricesArgs, never>
   >;
-  referencePrice?: Resolver<
-    Maybe<ResolversTypes['ReferencePrice']>,
-    ParentType,
-    ContextType
-  >;
   taxClass?: Resolver<ResolversTypes['TaxClass'], ParentType, ContextType>;
   availabilities?: Resolver<
     Array<ResolversTypes['Availability']>,
@@ -1784,7 +1780,8 @@ export type PriceResolvers<
   currency?: Resolver<ResolversTypes['Currency'], ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   netValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  taxClass?: Resolver<ResolversTypes['TaxClass'], ParentType, ContextType>;
+  grossValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  taxValue?: Resolver<ResolversTypes['TaxValue'], ParentType, ContextType>;
   validFrom?: Resolver<
     Maybe<ResolversTypes['String']>,
     ParentType,
@@ -1797,6 +1794,11 @@ export type PriceResolvers<
   >;
   original?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   discount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  referencePrice?: Resolver<
+    Maybe<ResolversTypes['ReferencePrice']>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
