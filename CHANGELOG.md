@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.10](https://github.com/inniti/middle/compare/v1.0.0-alpha.9...v1.0.0-alpha.10) (2021-07-27)
+
+
+### Features
+
+* **schema:** add *ByField queries for article, product, category, brand ([4d7df12](https://github.com/inniti/middle/commit/4d7df12e0e2d95ab0431a547fad9625202d21970))
+
 ## [1.0.0-alpha.9](https://github.com/inniti/middle/compare/v1.0.0-alpha.8...v1.0.0-alpha.9) (2021-07-15)
 
 
