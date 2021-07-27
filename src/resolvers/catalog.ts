@@ -5,14 +5,15 @@ const baseCatalogResolvers: Resolvers = {
   Query: {
     products: notImplemented,
     product: notImplemented,
-    productBySlug: notImplemented,
+    productByField: notImplemented,
     article: notImplemented,
+    articleByField: notImplemented,
     brands: notImplemented,
     brand: notImplemented,
-    brandBySlug: notImplemented,
+    brandByField: notImplemented,
     categories: notImplemented,
     category: notImplemented,
-    categoryBySlug: notImplemented,
+    categoryByField: notImplemented,
     suggestions: notImplemented,
   },
   Product: {

@@ -25,6 +25,13 @@ enum MediaType {
 }
 
 """
+Purpose of a Media object
+"""
+enum MediaPurpose {
+  COVER
+}
+
+"""
 Type of a suggestion entry
 """
 enum SuggestionType {
@@ -100,6 +107,7 @@ A media object
 type Media {
   type: MediaType!
   url: String!
+  purpose: MediaPurpose
 }
 
 """
@@ -278,7 +286,7 @@ Value of a product list filter
 """
 type ProductListFilterValue {
   type: String!
-  value: String!
+  value: AttributeType!
   applied: Boolean!
   count: Int!
 }
@@ -289,7 +297,7 @@ Product list filter
 type ProductListFilter {
   id: ID!
   label: String
-  type: String!
+  type: AttributeType!
   values: [ProductListFilterValue!]!
 }
 
@@ -297,7 +305,7 @@ type ProductListFilter {
 Value of an article list filter
 """
 type ArticleListFilterValue {
-  type: String!
+  type: AttributeType!
   value: String!
   applied: Boolean!
   count: Int!
@@ -309,7 +317,7 @@ Article list filter
 type ArticleListFilter {
   id: ID!
   label: String
-  type: String!
+  type: AttributeType!
   values: [ArticleListFilterValue!]!
 }
 
@@ -613,6 +621,9 @@ type Customer {
   addresses: [CustomerAddress!]
 }
 
+"""
+Result of the resolveUrl query
+"""
 type ResolveUrlResult {
   resolved: Boolean
   resultId: ID
@@ -745,7 +756,6 @@ input CustomQueryConditionInput {
 
 type Query {
   shop: Shop
-
   products(
     query: String
     filters: [ProductsSearchFiltersInput!]
@@ -754,42 +764,38 @@ type Query {
     customQueryConditions: [CustomQueryConditionInput!]
   ): ProductsResult
   product(id: ID!): Product
-  productBySlug(slug: String!): Product
+  productByField(field: String!, value: String!): Product
   article(id: ID!): Article
+  articleByField(field: String!, value: String!): Article
   brands(
     paging: PagingInput
     customQueryConditions: [CustomQueryConditionInput!]
   ): BrandsResult
   brand(id: ID!): Brand
-  brandBySlug(slug: String!): Brand
+  brandByField(field: String!, value: String!): Brand
   categories(
     customQueryConditions: [CustomQueryConditionInput!]
   ): CategoriesResult
   category(id: ID!): Category
-  categoryBySlug(slug: String!): Category
+  categoryByField(field: String!, value: String!): Category
   suggestions(
     searchTerm: String
     customQueryConditions: [CustomQueryConditionInput!]
   ): [Suggestion!]!
-
   carts(customQueryConditions: [CustomQueryConditionInput!]): CartsResult
   cart(id: ID!): Cart
-
   wishlists(
     sort: [SortInput!]
     customQueryConditions: [CustomQueryConditionInput!]
   ): WishlistsResult
   wishlist(id: ID!): Wishlist
-
   orders(
     paging: PagingInput
     sort: [SortInput!]
     customQueryConditions: [CustomQueryConditionInput!]
   ): OrdersResult
   order(id: ID!): Order
-
   customer: Customer
-
   resolveUrl(url: String): ResolveUrlResult
 }
 
