@@ -3,7 +3,7 @@ import {
   ApolloServerPluginLandingPageDisabled,
   ApolloServerPluginLandingPageGraphQLPlayground,
 } from 'apollo-server-core';
-import { MiddleServerOptions } from '../types';
+import { MiddleServerInfo, MiddleServerOptions } from '../types';
 import baseResolvers from './resolvers';
 import baseTypeDefs from './typeDefs';
 
@@ -65,8 +65,9 @@ export default class MiddleServer {
     });
   }
 
-  public listen(port = 4000) {
+  public listen(port = 4000): Promise<MiddleServerInfo> {
     return this.apolloServer.listen({ port }).then((serverInfo) => {
+      console.log(serverInfo);
       return {
         address: serverInfo.address,
         url: serverInfo.url,

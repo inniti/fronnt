@@ -41,9 +41,7 @@ export interface MiddleConnector {
 }
 
 export interface MiddleServerInfo {
-  address: string;
-  url: string;
-  subscriptionsUrl: string;
+  address?: string;
+  url?: string;
   port: number | string;
-  subscriptionsPath: string;
 }
