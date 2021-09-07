@@ -89,6 +89,12 @@ export interface Article {
 }
 
 /** An article is a concrete shape of a product */
+export interface ArticleMediaArgs {
+  purpose?: Maybe<MediaPurpose>;
+  mediaType?: Maybe<MediaType>;
+}
+
+/** An article is a concrete shape of a product */
 export interface ArticlePricesArgs {
   quantity?: Maybe<Scalars['Int']>;
 }
@@ -171,13 +177,19 @@ export interface Brand {
   __typename?: 'Brand';
   id: Scalars['ID'];
   title: Scalars['String'];
-  media?: Maybe<Array<Media>>;
+  media: Array<Media>;
   slug: Scalars['String'];
   description: Scalars['String'];
   meta: Meta;
   categoryIds: Array<Scalars['String']>;
   categories?: Maybe<CategoriesResult>;
   products?: Maybe<ProductsResult>;
+}
+
+/** Brand */
+export interface BrandMediaArgs {
+  purpose?: Maybe<MediaPurpose>;
+  mediaType?: Maybe<MediaType>;
 }
 
 /** Brand */
@@ -251,7 +263,7 @@ export interface Category {
   __typename?: 'Category';
   id: Scalars['ID'];
   title: Scalars['String'];
-  media?: Maybe<Array<Media>>;
+  media: Array<Media>;
   description?: Maybe<Scalars['String']>;
   childrenIds: Array<Maybe<Scalars['String']>>;
   parentId?: Maybe<Scalars['ID']>;
@@ -260,6 +272,12 @@ export interface Category {
   products?: Maybe<ProductsResult>;
   parent?: Maybe<Category>;
   children?: Maybe<CategoriesResult>;
+}
+
+/** Categories are hierarchical containers for products */
+export interface CategoryMediaArgs {
+  purpose?: Maybe<MediaPurpose>;
+  mediaType?: Maybe<MediaType>;
 }
 
 /** Categories are hierarchical containers for products */
@@ -364,7 +382,7 @@ export interface Error {
 /** A media object */
 export interface Media {
   __typename?: 'Media';
-  type: MediaType;
+  mediaType: MediaType;
   url: Scalars['String'];
   purpose?: Maybe<MediaPurpose>;
 }
@@ -545,6 +563,12 @@ export interface Product {
   status: ProductStatus;
   articles?: Maybe<ArticlesResult>;
   categories?: Maybe<Array<Category>>;
+}
+
+/** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
+export interface ProductMediaArgs {
+  purpose?: Maybe<MediaPurpose>;
+  mediaType?: Maybe<MediaType>;
 }
 
 /** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
@@ -1200,7 +1224,12 @@ export type ArticleResolvers<
   sku?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   productId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  media?: Resolver<Array<ResolversTypes['Media']>, ParentType, ContextType>;
+  media?: Resolver<
+    Array<ResolversTypes['Media']>,
+    ParentType,
+    ContextType,
+    RequireFields<ArticleMediaArgs, never>
+  >;
   description?: Resolver<
     Maybe<ResolversTypes['String']>,
     ParentType,
@@ -1343,9 +1372,10 @@ export type BrandResolvers<
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   media?: Resolver<
-    Maybe<Array<ResolversTypes['Media']>>,
+    Array<ResolversTypes['Media']>,
     ParentType,
-    ContextType
+    ContextType,
+    RequireFields<BrandMediaArgs, never>
   >;
   slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1450,9 +1480,10 @@ export type CategoryResolvers<
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   media?: Resolver<
-    Maybe<Array<ResolversTypes['Media']>>,
+    Array<ResolversTypes['Media']>,
     ParentType,
-    ContextType
+    ContextType,
+    RequireFields<CategoryMediaArgs, never>
   >;
   description?: Resolver<
     Maybe<ResolversTypes['String']>,
@@ -1602,7 +1633,7 @@ export type MediaResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Media'] = ResolversParentTypes['Media']
 > = {
-  type?: Resolver<ResolversTypes['MediaType'], ParentType, ContextType>;
+  mediaType?: Resolver<ResolversTypes['MediaType'], ParentType, ContextType>;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   purpose?: Resolver<
     Maybe<ResolversTypes['MediaPurpose']>,
@@ -1835,7 +1866,12 @@ export type ProductResolvers<
     ContextType
   >;
   categoryIds?: Resolver<Array<ResolversTypes['ID']>, ParentType, ContextType>;
-  media?: Resolver<Array<ResolversTypes['Media']>, ParentType, ContextType>;
+  media?: Resolver<
+    Array<ResolversTypes['Media']>,
+    ParentType,
+    ContextType,
+    RequireFields<ProductMediaArgs, never>
+  >;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   brandId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   brand?: Resolver<Maybe<ResolversTypes['Brand']>, ParentType, ContextType>;

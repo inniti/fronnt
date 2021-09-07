@@ -105,7 +105,7 @@ type Paging {
 A media object
 """
 type Media {
-  type: MediaType!
+  mediaType: MediaType!
   url: String!
   purpose: MediaPurpose
 }
@@ -216,7 +216,7 @@ type Product {
   title: String!
   articleIds: [String!]!
   categoryIds: [ID!]!
-  media: [Media!]!
+  media(purpose: MediaPurpose, mediaType: MediaType): [Media!]!
   description: String!
   brandId: ID
   brand: Brand
@@ -263,7 +263,7 @@ type Article {
   sku: String!
   title: String!
   productId: ID!
-  media: [Media!]!
+  media(purpose: MediaPurpose, mediaType: MediaType): [Media!]!
   description: String
   brandId: ID
   brand: Brand
@@ -336,7 +336,7 @@ Categories are hierarchical containers for products
 type Category {
   id: ID!
   title: String!
-  media: [Media!]
+  media(purpose: MediaPurpose, mediaType: MediaType): [Media!]!
   description: String
   childrenIds: [String]!
   parentId: ID
@@ -361,7 +361,7 @@ Brand
 type Brand {
   id: ID!
   title: String!
-  media: [Media!]
+  media(purpose: MediaPurpose, mediaType: MediaType): [Media!]!
   slug: String!
   description: String!
   meta: Meta!

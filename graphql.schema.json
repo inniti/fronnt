@@ -538,7 +538,32 @@
           {
             "name": "media",
             "description": null,
-            "args": [],
+            "args": [
+              {
+                "name": "purpose",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "MediaPurpose",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "mediaType",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "MediaType",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -1530,17 +1555,46 @@
           {
             "name": "media",
             "description": null,
-            "args": [],
+            "args": [
+              {
+                "name": "purpose",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "MediaPurpose",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "mediaType",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "MediaType",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
             "type": {
-              "kind": "LIST",
+              "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "NON_NULL",
+                "kind": "LIST",
                 "name": null,
                 "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Media",
-                  "ofType": null
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Media",
+                    "ofType": null
+                  }
                 }
               }
             },
@@ -2271,17 +2325,46 @@
           {
             "name": "media",
             "description": null,
-            "args": [],
+            "args": [
+              {
+                "name": "purpose",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "MediaPurpose",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "mediaType",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "MediaType",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
             "type": {
-              "kind": "LIST",
+              "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "NON_NULL",
+                "kind": "LIST",
                 "name": null,
                 "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Media",
-                  "ofType": null
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Media",
+                    "ofType": null
+                  }
                 }
               }
             },
@@ -3158,7 +3241,7 @@
         "description": "A media object",
         "fields": [
           {
-            "name": "type",
+            "name": "mediaType",
             "description": null,
             "args": [],
             "type": {
@@ -4487,7 +4570,32 @@
           {
             "name": "media",
             "description": null,
-            "args": [],
+            "args": [
+              {
+                "name": "purpose",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "MediaPurpose",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "mediaType",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "MediaType",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
             "type": {
               "kind": "NON_NULL",
               "name": null,
