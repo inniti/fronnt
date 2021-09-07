@@ -67,7 +67,6 @@ export default class MiddleServer {
 
   public listen(port = 4000): Promise<MiddleServerInfo> {
     return this.apolloServer.listen({ port }).then((serverInfo) => {
-      console.log(serverInfo);
       return {
         address: serverInfo.address,
         url: serverInfo.url,

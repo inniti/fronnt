@@ -12,9 +12,6 @@ const baseWishlistResolvers: Resolvers = {
     addToWishlist: notImplemented,
     removeFromWishlist: notImplemented,
   },
-  Wishlist: {
-    items: notImplemented,
-  },
   WishlistItem: {
     article: notImplemented,
   },
