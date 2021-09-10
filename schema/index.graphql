@@ -454,6 +454,9 @@ An address
 """
 type Address implements AddressFields {
   name: String!
+  name2: String
+  name3: String
+  company: String
   street: String!
   zipCode: String!
   city: String!
@@ -707,6 +710,9 @@ Address data
 """
 input AddressInput {
   name: String!
+  name2: String
+  name3: String
+  company: String
   street: String!
   zipCode: String!
   city: String!
@@ -730,6 +736,8 @@ input RegistrationInput {
   firstname: String
   lastname: String
   password: String
+  addresses: [AddressInput!]!
+  salutation: String
 }
 
 """

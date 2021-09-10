@@ -40,6 +40,9 @@ export interface AddToCartResult {
 export interface Address extends AddressFields {
   __typename?: 'Address';
   name: Scalars['String'];
+  name2?: Maybe<Scalars['String']>;
+  name3?: Maybe<Scalars['String']>;
+  company?: Maybe<Scalars['String']>;
   street: Scalars['String'];
   zipCode: Scalars['String'];
   city: Scalars['String'];
@@ -57,6 +60,9 @@ export interface AddressFields {
 /** Address data */
 export interface AddressInput {
   name: Scalars['String'];
+  name2?: Maybe<Scalars['String']>;
+  name3?: Maybe<Scalars['String']>;
+  company?: Maybe<Scalars['String']>;
   street: Scalars['String'];
   zipCode: Scalars['String'];
   city: Scalars['String'];
@@ -754,6 +760,8 @@ export interface RegistrationInput {
   firstname?: Maybe<Scalars['String']>;
   lastname?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
+  addresses: Array<AddressInput>;
+  salutation?: Maybe<Scalars['String']>;
 }
 
 /** Result of the resolveUrl query */
@@ -1193,6 +1201,9 @@ export type AddressResolvers<
   ParentType extends ResolversParentTypes['Address'] = ResolversParentTypes['Address']
 > = {
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name2?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name3?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  company?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   street?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   zipCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   city?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
