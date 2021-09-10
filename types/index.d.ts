@@ -45,3 +45,9 @@ export interface MiddleServerInfo {
   url?: string;
   port: number | string;
 }
+
+export interface MiddleErrorDetails {
+  message: string;
+  code?: string;
+  ref?: string;
+}
