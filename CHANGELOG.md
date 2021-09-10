@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.11](https://github.com/inniti/middle/compare/v1.0.0-alpha.10...v1.0.0-alpha.11) (2021-09-10)
+
+
+### Features
+
+* **schema:** add additional fields to address types ([ae0680a](https://github.com/inniti/middle/commit/ae0680a03948fb804e73942442f1593ee84c283c))
+* **schema:** introduce resolver arguments to filter media list ([658cfd5](https://github.com/inniti/middle/commit/658cfd52ef24fe06a6cff56e3be70faec1c5c614))
+
 ## [1.0.0-alpha.10](https://github.com/inniti/middle/compare/v1.0.0-alpha.9...v1.0.0-alpha.10) (2021-07-27)
 
 
