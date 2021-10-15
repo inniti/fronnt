@@ -23,7 +23,7 @@ const buildConfigMin = {
 
 const buildConfigEsm = {
   ...buildConfig,
-  outfile: './dist/index.esm.js',
+  outfile: './dist/index.mjs',
   format: 'esm',
 };
 

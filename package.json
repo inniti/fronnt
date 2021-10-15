@@ -3,7 +3,7 @@
   "version": "1.0.0-alpha.11",
   "description": "Scalable eCommerce GraphQL API middleware architecture",
   "main": "dist/index.min.js",
-  "module": "dist/index.esm.js",
+  "module": "dist/index.mjs",
   "types": "types",
   "author": "inniti",
   "keywords": [
