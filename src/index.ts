@@ -3,12 +3,8 @@ import {
   MiddleServer as MiddleServerInterface,
   MiddleServerOptions,
 } from '../types';
-import {
-  ApolloError,
-  MiddleError,
-  NotImplementedError,
-  PagingOutOfRangeError,
-} from './errors';
+
+export * from './errors';
 
 export function createServer(
   options: MiddleServerOptions
@@ -16,10 +12,4 @@ export function createServer(
   return new MiddleServer(options);
 }
 
-export {
-  MiddleServer,
-  PagingOutOfRangeError,
-  NotImplementedError,
-  ApolloError,
-  MiddleError,
-};
+export { MiddleServer };

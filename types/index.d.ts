@@ -37,7 +37,7 @@ export interface MiddleConnector {
 
   extendContext?(context: ContextArguments): object;
 
-  getDataSources?(): Object;
+  getDataSources?(): object;
 }
 
 export interface MiddleServerInfo {
