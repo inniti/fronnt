@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.12](https://github.com/inniti/middle/compare/v1.0.0-alpha.11...v1.0.0-alpha.12) (2021-10-15)
+
+
+### Features
+
+* **error-handling:** export class MiddleError for standardized errors ([22275e4](https://github.com/inniti/middle/commit/22275e4f80d1be44c58829c4f28d451177032eb2))
+* **schema:** remove resolveUrl types and query in favor of new pages types and queries ([fdead78](https://github.com/inniti/middle/commit/fdead786095380d87b725fb9b29b0571c948280f))
+
 ## [1.0.0-alpha.11](https://github.com/inniti/middle/compare/v1.0.0-alpha.10...v1.0.0-alpha.11) (2021-09-10)
 
 
