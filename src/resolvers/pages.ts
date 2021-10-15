@@ -3,7 +3,9 @@ import { Resolvers } from '../../types';
 
 const baseNavigationResolvers: Resolvers = {
   Query: {
-    resolveUrl: notImplemented,
+    pages: notImplemented,
+    page: notImplemented,
+    pageByField: notImplemented,
   },
 };
 

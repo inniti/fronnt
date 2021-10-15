@@ -60,9 +60,28 @@ enum AttributeType {
   BOOLEAN
 }
 
+enum PageStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum PageBlockStatus {
+  DRAFT
+  PUBLISHED
+}
+
 interface PagedResult {
   paging: Paging!
 }
+
+####################################################################################
+# Scalars
+####################################################################################
+
+"""
+A map of scalars
+"""
+scalar ScalarMap
 
 ####################################################################################
 # Types
@@ -625,21 +644,47 @@ type Customer {
 }
 
 """
-Result of the resolveUrl query
-"""
-type ResolveUrlResult {
-  resolved: Boolean
-  resultId: ID
-  resultType: ResolveUrlResultType
-  redirectUrl: String
-}
-
-"""
 Result of adding one or many articles to the cart
 """
 type AddToCartResult {
   errors: [Error!]!
   items: [CartItem!]!
+}
+
+"""
+A page represents a page in the storefront, typically provided by a CMS
+"""
+type Page {
+  id: ID!
+  title: String!
+  meta: Meta!
+  url: String!
+  status: PageStatus!
+  blocks: [PageBlock!]!
+  language: String
+  createdAt: String
+  updatedAt: String
+}
+
+"""
+A page can have multiple blocks, each of a specific type, which are optionally placed into slots
+"""
+type PageBlock {
+  id: ID!
+  blockType: String!
+  data: ScalarMap!
+  status: PageBlockStatus!
+  slot: String
+  createdAt: String
+  updatedAt: String
+}
+
+"""
+Result of a pages query
+"""
+type PagesResult implements PagedResult {
+  paging: Paging!
+  results: [Page!]!
 }
 
 ####################################################################################
@@ -804,7 +849,13 @@ type Query {
   ): OrdersResult
   order(id: ID!): Order
   customer: Customer
-  resolveUrl(url: String): ResolveUrlResult
+  pages(
+    sort: [SortInput!]
+    status: [PageStatus!]
+    customQueryConditions: [CustomQueryConditionInput!]
+  ): PagesResult
+  page(id: ID!): Page
+  pageByField(field: String!, value: String!): Page
 }
 
 type Mutation {

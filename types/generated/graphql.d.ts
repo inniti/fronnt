@@ -1,4 +1,8 @@
-import { GraphQLResolveInfo } from 'graphql';
+import {
+  GraphQLResolveInfo,
+  GraphQLScalarType,
+  GraphQLScalarTypeConfig,
+} from 'graphql';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K];
@@ -18,6 +22,8 @@ export interface Scalars {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** A map of scalars */
+  ScalarMap: any;
 }
 
 /** One item to be added to the cart */
@@ -509,8 +515,45 @@ export interface OrdersResult extends PagedResult {
   results?: Maybe<Array<Order>>;
 }
 
+/** A page represents a page in the storefront, typically provided by a CMS */
+export interface Page {
+  __typename?: 'Page';
+  id: Scalars['ID'];
+  title: Scalars['String'];
+  meta: Meta;
+  url: Scalars['String'];
+  status: PageStatus;
+  blocks: Array<PageBlock>;
+  language?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+}
+
+/** A page can have multiple blocks, each of a specific type, which are optionally placed into slots */
+export interface PageBlock {
+  __typename?: 'PageBlock';
+  id: Scalars['ID'];
+  blockType: Scalars['String'];
+  data: Scalars['ScalarMap'];
+  status: PageBlockStatus;
+  slot?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+}
+
+export type PageBlockStatus = 'DRAFT' | 'PUBLISHED';
+
+export type PageStatus = 'DRAFT' | 'PUBLISHED';
+
 export interface PagedResult {
   paging: Paging;
+}
+
+/** Result of a pages query */
+export interface PagesResult extends PagedResult {
+  __typename?: 'PagesResult';
+  paging: Paging;
+  results: Array<Page>;
 }
 
 /** Paging information */
@@ -648,7 +691,9 @@ export interface Query {
   orders?: Maybe<OrdersResult>;
   order?: Maybe<Order>;
   customer?: Maybe<Customer>;
-  resolveUrl?: Maybe<ResolveUrlResult>;
+  pages?: Maybe<PagesResult>;
+  page?: Maybe<Page>;
+  pageByField?: Maybe<Page>;
 }
 
 export interface QueryProductsArgs {
@@ -736,8 +781,19 @@ export interface QueryOrderArgs {
   id: Scalars['ID'];
 }
 
-export interface QueryResolveUrlArgs {
-  url?: Maybe<Scalars['String']>;
+export interface QueryPagesArgs {
+  sort?: Maybe<Array<SortInput>>;
+  status?: Maybe<Array<PageStatus>>;
+  customQueryConditions?: Maybe<Array<CustomQueryConditionInput>>;
+}
+
+export interface QueryPageArgs {
+  id: Scalars['ID'];
+}
+
+export interface QueryPageByFieldArgs {
+  field: Scalars['String'];
+  value: Scalars['String'];
 }
 
 /**
@@ -762,15 +818,6 @@ export interface RegistrationInput {
   password?: Maybe<Scalars['String']>;
   addresses: Array<AddressInput>;
   salutation?: Maybe<Scalars['String']>;
-}
-
-/** Result of the resolveUrl query */
-export interface ResolveUrlResult {
-  __typename?: 'ResolveUrlResult';
-  resolved?: Maybe<Scalars['Boolean']>;
-  resultId?: Maybe<Scalars['ID']>;
-  resultType?: Maybe<ResolveUrlResultType>;
-  redirectUrl?: Maybe<Scalars['String']>;
 }
 
 export type ResolveUrlResultType = 'CATEGORY' | 'PRODUCT' | 'ARTICLE' | 'BRAND';
@@ -1061,14 +1108,20 @@ export type ResolversTypes = {
   Order: ResolverTypeWrapper<Order>;
   OrderItem: ResolverTypeWrapper<OrderItem>;
   OrdersResult: ResolverTypeWrapper<OrdersResult>;
+  Page: ResolverTypeWrapper<Page>;
+  PageBlock: ResolverTypeWrapper<PageBlock>;
+  PageBlockStatus: PageBlockStatus;
+  PageStatus: PageStatus;
   PagedResult:
     | ResolversTypes['ArticlesResult']
     | ResolversTypes['BrandsResult']
     | ResolversTypes['CartsResult']
     | ResolversTypes['CategoriesResult']
     | ResolversTypes['OrdersResult']
+    | ResolversTypes['PagesResult']
     | ResolversTypes['ProductsResult']
     | ResolversTypes['WishlistsResult'];
+  PagesResult: ResolverTypeWrapper<PagesResult>;
   Paging: ResolverTypeWrapper<Paging>;
   PagingInput: PagingInput;
   PaymentInfo: ResolverTypeWrapper<PaymentInfo>;
@@ -1082,9 +1135,9 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   ReferencePrice: ResolverTypeWrapper<ReferencePrice>;
   RegistrationInput: RegistrationInput;
-  ResolveUrlResult: ResolverTypeWrapper<ResolveUrlResult>;
   ResolveUrlResultType: ResolveUrlResultType;
   SalesUnit: ResolverTypeWrapper<SalesUnit>;
+  ScalarMap: ResolverTypeWrapper<Scalars['ScalarMap']>;
   Shop: ResolverTypeWrapper<Shop>;
   SortInput: SortInput;
   SortValue: SortValue;
@@ -1149,14 +1202,18 @@ export type ResolversParentTypes = {
   Order: Order;
   OrderItem: OrderItem;
   OrdersResult: OrdersResult;
+  Page: Page;
+  PageBlock: PageBlock;
   PagedResult:
     | ResolversParentTypes['ArticlesResult']
     | ResolversParentTypes['BrandsResult']
     | ResolversParentTypes['CartsResult']
     | ResolversParentTypes['CategoriesResult']
     | ResolversParentTypes['OrdersResult']
+    | ResolversParentTypes['PagesResult']
     | ResolversParentTypes['ProductsResult']
     | ResolversParentTypes['WishlistsResult'];
+  PagesResult: PagesResult;
   Paging: Paging;
   PagingInput: PagingInput;
   PaymentInfo: PaymentInfo;
@@ -1169,8 +1226,8 @@ export type ResolversParentTypes = {
   Query: {};
   ReferencePrice: ReferencePrice;
   RegistrationInput: RegistrationInput;
-  ResolveUrlResult: ResolveUrlResult;
   SalesUnit: SalesUnit;
+  ScalarMap: Scalars['ScalarMap'];
   Shop: Shop;
   SortInput: SortInput;
   Sorting: Sorting;
@@ -1800,6 +1857,56 @@ export type OrdersResultResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PageResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Page'] = ResolversParentTypes['Page']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  meta?: Resolver<ResolversTypes['Meta'], ParentType, ContextType>;
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['PageStatus'], ParentType, ContextType>;
+  blocks?: Resolver<
+    Array<ResolversTypes['PageBlock']>,
+    ParentType,
+    ContextType
+  >;
+  language?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  updatedAt?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PageBlockResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['PageBlock'] = ResolversParentTypes['PageBlock']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  blockType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  data?: Resolver<ResolversTypes['ScalarMap'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['PageBlockStatus'], ParentType, ContextType>;
+  slot?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  updatedAt?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type PagedResultResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['PagedResult'] = ResolversParentTypes['PagedResult']
@@ -1810,12 +1917,22 @@ export type PagedResultResolvers<
     | 'CartsResult'
     | 'CategoriesResult'
     | 'OrdersResult'
+    | 'PagesResult'
     | 'ProductsResult'
     | 'WishlistsResult',
     ParentType,
     ContextType
   >;
   paging?: Resolver<ResolversTypes['Paging'], ParentType, ContextType>;
+};
+
+export type PagesResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['PagesResult'] = ResolversParentTypes['PagesResult']
+> = {
+  paging?: Resolver<ResolversTypes['Paging'], ParentType, ContextType>;
+  results?: Resolver<Array<ResolversTypes['Page']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type PagingResolvers<
@@ -2088,11 +2205,23 @@ export type QueryResolvers<
     ParentType,
     ContextType
   >;
-  resolveUrl?: Resolver<
-    Maybe<ResolversTypes['ResolveUrlResult']>,
+  pages?: Resolver<
+    Maybe<ResolversTypes['PagesResult']>,
     ParentType,
     ContextType,
-    RequireFields<QueryResolveUrlArgs, never>
+    RequireFields<QueryPagesArgs, never>
+  >;
+  page?: Resolver<
+    Maybe<ResolversTypes['Page']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryPageArgs, 'id'>
+  >;
+  pageByField?: Resolver<
+    Maybe<ResolversTypes['Page']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryPageByFieldArgs, 'field' | 'value'>
   >;
 };
 
@@ -2109,29 +2238,6 @@ export type ReferencePriceResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ResolveUrlResultResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['ResolveUrlResult'] = ResolversParentTypes['ResolveUrlResult']
-> = {
-  resolved?: Resolver<
-    Maybe<ResolversTypes['Boolean']>,
-    ParentType,
-    ContextType
-  >;
-  resultId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
-  resultType?: Resolver<
-    Maybe<ResolversTypes['ResolveUrlResultType']>,
-    ParentType,
-    ContextType
-  >;
-  redirectUrl?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type SalesUnitResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['SalesUnit'] = ResolversParentTypes['SalesUnit']
@@ -2141,6 +2247,11 @@ export type SalesUnitResolvers<
   conversion?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
+
+export interface ScalarMapScalarConfig
+  extends GraphQLScalarTypeConfig<ResolversTypes['ScalarMap'], any> {
+  name: 'ScalarMap';
+}
 
 export type ShopResolvers<
   ContextType = any,
@@ -2290,7 +2401,10 @@ export type Resolvers<ContextType = any> = {
   Order?: OrderResolvers<ContextType>;
   OrderItem?: OrderItemResolvers<ContextType>;
   OrdersResult?: OrdersResultResolvers<ContextType>;
+  Page?: PageResolvers<ContextType>;
+  PageBlock?: PageBlockResolvers<ContextType>;
   PagedResult?: PagedResultResolvers<ContextType>;
+  PagesResult?: PagesResultResolvers<ContextType>;
   Paging?: PagingResolvers<ContextType>;
   PaymentInfo?: PaymentInfoResolvers<ContextType>;
   Price?: PriceResolvers<ContextType>;
@@ -2300,8 +2414,8 @@ export type Resolvers<ContextType = any> = {
   ProductsResult?: ProductsResultResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   ReferencePrice?: ReferencePriceResolvers<ContextType>;
-  ResolveUrlResult?: ResolveUrlResultResolvers<ContextType>;
   SalesUnit?: SalesUnitResolvers<ContextType>;
+  ScalarMap?: GraphQLScalarType;
   Shop?: ShopResolvers<ContextType>;
   Sorting?: SortingResolvers<ContextType>;
   Suggestion?: SuggestionResolvers<ContextType>;
