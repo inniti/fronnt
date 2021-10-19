@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.13](https://github.com/inniti/middle/compare/v1.0.0-alpha.12...v1.0.0-alpha.13) (2021-10-19)
+
+
+### Features
+
+* **schema:** extend schema to support reservations, extend warehouse types and queries ([e3ddf5b](https://github.com/inniti/middle/commit/e3ddf5b5f04d7ff1ff9af5d92ea6a691affc4535))
+
 ## [1.0.0-alpha.12](https://github.com/inniti/middle/compare/v1.0.0-alpha.11...v1.0.0-alpha.12) (2021-10-15)
 
 
