@@ -70,6 +70,13 @@ enum PageBlockStatus {
   PUBLISHED
 }
 
+enum ReservationStatus {
+  NEW
+  READY
+  CLOSED
+  CANCELLED
+}
+
 interface PagedResult {
   paging: Paging!
 }
@@ -144,15 +151,25 @@ A warehouse
 type Warehouse {
   id: ID!
   name: String!
+  openingTimes: [OpeningTime!]!
 }
 
 """
-Tells how many items of an article are available
+Opening times of a warehouse/store
+"""
+type OpeningTime {
+  dayOfWeek: String!
+  from: String!
+  until: String!
+}
+
+"""
+Tells how many items of an article are available. Refers to the BaseUnit of the article.
 """
 type Availability {
   value: Int!
   warehouseId: ID!
-  warehouse: Warehouse!
+  warehouse: Warehouse
 }
 
 """
@@ -293,7 +310,7 @@ type Article {
   meta: Meta!
   prices(quantity: Int): [Price!]!
   taxClass: TaxClass!
-  availabilities: [Availability!]!
+  availabilities(warehouseId: ID): [Availability!]!
   status: ArticleStatus!
   product: Product
   salesUnits: [SalesUnit!]!
@@ -640,7 +657,7 @@ type Customer {
   lastname: String
   blocked: Boolean!
   email: String!
-  addresses: [CustomerAddress!]
+  addresses: [CustomerAddress!]!
 }
 
 """
@@ -685,6 +702,51 @@ Result of a pages query
 type PagesResult implements PagedResult {
   paging: Paging!
   results: [Page!]!
+}
+
+"""
+A reservation of articles in specified quantites in a warehouse
+"""
+type Reservation {
+  id: ID!
+  reservationNumber: String!
+  status: ReservationStatus!
+  customerId: ID
+  customer: Customer
+  email: String!
+  phone: String
+  firstname: String!
+  lastname: String!
+  warehouseId: ID!
+  warehouse: Warehouse
+  validUntil: String!
+  articles: [ReservedArticle!]!
+}
+
+"""
+A reserved article references an article in a specified quantity which is part of a reservation
+"""
+type ReservedArticle {
+  id: ID!
+  articleID: ID!
+  article: Article
+  quantity: Int!
+}
+
+"""
+Result of a reservations query
+"""
+type ReservationsResult implements PagedResult {
+  paging: Paging!
+  results: [Reservation!]!
+}
+
+"""
+Result of a warehouses query
+"""
+type WarehousesResult implements PagedResult {
+  paging: Paging!
+  results: [Warehouse!]!
 }
 
 ####################################################################################
@@ -803,12 +865,41 @@ input CustomQueryConditionInput {
   value: String!
 }
 
+"""
+Contact data required to create a reservation
+"""
+input ReservationContactDataInput {
+  email: String!
+  firstname: String!
+  lastname: String!
+  phone: String
+}
+
+"""
+Data required to create a new reservation
+"""
+input ReservationInput {
+  articleId: ID!
+  quantity: Int!
+  contactData: ReservationContactDataInput!
+}
+
+"""
+Fields to narrow down search results for warehouses around a location
+"""
+input AroundLocationInput {
+  searchQuery: String
+  longitude: Float
+  latitude: Float
+}
+
 ####################################################################################
 # Root
 ####################################################################################
 
 type Query {
   shop: Shop
+
   products(
     query: String
     filters: [ProductsSearchFiltersInput!]
@@ -818,37 +909,46 @@ type Query {
   ): ProductsResult
   product(id: ID!): Product
   productByField(field: String!, value: String!): Product
+
   article(id: ID!): Article
   articleByField(field: String!, value: String!): Article
+
   brands(
     paging: PagingInput
     customQueryConditions: [CustomQueryConditionInput!]
   ): BrandsResult
   brand(id: ID!): Brand
   brandByField(field: String!, value: String!): Brand
+
   categories(
     customQueryConditions: [CustomQueryConditionInput!]
   ): CategoriesResult
   category(id: ID!): Category
   categoryByField(field: String!, value: String!): Category
+
   suggestions(
     searchTerm: String
     customQueryConditions: [CustomQueryConditionInput!]
   ): [Suggestion!]!
+
   carts(customQueryConditions: [CustomQueryConditionInput!]): CartsResult
   cart(id: ID!): Cart
+
   wishlists(
     sort: [SortInput!]
     customQueryConditions: [CustomQueryConditionInput!]
   ): WishlistsResult
   wishlist(id: ID!): Wishlist
+
   orders(
     paging: PagingInput
     sort: [SortInput!]
     customQueryConditions: [CustomQueryConditionInput!]
   ): OrdersResult
   order(id: ID!): Order
+
   customer: Customer
+
   pages(
     sort: [SortInput!]
     status: [PageStatus!]
@@ -856,6 +956,19 @@ type Query {
   ): PagesResult
   page(id: ID!): Page
   pageByField(field: String!, value: String!): Page
+
+  warehouses(
+    aroundLocation: AroundLocationInput
+    customQueryConditions: [CustomQueryConditionInput!]
+  ): WarehousesResult
+  warehouse(id: ID!): Warehouse
+  warehouseByField(field: String!, value: String!): Warehouse
+
+  reservations(
+    customQueryConditions: [CustomQueryConditionInput!]
+  ): ReservationsResult
+  reservation(id: ID!): Reservation
+  reservationByField(field: String!, value: String!): Reservation
 }
 
 type Mutation {
@@ -877,4 +990,11 @@ type Mutation {
 
   register(data: RegistrationInput!): Customer
   updateCustomer(id: ID!, data: UpdateCustomerInput!): Customer
+
+  createReservation(
+    articleId: ID!
+    quantity: Int!
+    reservationData: ReservationInput!
+  ): Reservation
+  cancelReservation(reservationId: ID!): DeleteResult
 }

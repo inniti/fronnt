@@ -75,6 +75,13 @@ export interface AddressInput {
   country: Scalars['String'];
 }
 
+/** Fields to narrow down search results for warehouses around a location */
+export interface AroundLocationInput {
+  searchQuery?: Maybe<Scalars['String']>;
+  longitude?: Maybe<Scalars['Float']>;
+  latitude?: Maybe<Scalars['Float']>;
+}
+
 /** An article is a concrete shape of a product */
 export interface Article {
   __typename?: 'Article';
@@ -109,6 +116,11 @@ export interface ArticleMediaArgs {
 /** An article is a concrete shape of a product */
 export interface ArticlePricesArgs {
   quantity?: Maybe<Scalars['Int']>;
+}
+
+/** An article is a concrete shape of a product */
+export interface ArticleAvailabilitiesArgs {
+  warehouseId?: Maybe<Scalars['ID']>;
 }
 
 /** Article list filter */
@@ -165,12 +177,12 @@ export interface AttributeDefinition {
 
 export type AttributeType = 'NUMBER' | 'COLOR' | 'STRING' | 'BOOLEAN';
 
-/** Tells how many items of an article are available */
+/** Tells how many items of an article are available. Refers to the BaseUnit of the article. */
 export interface Availability {
   __typename?: 'Availability';
   value: Scalars['Int'];
   warehouseId: Scalars['ID'];
-  warehouse: Warehouse;
+  warehouse?: Maybe<Warehouse>;
 }
 
 /** The base unit is used for all internal calculations */
@@ -354,7 +366,7 @@ export interface Customer {
   lastname?: Maybe<Scalars['String']>;
   blocked: Scalars['Boolean'];
   email: Scalars['String'];
-  addresses?: Maybe<Array<CustomerAddress>>;
+  addresses: Array<CustomerAddress>;
 }
 
 /** A saved address of a customer */
@@ -430,6 +442,8 @@ export interface Mutation {
   finishCheckout?: Maybe<Order>;
   register?: Maybe<Customer>;
   updateCustomer?: Maybe<Customer>;
+  createReservation?: Maybe<Reservation>;
+  cancelReservation?: Maybe<DeleteResult>;
 }
 
 export interface MutationDeleteCartArgs {
@@ -484,6 +498,24 @@ export interface MutationRegisterArgs {
 export interface MutationUpdateCustomerArgs {
   id: Scalars['ID'];
   data: UpdateCustomerInput;
+}
+
+export interface MutationCreateReservationArgs {
+  articleId: Scalars['ID'];
+  quantity: Scalars['Int'];
+  reservationData: ReservationInput;
+}
+
+export interface MutationCancelReservationArgs {
+  reservationId: Scalars['ID'];
+}
+
+/** Opening times of a warehouse/store */
+export interface OpeningTime {
+  __typename?: 'OpeningTime';
+  dayOfWeek: Scalars['String'];
+  from: Scalars['String'];
+  until: Scalars['String'];
 }
 
 /** Order */
@@ -694,6 +726,12 @@ export interface Query {
   pages?: Maybe<PagesResult>;
   page?: Maybe<Page>;
   pageByField?: Maybe<Page>;
+  warehouses?: Maybe<WarehousesResult>;
+  warehouse?: Maybe<Warehouse>;
+  warehouseByField?: Maybe<Warehouse>;
+  reservations?: Maybe<ReservationsResult>;
+  reservation?: Maybe<Reservation>;
+  reservationByField?: Maybe<Reservation>;
 }
 
 export interface QueryProductsArgs {
@@ -796,6 +834,33 @@ export interface QueryPageByFieldArgs {
   value: Scalars['String'];
 }
 
+export interface QueryWarehousesArgs {
+  aroundLocation?: Maybe<AroundLocationInput>;
+  customQueryConditions?: Maybe<Array<CustomQueryConditionInput>>;
+}
+
+export interface QueryWarehouseArgs {
+  id: Scalars['ID'];
+}
+
+export interface QueryWarehouseByFieldArgs {
+  field: Scalars['String'];
+  value: Scalars['String'];
+}
+
+export interface QueryReservationsArgs {
+  customQueryConditions?: Maybe<Array<CustomQueryConditionInput>>;
+}
+
+export interface QueryReservationArgs {
+  id: Scalars['ID'];
+}
+
+export interface QueryReservationByFieldArgs {
+  field: Scalars['String'];
+  value: Scalars['String'];
+}
+
 /**
  * A reference price provides a baseline with which prices of different articles can be compared, even though these
  * articles might be sond in different SalesUnits.
@@ -818,6 +883,57 @@ export interface RegistrationInput {
   password?: Maybe<Scalars['String']>;
   addresses: Array<AddressInput>;
   salutation?: Maybe<Scalars['String']>;
+}
+
+/** A reservation of articles in specified quantites in a warehouse */
+export interface Reservation {
+  __typename?: 'Reservation';
+  id: Scalars['ID'];
+  reservationNumber: Scalars['String'];
+  status: ReservationStatus;
+  customerId?: Maybe<Scalars['ID']>;
+  customer?: Maybe<Customer>;
+  email: Scalars['String'];
+  phone?: Maybe<Scalars['String']>;
+  firstname: Scalars['String'];
+  lastname: Scalars['String'];
+  warehouseId: Scalars['ID'];
+  warehouse?: Maybe<Warehouse>;
+  validUntil: Scalars['String'];
+  articles: Array<ReservedArticle>;
+}
+
+/** Contact data required to create a reservation */
+export interface ReservationContactDataInput {
+  email: Scalars['String'];
+  firstname: Scalars['String'];
+  lastname: Scalars['String'];
+  phone?: Maybe<Scalars['String']>;
+}
+
+/** Data required to create a new reservation */
+export interface ReservationInput {
+  articleId: Scalars['ID'];
+  quantity: Scalars['Int'];
+  contactData: ReservationContactDataInput;
+}
+
+export type ReservationStatus = 'NEW' | 'READY' | 'CLOSED' | 'CANCELLED';
+
+/** Result of a reservations query */
+export interface ReservationsResult extends PagedResult {
+  __typename?: 'ReservationsResult';
+  paging: Paging;
+  results: Array<Reservation>;
+}
+
+/** A reserved article references an article in a specified quantity which is part of a reservation */
+export interface ReservedArticle {
+  __typename?: 'ReservedArticle';
+  id: Scalars['ID'];
+  articleID: Scalars['ID'];
+  article?: Maybe<Article>;
+  quantity: Scalars['Int'];
 }
 
 export type ResolveUrlResultType = 'CATEGORY' | 'PRODUCT' | 'ARTICLE' | 'BRAND';
@@ -917,6 +1033,14 @@ export interface Warehouse {
   __typename?: 'Warehouse';
   id: Scalars['ID'];
   name: Scalars['String'];
+  openingTimes: Array<OpeningTime>;
+}
+
+/** Result of a warehouses query */
+export interface WarehousesResult extends PagedResult {
+  __typename?: 'WarehousesResult';
+  paging: Paging;
+  results: Array<Warehouse>;
 }
 
 /** Wishlist */
@@ -1070,6 +1194,8 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   AddressFields: ResolversTypes['Address'] | ResolversTypes['CustomerAddress'];
   AddressInput: AddressInput;
+  AroundLocationInput: AroundLocationInput;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
   Article: ResolverTypeWrapper<Article>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   ArticleListFilter: ResolverTypeWrapper<ArticleListFilter>;
@@ -1105,6 +1231,7 @@ export type ResolversTypes = {
   MediaType: MediaType;
   Meta: ResolverTypeWrapper<Meta>;
   Mutation: ResolverTypeWrapper<{}>;
+  OpeningTime: ResolverTypeWrapper<OpeningTime>;
   Order: ResolverTypeWrapper<Order>;
   OrderItem: ResolverTypeWrapper<OrderItem>;
   OrdersResult: ResolverTypeWrapper<OrdersResult>;
@@ -1120,6 +1247,8 @@ export type ResolversTypes = {
     | ResolversTypes['OrdersResult']
     | ResolversTypes['PagesResult']
     | ResolversTypes['ProductsResult']
+    | ResolversTypes['ReservationsResult']
+    | ResolversTypes['WarehousesResult']
     | ResolversTypes['WishlistsResult'];
   PagesResult: ResolverTypeWrapper<PagesResult>;
   Paging: ResolverTypeWrapper<Paging>;
@@ -1135,6 +1264,12 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   ReferencePrice: ResolverTypeWrapper<ReferencePrice>;
   RegistrationInput: RegistrationInput;
+  Reservation: ResolverTypeWrapper<Reservation>;
+  ReservationContactDataInput: ReservationContactDataInput;
+  ReservationInput: ReservationInput;
+  ReservationStatus: ReservationStatus;
+  ReservationsResult: ResolverTypeWrapper<ReservationsResult>;
+  ReservedArticle: ResolverTypeWrapper<ReservedArticle>;
   ResolveUrlResultType: ResolveUrlResultType;
   SalesUnit: ResolverTypeWrapper<SalesUnit>;
   ScalarMap: ResolverTypeWrapper<Scalars['ScalarMap']>;
@@ -1151,6 +1286,7 @@ export type ResolversTypes = {
   UpdateCheckoutInput: UpdateCheckoutInput;
   UpdateCustomerInput: UpdateCustomerInput;
   Warehouse: ResolverTypeWrapper<Warehouse>;
+  WarehousesResult: ResolverTypeWrapper<WarehousesResult>;
   Wishlist: ResolverTypeWrapper<Wishlist>;
   WishlistItem: ResolverTypeWrapper<WishlistItem>;
   WishlistsResult: ResolverTypeWrapper<WishlistsResult>;
@@ -1168,6 +1304,8 @@ export type ResolversParentTypes = {
     | ResolversParentTypes['Address']
     | ResolversParentTypes['CustomerAddress'];
   AddressInput: AddressInput;
+  AroundLocationInput: AroundLocationInput;
+  Float: Scalars['Float'];
   Article: Article;
   Boolean: Scalars['Boolean'];
   ArticleListFilter: ArticleListFilter;
@@ -1199,6 +1337,7 @@ export type ResolversParentTypes = {
   Media: Media;
   Meta: Meta;
   Mutation: {};
+  OpeningTime: OpeningTime;
   Order: Order;
   OrderItem: OrderItem;
   OrdersResult: OrdersResult;
@@ -1212,6 +1351,8 @@ export type ResolversParentTypes = {
     | ResolversParentTypes['OrdersResult']
     | ResolversParentTypes['PagesResult']
     | ResolversParentTypes['ProductsResult']
+    | ResolversParentTypes['ReservationsResult']
+    | ResolversParentTypes['WarehousesResult']
     | ResolversParentTypes['WishlistsResult'];
   PagesResult: PagesResult;
   Paging: Paging;
@@ -1226,6 +1367,11 @@ export type ResolversParentTypes = {
   Query: {};
   ReferencePrice: ReferencePrice;
   RegistrationInput: RegistrationInput;
+  Reservation: Reservation;
+  ReservationContactDataInput: ReservationContactDataInput;
+  ReservationInput: ReservationInput;
+  ReservationsResult: ReservationsResult;
+  ReservedArticle: ReservedArticle;
   SalesUnit: SalesUnit;
   ScalarMap: Scalars['ScalarMap'];
   Shop: Shop;
@@ -1239,6 +1385,7 @@ export type ResolversParentTypes = {
   UpdateCheckoutInput: UpdateCheckoutInput;
   UpdateCustomerInput: UpdateCustomerInput;
   Warehouse: Warehouse;
+  WarehousesResult: WarehousesResult;
   Wishlist: Wishlist;
   WishlistItem: WishlistItem;
   WishlistsResult: WishlistsResult;
@@ -1324,7 +1471,8 @@ export type ArticleResolvers<
   availabilities?: Resolver<
     Array<ResolversTypes['Availability']>,
     ParentType,
-    ContextType
+    ContextType,
+    RequireFields<ArticleAvailabilitiesArgs, never>
   >;
   status?: Resolver<ResolversTypes['ArticleStatus'], ParentType, ContextType>;
   product?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType>;
@@ -1412,7 +1560,11 @@ export type AvailabilityResolvers<
 > = {
   value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   warehouseId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  warehouse?: Resolver<ResolversTypes['Warehouse'], ParentType, ContextType>;
+  warehouse?: Resolver<
+    Maybe<ResolversTypes['Warehouse']>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1648,7 +1800,7 @@ export type CustomerResolvers<
   blocked?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   addresses?: Resolver<
-    Maybe<Array<ResolversTypes['CustomerAddress']>>,
+    Array<ResolversTypes['CustomerAddress']>,
     ParentType,
     ContextType
   >;
@@ -1808,6 +1960,31 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationUpdateCustomerArgs, 'id' | 'data'>
   >;
+  createReservation?: Resolver<
+    Maybe<ResolversTypes['Reservation']>,
+    ParentType,
+    ContextType,
+    RequireFields<
+      MutationCreateReservationArgs,
+      'articleId' | 'quantity' | 'reservationData'
+    >
+  >;
+  cancelReservation?: Resolver<
+    Maybe<ResolversTypes['DeleteResult']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationCancelReservationArgs, 'reservationId'>
+  >;
+};
+
+export type OpeningTimeResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['OpeningTime'] = ResolversParentTypes['OpeningTime']
+> = {
+  dayOfWeek?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  from?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  until?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type OrderResolvers<
@@ -1919,6 +2096,8 @@ export type PagedResultResolvers<
     | 'OrdersResult'
     | 'PagesResult'
     | 'ProductsResult'
+    | 'ReservationsResult'
+    | 'WarehousesResult'
     | 'WishlistsResult',
     ParentType,
     ContextType
@@ -2223,6 +2402,42 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryPageByFieldArgs, 'field' | 'value'>
   >;
+  warehouses?: Resolver<
+    Maybe<ResolversTypes['WarehousesResult']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryWarehousesArgs, never>
+  >;
+  warehouse?: Resolver<
+    Maybe<ResolversTypes['Warehouse']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryWarehouseArgs, 'id'>
+  >;
+  warehouseByField?: Resolver<
+    Maybe<ResolversTypes['Warehouse']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryWarehouseByFieldArgs, 'field' | 'value'>
+  >;
+  reservations?: Resolver<
+    Maybe<ResolversTypes['ReservationsResult']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryReservationsArgs, never>
+  >;
+  reservation?: Resolver<
+    Maybe<ResolversTypes['Reservation']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryReservationArgs, 'id'>
+  >;
+  reservationByField?: Resolver<
+    Maybe<ResolversTypes['Reservation']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryReservationByFieldArgs, 'field' | 'value'>
+  >;
 };
 
 export type ReferencePriceResolvers<
@@ -2235,6 +2450,70 @@ export type ReferencePriceResolvers<
   salesUnit?: Resolver<ResolversTypes['SalesUnit'], ParentType, ContextType>;
   taxValue?: Resolver<ResolversTypes['TaxValue'], ParentType, ContextType>;
   currency?: Resolver<ResolversTypes['Currency'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ReservationResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Reservation'] = ResolversParentTypes['Reservation']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  reservationNumber?: Resolver<
+    ResolversTypes['String'],
+    ParentType,
+    ContextType
+  >;
+  status?: Resolver<
+    ResolversTypes['ReservationStatus'],
+    ParentType,
+    ContextType
+  >;
+  customerId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  customer?: Resolver<
+    Maybe<ResolversTypes['Customer']>,
+    ParentType,
+    ContextType
+  >;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  phone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  firstname?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  lastname?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  warehouseId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  warehouse?: Resolver<
+    Maybe<ResolversTypes['Warehouse']>,
+    ParentType,
+    ContextType
+  >;
+  validUntil?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  articles?: Resolver<
+    Array<ResolversTypes['ReservedArticle']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ReservationsResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ReservationsResult'] = ResolversParentTypes['ReservationsResult']
+> = {
+  paging?: Resolver<ResolversTypes['Paging'], ParentType, ContextType>;
+  results?: Resolver<
+    Array<ResolversTypes['Reservation']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ReservedArticleResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ReservedArticle'] = ResolversParentTypes['ReservedArticle']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  articleID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  article?: Resolver<Maybe<ResolversTypes['Article']>, ParentType, ContextType>;
+  quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2327,6 +2606,24 @@ export type WarehouseResolvers<
 > = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  openingTimes?: Resolver<
+    Array<ResolversTypes['OpeningTime']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type WarehousesResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['WarehousesResult'] = ResolversParentTypes['WarehousesResult']
+> = {
+  paging?: Resolver<ResolversTypes['Paging'], ParentType, ContextType>;
+  results?: Resolver<
+    Array<ResolversTypes['Warehouse']>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2398,6 +2695,7 @@ export type Resolvers<ContextType = any> = {
   Media?: MediaResolvers<ContextType>;
   Meta?: MetaResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  OpeningTime?: OpeningTimeResolvers<ContextType>;
   Order?: OrderResolvers<ContextType>;
   OrderItem?: OrderItemResolvers<ContextType>;
   OrdersResult?: OrdersResultResolvers<ContextType>;
@@ -2414,6 +2712,9 @@ export type Resolvers<ContextType = any> = {
   ProductsResult?: ProductsResultResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   ReferencePrice?: ReferencePriceResolvers<ContextType>;
+  Reservation?: ReservationResolvers<ContextType>;
+  ReservationsResult?: ReservationsResultResolvers<ContextType>;
+  ReservedArticle?: ReservedArticleResolvers<ContextType>;
   SalesUnit?: SalesUnitResolvers<ContextType>;
   ScalarMap?: GraphQLScalarType;
   Shop?: ShopResolvers<ContextType>;
@@ -2423,6 +2724,7 @@ export type Resolvers<ContextType = any> = {
   TaxValue?: TaxValueResolvers<ContextType>;
   Totals?: TotalsResolvers<ContextType>;
   Warehouse?: WarehouseResolvers<ContextType>;
+  WarehousesResult?: WarehousesResultResolvers<ContextType>;
   Wishlist?: WishlistResolvers<ContextType>;
   WishlistItem?: WishlistItemResolvers<ContextType>;
   WishlistsResult?: WishlistsResultResolvers<ContextType>;

@@ -7,6 +7,8 @@ import checkout from './checkout';
 import wishlists from './wishlists';
 import account from './account';
 import shop from './shop';
+import reservations from './reservations';
+import warehouses from './warehouses';
 
 const ScalarMapType = new GraphQLScalarType({
   name: 'ScalarMap',
@@ -61,4 +63,6 @@ export default [
   checkout,
   wishlists,
   account,
+  reservations,
+  warehouses,
 ];
