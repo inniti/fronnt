@@ -11,4 +11,3 @@ codegen.yml
 .idea
 .eslintcache
 .husky
-graphql.schema.json
