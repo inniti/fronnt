@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.14](https://github.com/inniti/middle/compare/v1.0.0-alpha.13...v1.0.0-alpha.14) (2021-10-20)
+
 ## [1.0.0-alpha.13](https://github.com/inniti/middle/compare/v1.0.0-alpha.12...v1.0.0-alpha.13) (2021-10-19)
 
 
