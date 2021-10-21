@@ -77,6 +77,11 @@ enum ReservationStatus {
   CANCELLED
 }
 
+enum RelatedProductType {
+  ACCESSORY
+  ALTERNATIVE
+}
+
 interface PagedResult {
   paging: Paging!
 }
@@ -271,6 +276,19 @@ type Product {
     customQueryConditions: [CustomQueryConditionInput!]
   ): ArticlesResult
   categories(customQueryConditions: [CustomQueryConditionInput!]): [Category!]
+  relatedProducts(
+    type: RelatedProductType
+    paging: PagingInput
+    customQueryConditions: [CustomQueryConditionInput!]
+  ): RelatedProductsResult
+}
+
+"""
+A product which related to an other product
+"""
+type RelatedProduct {
+  type: RelatedProductType!
+  product: Product!
 }
 
 """
@@ -432,6 +450,14 @@ type ProductsResult implements PagedResult {
   results: [Product!]!
   filters: [ProductListFilter!]!
   sortings: [Sorting!]!
+}
+
+"""
+Paged result of a related-product list
+"""
+type RelatedProductsResult implements PagedResult {
+  paging: Paging!
+  results: [RelatedProduct!]!
 }
 
 """

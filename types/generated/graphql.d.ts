@@ -644,6 +644,7 @@ export interface Product {
   status: ProductStatus;
   articles?: Maybe<ArticlesResult>;
   categories?: Maybe<Array<Category>>;
+  relatedProducts?: Maybe<RelatedProductsResult>;
 }
 
 /** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
@@ -662,6 +663,13 @@ export interface ProductArticlesArgs {
 
 /** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
 export interface ProductCategoriesArgs {
+  customQueryConditions?: Maybe<Array<CustomQueryConditionInput>>;
+}
+
+/** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
+export interface ProductRelatedProductsArgs {
+  type?: Maybe<RelatedProductType>;
+  paging?: Maybe<PagingInput>;
   customQueryConditions?: Maybe<Array<CustomQueryConditionInput>>;
 }
 
@@ -883,6 +891,22 @@ export interface RegistrationInput {
   password?: Maybe<Scalars['String']>;
   addresses: Array<AddressInput>;
   salutation?: Maybe<Scalars['String']>;
+}
+
+/** A product which related to an other product */
+export interface RelatedProduct {
+  __typename?: 'RelatedProduct';
+  type: RelatedProductType;
+  product: Product;
+}
+
+export type RelatedProductType = 'ACCESSORY' | 'ALTERNATIVE';
+
+/** Paged result of a related-product list */
+export interface RelatedProductsResult extends PagedResult {
+  __typename?: 'RelatedProductsResult';
+  paging: Paging;
+  results: Array<RelatedProduct>;
 }
 
 /** A reservation of articles in specified quantites in a warehouse */
@@ -1247,6 +1271,7 @@ export type ResolversTypes = {
     | ResolversTypes['OrdersResult']
     | ResolversTypes['PagesResult']
     | ResolversTypes['ProductsResult']
+    | ResolversTypes['RelatedProductsResult']
     | ResolversTypes['ReservationsResult']
     | ResolversTypes['WarehousesResult']
     | ResolversTypes['WishlistsResult'];
@@ -1264,6 +1289,9 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   ReferencePrice: ResolverTypeWrapper<ReferencePrice>;
   RegistrationInput: RegistrationInput;
+  RelatedProduct: ResolverTypeWrapper<RelatedProduct>;
+  RelatedProductType: RelatedProductType;
+  RelatedProductsResult: ResolverTypeWrapper<RelatedProductsResult>;
   Reservation: ResolverTypeWrapper<Reservation>;
   ReservationContactDataInput: ReservationContactDataInput;
   ReservationInput: ReservationInput;
@@ -1351,6 +1379,7 @@ export type ResolversParentTypes = {
     | ResolversParentTypes['OrdersResult']
     | ResolversParentTypes['PagesResult']
     | ResolversParentTypes['ProductsResult']
+    | ResolversParentTypes['RelatedProductsResult']
     | ResolversParentTypes['ReservationsResult']
     | ResolversParentTypes['WarehousesResult']
     | ResolversParentTypes['WishlistsResult'];
@@ -1367,6 +1396,8 @@ export type ResolversParentTypes = {
   Query: {};
   ReferencePrice: ReferencePrice;
   RegistrationInput: RegistrationInput;
+  RelatedProduct: RelatedProduct;
+  RelatedProductsResult: RelatedProductsResult;
   Reservation: Reservation;
   ReservationContactDataInput: ReservationContactDataInput;
   ReservationInput: ReservationInput;
@@ -2096,6 +2127,7 @@ export type PagedResultResolvers<
     | 'OrdersResult'
     | 'PagesResult'
     | 'ProductsResult'
+    | 'RelatedProductsResult'
     | 'ReservationsResult'
     | 'WarehousesResult'
     | 'WishlistsResult',
@@ -2217,6 +2249,12 @@ export type ProductResolvers<
     ParentType,
     ContextType,
     RequireFields<ProductCategoriesArgs, never>
+  >;
+  relatedProducts?: Resolver<
+    Maybe<ResolversTypes['RelatedProductsResult']>,
+    ParentType,
+    ContextType,
+    RequireFields<ProductRelatedProductsArgs, never>
   >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -2450,6 +2488,32 @@ export type ReferencePriceResolvers<
   salesUnit?: Resolver<ResolversTypes['SalesUnit'], ParentType, ContextType>;
   taxValue?: Resolver<ResolversTypes['TaxValue'], ParentType, ContextType>;
   currency?: Resolver<ResolversTypes['Currency'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RelatedProductResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['RelatedProduct'] = ResolversParentTypes['RelatedProduct']
+> = {
+  type?: Resolver<
+    ResolversTypes['RelatedProductType'],
+    ParentType,
+    ContextType
+  >;
+  product?: Resolver<ResolversTypes['Product'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RelatedProductsResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['RelatedProductsResult'] = ResolversParentTypes['RelatedProductsResult']
+> = {
+  paging?: Resolver<ResolversTypes['Paging'], ParentType, ContextType>;
+  results?: Resolver<
+    Array<ResolversTypes['RelatedProduct']>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2712,6 +2776,8 @@ export type Resolvers<ContextType = any> = {
   ProductsResult?: ProductsResultResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   ReferencePrice?: ReferencePriceResolvers<ContextType>;
+  RelatedProduct?: RelatedProductResolvers<ContextType>;
+  RelatedProductsResult?: RelatedProductsResultResolvers<ContextType>;
   Reservation?: ReservationResolvers<ContextType>;
   ReservationsResult?: ReservationsResultResolvers<ContextType>;
   ReservedArticle?: ReservedArticleResolvers<ContextType>;
