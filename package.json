@@ -2,8 +2,14 @@
   "name": "@inniti/middle",
   "version": "1.0.0-alpha.15",
   "description": "Scalable eCommerce GraphQL API middleware architecture",
-  "main": "dist/index.min.js",
+  "main": "dist/index.js",
   "module": "dist/index.mjs",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
   "types": "types",
   "author": "inniti",
   "keywords": [
