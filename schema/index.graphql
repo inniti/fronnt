@@ -281,6 +281,24 @@ type Product {
     paging: PagingInput
     customQueryConditions: [CustomQueryConditionInput!]
   ): RelatedProductsResult
+  vendorId: ID!
+  vendor: Vendor
+}
+
+"""
+Vendors sell products. In most cases there is only one vendor in the system, but there may be many for marketplaces
+"""
+type Vendor {
+  id: ID!
+  name: String!
+}
+
+"""
+Result of a vendors query
+"""
+type VendorsResult implements PagedResult {
+  paging: Paging!
+  results: [Vendor!]!
 }
 
 """
@@ -995,6 +1013,10 @@ type Query {
   ): ReservationsResult
   reservation(id: ID!): Reservation
   reservationByField(field: String!, value: String!): Reservation
+
+  vendors(customQueryConditions: [CustomQueryConditionInput!]): VendorsResult
+  vendor(id: ID!): Vendor
+  vendorByField(field: String!, value: String!): Vendor
 }
 
 type Mutation {

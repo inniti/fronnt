@@ -645,6 +645,8 @@ export interface Product {
   articles?: Maybe<ArticlesResult>;
   categories?: Maybe<Array<Category>>;
   relatedProducts?: Maybe<RelatedProductsResult>;
+  vendorId: Scalars['ID'];
+  vendor?: Maybe<Vendor>;
 }
 
 /** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
@@ -740,6 +742,9 @@ export interface Query {
   reservations?: Maybe<ReservationsResult>;
   reservation?: Maybe<Reservation>;
   reservationByField?: Maybe<Reservation>;
+  vendors?: Maybe<VendorsResult>;
+  vendor?: Maybe<Vendor>;
+  vendorByField?: Maybe<Vendor>;
 }
 
 export interface QueryProductsArgs {
@@ -865,6 +870,19 @@ export interface QueryReservationArgs {
 }
 
 export interface QueryReservationByFieldArgs {
+  field: Scalars['String'];
+  value: Scalars['String'];
+}
+
+export interface QueryVendorsArgs {
+  customQueryConditions?: Maybe<Array<CustomQueryConditionInput>>;
+}
+
+export interface QueryVendorArgs {
+  id: Scalars['ID'];
+}
+
+export interface QueryVendorByFieldArgs {
   field: Scalars['String'];
   value: Scalars['String'];
 }
@@ -1050,6 +1068,20 @@ export interface UpdateCustomerInput {
   email?: Maybe<Scalars['String']>;
   firstname?: Maybe<Scalars['String']>;
   lastname?: Maybe<Scalars['String']>;
+}
+
+/** Vendors sell products. In most cases there is only one vendor in the system, but there may be many for marketplaces */
+export interface Vendor {
+  __typename?: 'Vendor';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+}
+
+/** Result of a vendors query */
+export interface VendorsResult extends PagedResult {
+  __typename?: 'VendorsResult';
+  paging: Paging;
+  results: Array<Vendor>;
 }
 
 /** A warehouse */
@@ -1273,6 +1305,7 @@ export type ResolversTypes = {
     | ResolversTypes['ProductsResult']
     | ResolversTypes['RelatedProductsResult']
     | ResolversTypes['ReservationsResult']
+    | ResolversTypes['VendorsResult']
     | ResolversTypes['WarehousesResult']
     | ResolversTypes['WishlistsResult'];
   PagesResult: ResolverTypeWrapper<PagesResult>;
@@ -1313,6 +1346,8 @@ export type ResolversTypes = {
   UpdateCartItemInput: UpdateCartItemInput;
   UpdateCheckoutInput: UpdateCheckoutInput;
   UpdateCustomerInput: UpdateCustomerInput;
+  Vendor: ResolverTypeWrapper<Vendor>;
+  VendorsResult: ResolverTypeWrapper<VendorsResult>;
   Warehouse: ResolverTypeWrapper<Warehouse>;
   WarehousesResult: ResolverTypeWrapper<WarehousesResult>;
   Wishlist: ResolverTypeWrapper<Wishlist>;
@@ -1381,6 +1416,7 @@ export type ResolversParentTypes = {
     | ResolversParentTypes['ProductsResult']
     | ResolversParentTypes['RelatedProductsResult']
     | ResolversParentTypes['ReservationsResult']
+    | ResolversParentTypes['VendorsResult']
     | ResolversParentTypes['WarehousesResult']
     | ResolversParentTypes['WishlistsResult'];
   PagesResult: PagesResult;
@@ -1415,6 +1451,8 @@ export type ResolversParentTypes = {
   UpdateCartItemInput: UpdateCartItemInput;
   UpdateCheckoutInput: UpdateCheckoutInput;
   UpdateCustomerInput: UpdateCustomerInput;
+  Vendor: Vendor;
+  VendorsResult: VendorsResult;
   Warehouse: Warehouse;
   WarehousesResult: WarehousesResult;
   Wishlist: Wishlist;
@@ -2129,6 +2167,7 @@ export type PagedResultResolvers<
     | 'ProductsResult'
     | 'RelatedProductsResult'
     | 'ReservationsResult'
+    | 'VendorsResult'
     | 'WarehousesResult'
     | 'WishlistsResult',
     ParentType,
@@ -2256,6 +2295,8 @@ export type ProductResolvers<
     ContextType,
     RequireFields<ProductRelatedProductsArgs, never>
   >;
+  vendorId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  vendor?: Resolver<Maybe<ResolversTypes['Vendor']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2476,6 +2517,24 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryReservationByFieldArgs, 'field' | 'value'>
   >;
+  vendors?: Resolver<
+    Maybe<ResolversTypes['VendorsResult']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryVendorsArgs, never>
+  >;
+  vendor?: Resolver<
+    Maybe<ResolversTypes['Vendor']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryVendorArgs, 'id'>
+  >;
+  vendorByField?: Resolver<
+    Maybe<ResolversTypes['Vendor']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryVendorByFieldArgs, 'field' | 'value'>
+  >;
 };
 
 export type ReferencePriceResolvers<
@@ -2664,6 +2723,24 @@ export type TotalsResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type VendorResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Vendor'] = ResolversParentTypes['Vendor']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type VendorsResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['VendorsResult'] = ResolversParentTypes['VendorsResult']
+> = {
+  paging?: Resolver<ResolversTypes['Paging'], ParentType, ContextType>;
+  results?: Resolver<Array<ResolversTypes['Vendor']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type WarehouseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Warehouse'] = ResolversParentTypes['Warehouse']
@@ -2789,6 +2866,8 @@ export type Resolvers<ContextType = any> = {
   TaxClass?: TaxClassResolvers<ContextType>;
   TaxValue?: TaxValueResolvers<ContextType>;
   Totals?: TotalsResolvers<ContextType>;
+  Vendor?: VendorResolvers<ContextType>;
+  VendorsResult?: VendorsResultResolvers<ContextType>;
   Warehouse?: WarehouseResolvers<ContextType>;
   WarehousesResult?: WarehousesResultResolvers<ContextType>;
   Wishlist?: WishlistResolvers<ContextType>;
