@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.17](https://github.com/inniti/middle/compare/v1.0.0-alpha.16...v1.0.0-alpha.17) (2021-10-25)
+
+
+### Features
+
+* **schema:** add vendor types and query ([340070b](https://github.com/inniti/middle/commit/340070b6bfc309da9a33e51874ae087c95aa80e6))
+
 ## [1.0.0-alpha.16](https://github.com/inniti/middle/compare/v1.0.0-alpha.15...v1.0.0-alpha.16) (2021-10-22)
 
 ## [1.0.0-alpha.15](https://github.com/inniti/middle/compare/v1.0.0-alpha.14...v1.0.0-alpha.15) (2021-10-21)
