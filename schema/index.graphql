@@ -56,7 +56,7 @@ enum ResolveUrlResultType {
 enum AttributeType {
   NUMBER
   COLOR
-  STRING
+  TEXT
   BOOLEAN
 }
 
@@ -262,19 +262,17 @@ type Product {
   brandId: ID!
   brand: Brand
   labels: [String!]!
-  superAttributeDefinitions: [AttributeDefinition!]!
+  """
+  These are the attributes which make up variants. Each article must have these attributes defined.
+  """
+  variantAttributes: [AttributeDefinition!]!
   attributes: [Attribute]!
   createdAt: String
   updatedAt: String
   slug: String!
   meta: Meta!
   status: ProductStatus!
-  articles(
-    filters: [ArticlesSearchFiltersInput!]
-    sort: [SortInput!]
-    paging: PagingInput
-    customQueryConditions: [CustomQueryConditionInput!]
-  ): ArticlesResult
+  articles: [Article!]!
   categories(customQueryConditions: [CustomQueryConditionInput!]): [Category!]
   relatedProducts(
     type: RelatedProductType
@@ -315,8 +313,7 @@ Definition of a product attribute
 type AttributeDefinition {
   id: ID!
   label: String
-  super: Boolean!
-  type: AttributeType!
+  attributeType: AttributeType!
 }
 
 """
@@ -484,16 +481,6 @@ Paged result of a category list
 type CategoriesResult implements PagedResult {
   paging: Paging!
   results: [Category!]!
-}
-
-"""
-Paged result of an article list
-"""
-type ArticlesResult implements PagedResult {
-  paging: Paging!
-  results: [Article!]!
-  filters: [ArticleListFilter!]!
-  sortings: [Sorting!]!
 }
 
 """
@@ -844,14 +831,6 @@ input AddToCartItemInput {
 Product list search filters
 """
 input ProductsSearchFiltersInput {
-  id: ID!
-  values: [String!]!
-}
-
-"""
-Article list search filters
-"""
-input ArticlesSearchFiltersInput {
   id: ID!
   values: [String!]!
 }

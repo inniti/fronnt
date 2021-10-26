@@ -144,21 +144,6 @@ export interface ArticleListFilterValue {
 /** Status of an article */
 export type ArticleStatus = 'DRAFT' | 'PUBLISHED' | 'DISCONTINUED';
 
-/** Paged result of an article list */
-export interface ArticlesResult extends PagedResult {
-  __typename?: 'ArticlesResult';
-  paging: Paging;
-  results: Array<Article>;
-  filters: Array<ArticleListFilter>;
-  sortings: Array<Sorting>;
-}
-
-/** Article list search filters */
-export interface ArticlesSearchFiltersInput {
-  id: Scalars['ID'];
-  values: Array<Scalars['String']>;
-}
-
 /** A concrete product attribute (value) */
 export interface Attribute {
   __typename?: 'Attribute';
@@ -171,11 +156,10 @@ export interface AttributeDefinition {
   __typename?: 'AttributeDefinition';
   id: Scalars['ID'];
   label?: Maybe<Scalars['String']>;
-  super: Scalars['Boolean'];
-  type: AttributeType;
+  attributeType: AttributeType;
 }
 
-export type AttributeType = 'NUMBER' | 'COLOR' | 'STRING' | 'BOOLEAN';
+export type AttributeType = 'NUMBER' | 'COLOR' | 'TEXT' | 'BOOLEAN';
 
 /** Tells how many items of an article are available. Refers to the BaseUnit of the article. */
 export interface Availability {
@@ -635,14 +619,15 @@ export interface Product {
   brandId: Scalars['ID'];
   brand?: Maybe<Brand>;
   labels: Array<Scalars['String']>;
-  superAttributeDefinitions: Array<AttributeDefinition>;
+  /** These are the attributes which make up variants. Each article must have these attributes defined. */
+  variantAttributes: Array<AttributeDefinition>;
   attributes: Array<Maybe<Attribute>>;
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
   slug: Scalars['String'];
   meta: Meta;
   status: ProductStatus;
-  articles?: Maybe<ArticlesResult>;
+  articles: Array<Article>;
   categories?: Maybe<Array<Category>>;
   relatedProducts?: Maybe<RelatedProductsResult>;
   vendorId: Scalars['ID'];
@@ -653,14 +638,6 @@ export interface Product {
 export interface ProductMediaArgs {
   purpose?: Maybe<MediaPurpose>;
   mediaType?: Maybe<MediaType>;
-}
-
-/** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
-export interface ProductArticlesArgs {
-  filters?: Maybe<Array<ArticlesSearchFiltersInput>>;
-  sort?: Maybe<Array<SortInput>>;
-  paging?: Maybe<PagingInput>;
-  customQueryConditions?: Maybe<Array<CustomQueryConditionInput>>;
 }
 
 /** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
@@ -1257,8 +1234,6 @@ export type ResolversTypes = {
   ArticleListFilter: ResolverTypeWrapper<ArticleListFilter>;
   ArticleListFilterValue: ResolverTypeWrapper<ArticleListFilterValue>;
   ArticleStatus: ArticleStatus;
-  ArticlesResult: ResolverTypeWrapper<ArticlesResult>;
-  ArticlesSearchFiltersInput: ArticlesSearchFiltersInput;
   Attribute: ResolverTypeWrapper<Attribute>;
   AttributeDefinition: ResolverTypeWrapper<AttributeDefinition>;
   AttributeType: AttributeType;
@@ -1296,7 +1271,6 @@ export type ResolversTypes = {
   PageBlockStatus: PageBlockStatus;
   PageStatus: PageStatus;
   PagedResult:
-    | ResolversTypes['ArticlesResult']
     | ResolversTypes['BrandsResult']
     | ResolversTypes['CartsResult']
     | ResolversTypes['CategoriesResult']
@@ -1373,8 +1347,6 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   ArticleListFilter: ArticleListFilter;
   ArticleListFilterValue: ArticleListFilterValue;
-  ArticlesResult: ArticlesResult;
-  ArticlesSearchFiltersInput: ArticlesSearchFiltersInput;
   Attribute: Attribute;
   AttributeDefinition: AttributeDefinition;
   Availability: Availability;
@@ -1407,7 +1379,6 @@ export type ResolversParentTypes = {
   Page: Page;
   PageBlock: PageBlock;
   PagedResult:
-    | ResolversParentTypes['ArticlesResult']
     | ResolversParentTypes['BrandsResult']
     | ResolversParentTypes['CartsResult']
     | ResolversParentTypes['CategoriesResult']
@@ -1580,25 +1551,6 @@ export type ArticleListFilterValueResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ArticlesResultResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['ArticlesResult'] = ResolversParentTypes['ArticlesResult']
-> = {
-  paging?: Resolver<ResolversTypes['Paging'], ParentType, ContextType>;
-  results?: Resolver<Array<ResolversTypes['Article']>, ParentType, ContextType>;
-  filters?: Resolver<
-    Array<ResolversTypes['ArticleListFilter']>,
-    ParentType,
-    ContextType
-  >;
-  sortings?: Resolver<
-    Array<ResolversTypes['Sorting']>,
-    ParentType,
-    ContextType
-  >;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type AttributeResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Attribute'] = ResolversParentTypes['Attribute']
@@ -1618,8 +1570,11 @@ export type AttributeDefinitionResolvers<
 > = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   label?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  super?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['AttributeType'], ParentType, ContextType>;
+  attributeType?: Resolver<
+    ResolversTypes['AttributeType'],
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2158,7 +2113,6 @@ export type PagedResultResolvers<
   ParentType extends ResolversParentTypes['PagedResult'] = ResolversParentTypes['PagedResult']
 > = {
   __resolveType: TypeResolveFn<
-    | 'ArticlesResult'
     | 'BrandsResult'
     | 'CartsResult'
     | 'CategoriesResult'
@@ -2254,7 +2208,7 @@ export type ProductResolvers<
   brandId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   brand?: Resolver<Maybe<ResolversTypes['Brand']>, ParentType, ContextType>;
   labels?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  superAttributeDefinitions?: Resolver<
+  variantAttributes?: Resolver<
     Array<ResolversTypes['AttributeDefinition']>,
     ParentType,
     ContextType
@@ -2278,10 +2232,9 @@ export type ProductResolvers<
   meta?: Resolver<ResolversTypes['Meta'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['ProductStatus'], ParentType, ContextType>;
   articles?: Resolver<
-    Maybe<ResolversTypes['ArticlesResult']>,
+    Array<ResolversTypes['Article']>,
     ParentType,
-    ContextType,
-    RequireFields<ProductArticlesArgs, never>
+    ContextType
   >;
   categories?: Resolver<
     Maybe<Array<ResolversTypes['Category']>>,
@@ -2812,7 +2765,6 @@ export type Resolvers<ContextType = any> = {
   Article?: ArticleResolvers<ContextType>;
   ArticleListFilter?: ArticleListFilterResolvers<ContextType>;
   ArticleListFilterValue?: ArticleListFilterValueResolvers<ContextType>;
-  ArticlesResult?: ArticlesResultResolvers<ContextType>;
   Attribute?: AttributeResolvers<ContextType>;
   AttributeDefinition?: AttributeDefinitionResolvers<ContextType>;
   Availability?: AvailabilityResolvers<ContextType>;
