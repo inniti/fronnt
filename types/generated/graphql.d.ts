@@ -91,7 +91,7 @@ export interface Article {
   productId: Scalars['ID'];
   media: Array<Media>;
   description?: Maybe<Scalars['String']>;
-  brandId?: Maybe<Scalars['ID']>;
+  brandId: Scalars['ID'];
   brand?: Maybe<Brand>;
   isBuyable: Scalars['Boolean'];
   isMaster: Scalars['Boolean'];
@@ -632,7 +632,7 @@ export interface Product {
   categoryIds: Array<Scalars['ID']>;
   media: Array<Media>;
   description: Scalars['String'];
-  brandId?: Maybe<Scalars['ID']>;
+  brandId: Scalars['ID'];
   brand?: Maybe<Brand>;
   labels: Array<Scalars['String']>;
   superAttributeDefinitions: Array<AttributeDefinition>;
@@ -1519,7 +1519,7 @@ export type ArticleResolvers<
     ParentType,
     ContextType
   >;
-  brandId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  brandId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   brand?: Resolver<Maybe<ResolversTypes['Brand']>, ParentType, ContextType>;
   isBuyable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isMaster?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -2251,7 +2251,7 @@ export type ProductResolvers<
     RequireFields<ProductMediaArgs, never>
   >;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  brandId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  brandId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   brand?: Resolver<Maybe<ResolversTypes['Brand']>, ParentType, ContextType>;
   labels?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   superAttributeDefinitions?: Resolver<

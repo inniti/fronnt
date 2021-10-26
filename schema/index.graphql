@@ -259,7 +259,7 @@ type Product {
   categoryIds: [ID!]!
   media(purpose: MediaPurpose, mediaType: MediaType): [Media!]!
   description: String!
-  brandId: ID
+  brandId: ID!
   brand: Brand
   labels: [String!]!
   superAttributeDefinitions: [AttributeDefinition!]!
@@ -337,7 +337,7 @@ type Article {
   productId: ID!
   media(purpose: MediaPurpose, mediaType: MediaType): [Media!]!
   description: String
-  brandId: ID
+  brandId: ID!
   brand: Brand
   isBuyable: Boolean!
   isMaster: Boolean!
