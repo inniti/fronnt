@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.19](https://github.com/inniti/middle/compare/v1.0.0-alpha.18...v1.0.0-alpha.19) (2021-10-27)
+
+
+### Features
+
+* **schema:** add article options to Article type ([7f1c6a3](https://github.com/inniti/middle/commit/7f1c6a3573085778a7be7759286723a911ecb235))
+
 ## [1.0.0-alpha.18](https://github.com/inniti/middle/compare/v1.0.0-alpha.17...v1.0.0-alpha.18) (2021-10-26)
 
 
