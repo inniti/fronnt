@@ -82,6 +82,21 @@ enum RelatedProductType {
   ALTERNATIVE
 }
 
+enum ArticleOptionType {
+  NUMBER
+  TEXT
+  CHECKBOX
+  SELECT
+  DATE
+}
+
+enum ArticleOptionConstraintOperator {
+  EQUALS
+  GREATER_THAN
+  LESS_THAN
+  INCLUDES
+}
+
 interface PagedResult {
   paging: Paging!
 }
@@ -272,7 +287,7 @@ type Product {
   slug: String!
   meta: Meta!
   status: ProductStatus!
-  articles: [Article!]!
+  articles: [Article!]
   categories(customQueryConditions: [CustomQueryConditionInput!]): [Category!]
   relatedProducts(
     type: RelatedProductType
@@ -325,6 +340,33 @@ type Attribute {
 }
 
 """
+Article options may have constraints, like "at most 10 characters are allowed for this text field"
+"""
+type ArticleOptionConstraint {
+  operator: ArticleOptionConstraintOperator!
+  """
+  A reference to the field which shall be compared
+  """
+  reference: String!
+  """
+  The value to which the referenced field shall be compared
+  """
+  comparisonValue: String!
+}
+
+"""
+Options to be set before adding an article to the cart. This may include gift wrapping or customizations like engraving
+"""
+type ArticleOption {
+  id: ID!
+  label: String!
+  optionType: ArticleOptionType!
+  constraints: [ArticleOptionConstraint!]!
+  mandatory: Boolean!
+  price: Price
+}
+
+"""
 An article is a concrete shape of a product
 """
 type Article {
@@ -348,6 +390,7 @@ type Article {
   product: Product
   salesUnits: [SalesUnit!]!
   baseUnit: BaseUnit!
+  options: [ArticleOption!]!
 }
 
 """

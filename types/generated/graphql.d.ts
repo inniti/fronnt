@@ -105,6 +105,7 @@ export interface Article {
   product?: Maybe<Product>;
   salesUnits: Array<SalesUnit>;
   baseUnit: BaseUnit;
+  options: Array<ArticleOption>;
 }
 
 /** An article is a concrete shape of a product */
@@ -140,6 +141,40 @@ export interface ArticleListFilterValue {
   applied: Scalars['Boolean'];
   count: Scalars['Int'];
 }
+
+/** Options to be set before adding an article to the cart. This may include gift wrapping or customizations like engraving */
+export interface ArticleOption {
+  __typename?: 'ArticleOption';
+  id: Scalars['ID'];
+  label: Scalars['String'];
+  optionType: ArticleOptionType;
+  constraints: Array<ArticleOptionConstraint>;
+  mandatory: Scalars['Boolean'];
+  price?: Maybe<Price>;
+}
+
+/** Article options may have constraints, like "at most 10 characters are allowed for this text field" */
+export interface ArticleOptionConstraint {
+  __typename?: 'ArticleOptionConstraint';
+  operator: ArticleOptionConstraintOperator;
+  /** A reference to the field which shall be compared */
+  reference: Scalars['String'];
+  /** The value to which the referenced field shall be compared */
+  comparisonValue: Scalars['String'];
+}
+
+export type ArticleOptionConstraintOperator =
+  | 'EQUALS'
+  | 'GREATER_THAN'
+  | 'LESS_THAN'
+  | 'INCLUDES';
+
+export type ArticleOptionType =
+  | 'NUMBER'
+  | 'TEXT'
+  | 'CHECKBOX'
+  | 'SELECT'
+  | 'DATE';
 
 /** Status of an article */
 export type ArticleStatus = 'DRAFT' | 'PUBLISHED' | 'DISCONTINUED';
@@ -627,7 +662,7 @@ export interface Product {
   slug: Scalars['String'];
   meta: Meta;
   status: ProductStatus;
-  articles: Array<Article>;
+  articles?: Maybe<Array<Article>>;
   categories?: Maybe<Array<Category>>;
   relatedProducts?: Maybe<RelatedProductsResult>;
   vendorId: Scalars['ID'];
@@ -1233,6 +1268,10 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   ArticleListFilter: ResolverTypeWrapper<ArticleListFilter>;
   ArticleListFilterValue: ResolverTypeWrapper<ArticleListFilterValue>;
+  ArticleOption: ResolverTypeWrapper<ArticleOption>;
+  ArticleOptionConstraint: ResolverTypeWrapper<ArticleOptionConstraint>;
+  ArticleOptionConstraintOperator: ArticleOptionConstraintOperator;
+  ArticleOptionType: ArticleOptionType;
   ArticleStatus: ArticleStatus;
   Attribute: ResolverTypeWrapper<Attribute>;
   AttributeDefinition: ResolverTypeWrapper<AttributeDefinition>;
@@ -1347,6 +1386,8 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   ArticleListFilter: ArticleListFilter;
   ArticleListFilterValue: ArticleListFilterValue;
+  ArticleOption: ArticleOption;
+  ArticleOptionConstraint: ArticleOptionConstraint;
   Attribute: Attribute;
   AttributeDefinition: AttributeDefinition;
   Availability: Availability;
@@ -1522,6 +1563,11 @@ export type ArticleResolvers<
     ContextType
   >;
   baseUnit?: Resolver<ResolversTypes['BaseUnit'], ParentType, ContextType>;
+  options?: Resolver<
+    Array<ResolversTypes['ArticleOption']>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1548,6 +1594,41 @@ export type ArticleListFilterValueResolvers<
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   applied?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ArticleOptionResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ArticleOption'] = ResolversParentTypes['ArticleOption']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  optionType?: Resolver<
+    ResolversTypes['ArticleOptionType'],
+    ParentType,
+    ContextType
+  >;
+  constraints?: Resolver<
+    Array<ResolversTypes['ArticleOptionConstraint']>,
+    ParentType,
+    ContextType
+  >;
+  mandatory?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  price?: Resolver<Maybe<ResolversTypes['Price']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ArticleOptionConstraintResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ArticleOptionConstraint'] = ResolversParentTypes['ArticleOptionConstraint']
+> = {
+  operator?: Resolver<
+    ResolversTypes['ArticleOptionConstraintOperator'],
+    ParentType,
+    ContextType
+  >;
+  reference?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  comparisonValue?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2232,7 +2313,7 @@ export type ProductResolvers<
   meta?: Resolver<ResolversTypes['Meta'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['ProductStatus'], ParentType, ContextType>;
   articles?: Resolver<
-    Array<ResolversTypes['Article']>,
+    Maybe<Array<ResolversTypes['Article']>>,
     ParentType,
     ContextType
   >;
@@ -2765,6 +2846,8 @@ export type Resolvers<ContextType = any> = {
   Article?: ArticleResolvers<ContextType>;
   ArticleListFilter?: ArticleListFilterResolvers<ContextType>;
   ArticleListFilterValue?: ArticleListFilterValueResolvers<ContextType>;
+  ArticleOption?: ArticleOptionResolvers<ContextType>;
+  ArticleOptionConstraint?: ArticleOptionConstraintResolvers<ContextType>;
   Attribute?: AttributeResolvers<ContextType>;
   AttributeDefinition?: AttributeDefinitionResolvers<ContextType>;
   Availability?: AvailabilityResolvers<ContextType>;
