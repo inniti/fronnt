@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.21](https://github.com/inniti/middle/compare/v1.0.0-alpha.20...v1.0.0-alpha.21) (2021-11-29)
+
+
+### Features
+
+* **schema:** add order field to PageBlock type ([d4d0c93](https://github.com/inniti/middle/commit/d4d0c93d006e60e1849ceef8e54d3d7e136c04dc))
+* **schema:** remove meta field from all types apart Page ([17c9f9e](https://github.com/inniti/middle/commit/17c9f9eeeb9418bb6678b65b9c3c5561b0659791))
+
 ## [1.0.0-alpha.20](https://github.com/inniti/middle/compare/v1.0.0-alpha.19...v1.0.0-alpha.20) (2021-10-27)
 
 ## [1.0.0-alpha.19](https://github.com/inniti/middle/compare/v1.0.0-alpha.18...v1.0.0-alpha.19) (2021-10-27)
