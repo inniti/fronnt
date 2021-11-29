@@ -97,7 +97,6 @@ export interface Article {
   isMaster: Scalars['Boolean'];
   labels: Array<Scalars['String']>;
   attributes: Array<Attribute>;
-  meta: Meta;
   prices: Array<Price>;
   taxClass: TaxClass;
   availabilities: Array<Availability>;
@@ -223,7 +222,6 @@ export interface Brand {
   media: Array<Media>;
   slug: Scalars['String'];
   description: Scalars['String'];
-  meta: Meta;
   categoryIds: Array<Scalars['String']>;
   categories?: Maybe<CategoriesResult>;
   products?: Maybe<ProductsResult>;
@@ -311,7 +309,6 @@ export interface Category {
   childrenIds: Array<Maybe<Scalars['String']>>;
   parentId?: Maybe<Scalars['ID']>;
   slug: Scalars['String'];
-  meta: Meta;
   products?: Maybe<ProductsResult>;
   parent?: Maybe<Category>;
   children?: Maybe<CategoriesResult>;
@@ -660,7 +657,6 @@ export interface Product {
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
   slug: Scalars['String'];
-  meta: Meta;
   status: ProductStatus;
   articles?: Maybe<Array<Article>>;
   categories?: Maybe<Array<Category>>;
@@ -1541,7 +1537,6 @@ export type ArticleResolvers<
     ParentType,
     ContextType
   >;
-  meta?: Resolver<ResolversTypes['Meta'], ParentType, ContextType>;
   prices?: Resolver<
     Array<ResolversTypes['Price']>,
     ParentType,
@@ -1704,7 +1699,6 @@ export type BrandResolvers<
   >;
   slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  meta?: Resolver<ResolversTypes['Meta'], ParentType, ContextType>;
   categoryIds?: Resolver<
     Array<ResolversTypes['String']>,
     ParentType,
@@ -1822,7 +1816,6 @@ export type CategoryResolvers<
   >;
   parentId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  meta?: Resolver<ResolversTypes['Meta'], ParentType, ContextType>;
   products?: Resolver<
     Maybe<ResolversTypes['ProductsResult']>,
     ParentType,
@@ -2310,7 +2303,6 @@ export type ProductResolvers<
     ContextType
   >;
   slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  meta?: Resolver<ResolversTypes['Meta'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['ProductStatus'], ParentType, ContextType>;
   articles?: Resolver<
     Maybe<Array<ResolversTypes['Article']>>,

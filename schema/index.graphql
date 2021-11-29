@@ -285,7 +285,6 @@ type Product {
   createdAt: String
   updatedAt: String
   slug: String!
-  meta: Meta!
   status: ProductStatus!
   articles: [Article!]
   categories(customQueryConditions: [CustomQueryConditionInput!]): [Category!]
@@ -382,7 +381,6 @@ type Article {
   isMaster: Boolean!
   labels: [String!]!
   attributes: [Attribute!]!
-  meta: Meta!
   prices(quantity: Int): [Price!]!
   taxClass: TaxClass!
   availabilities(warehouseId: ID): [Availability!]!
@@ -453,7 +451,6 @@ type Category {
   childrenIds: [String]!
   parentId: ID
   slug: String!
-  meta: Meta!
   products(
     query: String
     filters: [ProductsSearchFiltersInput!]
@@ -476,7 +473,6 @@ type Brand {
   media(purpose: MediaPurpose, mediaType: MediaType): [Media!]!
   slug: String!
   description: String!
-  meta: Meta!
   categoryIds: [String!]!
   categories(
     customQueryConditions: [CustomQueryConditionInput!]
