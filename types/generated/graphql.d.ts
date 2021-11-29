@@ -587,6 +587,8 @@ export interface PageBlock {
   slot?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
+  /** Page blocks have a specific order within a page. The order field can be null if the page block is global (i.e. not associated with a page) */
+  order?: Maybe<Scalars['Int']>;
 }
 
 export type PageBlockStatus = 'DRAFT' | 'PUBLISHED';
@@ -2179,6 +2181,7 @@ export type PageBlockResolvers<
     ParentType,
     ContextType
   >;
+  order?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

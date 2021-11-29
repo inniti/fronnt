@@ -764,6 +764,10 @@ type PageBlock {
   slot: String
   createdAt: String
   updatedAt: String
+  """
+  Page blocks have a specific order within a page. The order field can be null if the page block is global (i.e. not associated with a page)
+  """
+  order: Int
 }
 
 """
