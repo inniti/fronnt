@@ -751,6 +751,8 @@ type Page {
   language: String
   createdAt: String
   updatedAt: String
+  children: [Page!]!
+  template: String
 }
 
 """
