@@ -574,6 +574,7 @@ export interface Page {
   id: Scalars['ID'];
   language?: Maybe<Scalars['String']>;
   meta: Meta;
+  reference?: Maybe<Scalars['String']>;
   status: PageStatus;
   template?: Maybe<Scalars['String']>;
   title: Scalars['String'];
@@ -826,6 +827,7 @@ export interface QueryPageByFieldArgs {
 
 export interface QueryPagesArgs {
   customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
+  paging?: InputMaybe<PagingInput>;
   sort?: InputMaybe<Array<SortInput>>;
   status?: InputMaybe<Array<PageStatus>>;
 }
@@ -2147,6 +2149,11 @@ export type PageResolvers<
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   language?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   meta?: Resolver<ResolversTypes['Meta'], ParentType, ContextType>;
+  reference?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
   status?: Resolver<ResolversTypes['PageStatus'], ParentType, ContextType>;
   template?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

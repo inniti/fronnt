@@ -753,6 +753,7 @@ type Page {
   updatedAt: String
   children: [Page!]!
   template: String
+  reference: String
 }
 
 """
@@ -1018,6 +1019,7 @@ type Query {
   customer: Customer
 
   pages(
+    paging: PagingInput
     sort: [SortInput!]
     status: [PageStatus!]
     customQueryConditions: [CustomQueryConditionInput!]
