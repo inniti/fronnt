@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.24](https://github.com/inniti/middle/compare/v1.0.0-alpha.23...v1.0.0-alpha.24) (2021-12-21)
+
+
+### Features
+
+* **schema:** add reference field to Page type and paging input to pages query ([5927ca9](https://github.com/inniti/middle/commit/5927ca90f8bb1f00704478978c61fb8d64dd3372))
+
 ## [1.0.0-alpha.23](https://github.com/inniti/middle/compare/v1.0.0-alpha.22...v1.0.0-alpha.23) (2021-12-21)
 
 
