@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.23](https://github.com/inniti/middle/compare/v1.0.0-alpha.22...v1.0.0-alpha.23) (2021-12-21)
+
+
+### Features
+
+* **schema:** add children and template fields to Page type ([0afa45c](https://github.com/inniti/middle/commit/0afa45cae908e97f50452924f84fd58a7b5301a8))
+
 ## [1.0.0-alpha.22](https://github.com/inniti/middle/compare/v1.0.0-alpha.21...v1.0.0-alpha.22) (2021-11-29)
 
 ## [1.0.0-alpha.21](https://github.com/inniti/middle/compare/v1.0.0-alpha.20...v1.0.0-alpha.21) (2021-11-29)
