@@ -14,6 +14,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = {
   [X in Exclude<keyof T, K>]?: T[X];
 } & { [P in K]-?: NonNullable<T[P]> };
@@ -574,7 +575,8 @@ export interface Page {
   id: Scalars['ID'];
   language?: Maybe<Scalars['String']>;
   meta: Meta;
-  reference?: Maybe<Scalars['String']>;
+  reference?: Maybe<PageReference>;
+  referenceId?: Maybe<Scalars['ID']>;
   status: PageStatus;
   template?: Maybe<Scalars['String']>;
   title: Scalars['String'];
@@ -597,6 +599,8 @@ export interface PageBlock {
 }
 
 export type PageBlockStatus = 'DRAFT' | 'PUBLISHED';
+
+export type PageReference = Article | Brand | Category | Product;
 
 export type PageStatus = 'DRAFT' | 'PUBLISHED';
 
@@ -1299,9 +1303,18 @@ export type ResolversTypes = {
   Order: ResolverTypeWrapper<Order>;
   OrderItem: ResolverTypeWrapper<OrderItem>;
   OrdersResult: ResolverTypeWrapper<OrdersResult>;
-  Page: ResolverTypeWrapper<Page>;
+  Page: ResolverTypeWrapper<
+    Omit<Page, 'reference'> & {
+      reference?: Maybe<ResolversTypes['PageReference']>;
+    }
+  >;
   PageBlock: ResolverTypeWrapper<PageBlock>;
   PageBlockStatus: PageBlockStatus;
+  PageReference:
+    | ResolversTypes['Article']
+    | ResolversTypes['Brand']
+    | ResolversTypes['Category']
+    | ResolversTypes['Product'];
   PageStatus: PageStatus;
   PagedResult:
     | ResolversTypes['BrandsResult']
@@ -1411,8 +1424,15 @@ export type ResolversParentTypes = {
   Order: Order;
   OrderItem: OrderItem;
   OrdersResult: OrdersResult;
-  Page: Page;
+  Page: Omit<Page, 'reference'> & {
+    reference?: Maybe<ResolversParentTypes['PageReference']>;
+  };
   PageBlock: PageBlock;
+  PageReference:
+    | ResolversParentTypes['Article']
+    | ResolversParentTypes['Brand']
+    | ResolversParentTypes['Category']
+    | ResolversParentTypes['Product'];
   PagedResult:
     | ResolversParentTypes['BrandsResult']
     | ResolversParentTypes['CartsResult']
@@ -2150,10 +2170,11 @@ export type PageResolvers<
   language?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   meta?: Resolver<ResolversTypes['Meta'], ParentType, ContextType>;
   reference?: Resolver<
-    Maybe<ResolversTypes['String']>,
+    Maybe<ResolversTypes['PageReference']>,
     ParentType,
     ContextType
   >;
+  referenceId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['PageStatus'], ParentType, ContextType>;
   template?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -2187,6 +2208,17 @@ export type PageBlockResolvers<
     ContextType
   >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PageReferenceResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['PageReference'] = ResolversParentTypes['PageReference']
+> = {
+  __resolveType: TypeResolveFn<
+    'Article' | 'Brand' | 'Category' | 'Product',
+    ParentType,
+    ContextType
+  >;
 };
 
 export type PagedResultResolvers<
@@ -2876,6 +2908,7 @@ export type Resolvers<ContextType = any> = {
   OrdersResult?: OrdersResultResolvers<ContextType>;
   Page?: PageResolvers<ContextType>;
   PageBlock?: PageBlockResolvers<ContextType>;
+  PageReference?: PageReferenceResolvers<ContextType>;
   PagedResult?: PagedResultResolvers<ContextType>;
   PagesResult?: PagesResultResolvers<ContextType>;
   Paging?: PagingResolvers<ContextType>;

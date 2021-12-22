@@ -4596,8 +4596,20 @@
             "description": null,
             "args": [],
             "type": {
+              "kind": "UNION",
+              "name": "PageReference",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "referenceId",
+            "description": null,
+            "args": [],
+            "type": {
               "kind": "SCALAR",
-              "name": "String",
+              "name": "ID",
               "ofType": null
             },
             "isDeprecated": false,
@@ -4826,6 +4838,37 @@
           }
         ],
         "possibleTypes": null
+      },
+      {
+        "kind": "UNION",
+        "name": "PageReference",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "Article",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "Brand",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "Category",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "Product",
+            "ofType": null
+          }
+        ]
       },
       {
         "kind": "ENUM",

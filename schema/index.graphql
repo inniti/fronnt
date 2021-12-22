@@ -738,6 +738,8 @@ type AddToCartResult {
   items: [CartItem!]!
 }
 
+union PageReference = Product | Article | Brand | Category
+
 """
 A page represents a page in the storefront, typically provided by a CMS
 """
@@ -753,7 +755,8 @@ type Page {
   updatedAt: String
   children: [Page!]!
   template: String
-  reference: String
+  referenceId: ID
+  reference: PageReference
 }
 
 """
