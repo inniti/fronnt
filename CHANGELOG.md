@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.25](https://github.com/inniti/middle/compare/v1.0.0-alpha.24...v1.0.0-alpha.25) (2021-12-22)
+
+
+### Features
+
+* **schema:** improve Page->reference field ([fd66d86](https://github.com/inniti/middle/commit/fd66d86f24b29077173d2b5bbeebe38351a58c97))
+
 ## [1.0.0-alpha.24](https://github.com/inniti/middle/compare/v1.0.0-alpha.23...v1.0.0-alpha.24) (2021-12-21)
 
 
