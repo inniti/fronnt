@@ -999,7 +999,7 @@ type Query {
   categoryByField(field: String!, value: String!): Category
 
   suggestions(
-    searchTerm: String
+    searchTerm: String!
     customQueryConditions: [CustomQueryConditionInput!]
   ): [Suggestion!]!
 

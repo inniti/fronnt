@@ -868,7 +868,7 @@ export interface QueryReservationsArgs {
 
 export interface QuerySuggestionsArgs {
   customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
-  searchTerm?: InputMaybe<Scalars['String']>;
+  searchTerm: Scalars['String'];
 }
 
 export interface QueryVendorArgs {
@@ -2550,7 +2550,7 @@ export type QueryResolvers<
     Array<ResolversTypes['Suggestion']>,
     ParentType,
     ContextType,
-    RequireFields<QuerySuggestionsArgs, never>
+    RequireFields<QuerySuggestionsArgs, 'searchTerm'>
   >;
   vendor?: Resolver<
     Maybe<ResolversTypes['Vendor']>,
