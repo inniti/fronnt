@@ -293,7 +293,7 @@ type Product {
     paging: PagingInput
     customQueryConditions: [CustomQueryConditionInput!]
   ): RelatedProductsResult
-  vendorId: ID!
+  vendorId: ID
   vendor: Vendor
 }
 

@@ -673,7 +673,7 @@ export interface Product {
   /** These are the attributes which make up variants. Each article must have these attributes defined. */
   variantAttributes: Array<AttributeDefinition>;
   vendor?: Maybe<Vendor>;
-  vendorId: Scalars['ID'];
+  vendorId?: Maybe<Scalars['ID']>;
 }
 
 /** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
@@ -2361,7 +2361,7 @@ export type ProductResolvers<
     ContextType
   >;
   vendor?: Resolver<Maybe<ResolversTypes['Vendor']>, ParentType, ContextType>;
-  vendorId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  vendorId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
