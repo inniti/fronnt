@@ -826,7 +826,7 @@ export interface ProductsSearchFiltersInput {
   values: Array<Scalars['String']>;
 }
 
-/** A reserved article references an article in a specified quantity which is part of a reservation */
+/** A quantified article extends an article with quantity information */
 export interface QuantifiedArticle {
   __typename?: 'QuantifiedArticle';
   article?: Maybe<Article>;

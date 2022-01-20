@@ -6852,7 +6852,7 @@
       {
         "kind": "OBJECT",
         "name": "QuantifiedArticle",
-        "description": "A reserved article references an article in a specified quantity which is part of a reservation",
+        "description": "A quantified article extends an article with quantity information",
         "fields": [
           {
             "name": "article",

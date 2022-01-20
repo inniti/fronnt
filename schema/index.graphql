@@ -971,7 +971,7 @@ type Reservation {
 }
 
 """
-A reserved article references an article in a specified quantity which is part of a reservation
+A quantified article extends an article with quantity information
 """
 type QuantifiedArticle {
   id: ID!
