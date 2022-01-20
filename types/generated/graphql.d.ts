@@ -337,21 +337,17 @@ export interface CategoryProductsArgs {
   sort?: InputMaybe<Array<SortInput>>;
 }
 
+/** Usable charsets according to https://www.iana.org/assignments/character-sets/character-sets.xhtml using _ instead of - */
+export type CharsetType = 'UTF_8' | 'UTF_16';
+
 /** Checkout state */
 export interface CheckoutState {
   __typename?: 'CheckoutState';
   billingAddress?: Maybe<Address>;
   id: Scalars['ID'];
   payment?: Maybe<PaymentInfo>;
+  shipmentMethod?: Maybe<ShipmentMethod>;
   shippingAddress?: Maybe<Address>;
-}
-
-/** Country */
-export interface Country {
-  __typename?: 'Country';
-  /** ISO 3166-1 code */
-  isoCode: Scalars['String'];
-  name: Scalars['String'];
 }
 
 /** Users can apply coupons to a cart */
@@ -365,6 +361,7 @@ export interface Coupon {
 /** Currency */
 export interface Currency {
   __typename?: 'Currency';
+  minorUnit: Scalars['Int'];
   name: Scalars['String'];
   symbol: Scalars['String'];
 }
@@ -382,6 +379,8 @@ export interface Customer {
   addresses: Array<CustomerAddress>;
   blocked: Scalars['Boolean'];
   customerNumber: Scalars['String'];
+  defaultBillingAddress?: Maybe<CustomerAddress>;
+  defaultShippingAddress?: Maybe<CustomerAddress>;
   email: Scalars['String'];
   firstname?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -397,6 +396,18 @@ export interface CustomerAddress extends AddressFields {
   name: Scalars['String'];
   street: Scalars['String'];
   zipCode: Scalars['String'];
+}
+
+/**
+ * Opening/closing times of a warehouse/store
+ * When no explicit date is specified dayOfWeek needs to be specified
+ */
+export interface DateTime {
+  __typename?: 'DateTime';
+  date?: Maybe<Scalars['String']>;
+  dayOfWeek?: Maybe<Scalars['Int']>;
+  from: Scalars['String'];
+  until: Scalars['String'];
 }
 
 /** Result of a mutation which deletes objects */
@@ -421,6 +432,79 @@ export interface Error {
   message?: Maybe<Scalars['String']>;
   ref?: Maybe<Scalars['String']>;
 }
+
+/** An expense to an order/cart */
+export interface Expense {
+  __typename?: 'Expense';
+  id: Scalars['ID'];
+  label?: Maybe<Scalars['String']>;
+  value: Scalars['Int'];
+}
+
+/** Locale configurations */
+export interface Locale {
+  __typename?: 'Locale';
+  charset: CharsetType;
+  country: Scalars['String'];
+  dateFormat: Scalars['String'];
+  decimalSign: Scalars['String'];
+  isoCode: Scalars['String'];
+  language: Scalars['String'];
+  measurement: MeasurementType;
+  timeZone: Scalars['String'];
+}
+
+export type MeasurementType = 'IMPERIAL_UK' | 'IMPERIAL_US' | 'METRIC';
+
+export type MeasurementUnitType =
+  | 'ACRE'
+  | 'ARES'
+  | 'BARL'
+  | 'BCUF'
+  | 'BDFT'
+  | 'BUSL'
+  | 'CBME'
+  | 'CELI'
+  | 'CMET'
+  | 'DGEU'
+  | 'FOOT'
+  | 'GBGA'
+  | 'GBOU'
+  | 'GBPI'
+  | 'GBQA'
+  | 'GBTN'
+  | 'GGEU'
+  | 'GRAM'
+  | 'HECT'
+  | 'HUWG'
+  | 'INCH'
+  | 'ITEM'
+  | 'KILO'
+  | 'KMET'
+  | 'LITR'
+  | 'METR'
+  | 'MIBA'
+  | 'MILE'
+  | 'MILI'
+  | 'MMET'
+  | 'OZTR'
+  | 'PUND'
+  | 'SCMT'
+  | 'SMET'
+  | 'SMIL'
+  | 'SQFO'
+  | 'SQIN'
+  | 'SQKI'
+  | 'SQMI'
+  | 'SQYA'
+  | 'TONE'
+  | 'UCWT'
+  | 'USGA'
+  | 'USOU'
+  | 'USPI'
+  | 'USQA'
+  | 'USTN'
+  | 'YARD';
 
 /** A media object */
 export interface Media {
@@ -529,14 +613,6 @@ export interface MutationUpdateCustomerArgs {
   id: Scalars['ID'];
 }
 
-/** Opening times of a warehouse/store */
-export interface OpeningTime {
-  __typename?: 'OpeningTime';
-  dayOfWeek: Scalars['String'];
-  from: Scalars['String'];
-  until: Scalars['String'];
-}
-
 /** Order */
 export interface Order {
   __typename?: 'Order';
@@ -545,6 +621,7 @@ export interface Order {
   id: Scalars['ID'];
   items?: Maybe<Array<OrderItem>>;
   payment: PaymentInfo;
+  shipments?: Maybe<Array<Shipment>>;
   shippingAddress: Address;
 }
 
@@ -557,6 +634,7 @@ export interface OrderItem {
   price: Scalars['Int'];
   quantity: Scalars['Int'];
   sku: Scalars['ID'];
+  state?: Maybe<Scalars['String']>;
 }
 
 /** Paged result of an order list */
@@ -632,7 +710,23 @@ export interface PagingInput {
 /** Container for payment information */
 export interface PaymentInfo {
   __typename?: 'PaymentInfo';
+  method?: Maybe<PaymentMethod>;
+}
+
+/** Payment method */
+export interface PaymentMethod {
+  __typename?: 'PaymentMethod';
+  expense?: Maybe<Expense>;
+  id: Scalars['ID'];
+  isActive: Scalars['Boolean'];
   method: Scalars['String'];
+}
+
+/** Paged result of an ordered payment method list */
+export interface PaymentMethodsResult extends PagedResult {
+  __typename?: 'PaymentMethodsResult';
+  paging: Paging;
+  results: Array<PaymentMethod>;
 }
 
 /** Prices (and their related quantities) always refer to the BaseUnit of an article */
@@ -649,6 +743,8 @@ export interface Price {
   validFrom?: Maybe<Scalars['String']>;
   validUntil?: Maybe<Scalars['String']>;
 }
+
+export type PriceType = 'GROSS' | 'NET';
 
 /** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
 export interface Product {
@@ -730,6 +826,15 @@ export interface ProductsSearchFiltersInput {
   values: Array<Scalars['String']>;
 }
 
+/** A reserved article references an article in a specified quantity which is part of a reservation */
+export interface QuantifiedArticle {
+  __typename?: 'QuantifiedArticle';
+  article?: Maybe<Article>;
+  articleID: Scalars['ID'];
+  id: Scalars['ID'];
+  quantity: Scalars['Int'];
+}
+
 export interface Query {
   __typename?: 'Query';
   article?: Maybe<Article>;
@@ -748,12 +853,14 @@ export interface Query {
   page?: Maybe<Page>;
   pageByField?: Maybe<Page>;
   pages?: Maybe<PagesResult>;
+  paymentMethods?: Maybe<PaymentMethodsResult>;
   product?: Maybe<Product>;
   productByField?: Maybe<Product>;
   products?: Maybe<ProductsResult>;
   reservation?: Maybe<Reservation>;
   reservationByField?: Maybe<Reservation>;
   reservations?: Maybe<ReservationsResult>;
+  shipmentMethods?: Maybe<ShipmentMethodsResult>;
   shop?: Maybe<Shop>;
   suggestions: Array<Suggestion>;
   vendor?: Maybe<Vendor>;
@@ -836,6 +943,15 @@ export interface QueryPagesArgs {
   status?: InputMaybe<Array<PageStatus>>;
 }
 
+export interface QueryPaymentMethodsArgs {
+  addressId?: InputMaybe<Scalars['ID']>;
+  cartId?: InputMaybe<Scalars['ID']>;
+  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
+  customerId?: InputMaybe<Scalars['ID']>;
+  paging?: InputMaybe<PagingInput>;
+  sort: Array<InputMaybe<SortInput>>;
+}
+
 export interface QueryProductArgs {
   id: Scalars['ID'];
 }
@@ -864,6 +980,15 @@ export interface QueryReservationByFieldArgs {
 
 export interface QueryReservationsArgs {
   customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
+}
+
+export interface QueryShipmentMethodsArgs {
+  addressId?: InputMaybe<Scalars['ID']>;
+  cartId?: InputMaybe<Scalars['ID']>;
+  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
+  customerId?: InputMaybe<Scalars['ID']>;
+  paging?: InputMaybe<PagingInput>;
+  sort: Array<InputMaybe<SortInput>>;
 }
 
 export interface QuerySuggestionsArgs {
@@ -909,7 +1034,7 @@ export interface QueryWishlistsArgs {
 
 /**
  * A reference price provides a baseline with which prices of different articles can be compared, even though these
- * articles might be sond in different SalesUnits.
+ * articles might be sold in different SalesUnits.
  */
 export interface ReferencePrice {
   __typename?: 'ReferencePrice';
@@ -938,7 +1063,7 @@ export interface RelatedProduct {
   type: RelatedProductType;
 }
 
-export type RelatedProductType = 'ACCESSORY' | 'ALTERNATIVE';
+export type RelatedProductType = 'ACCESSORY' | 'ALTERNATIVE' | 'SUCCESSOR';
 
 /** Paged result of a related-product list */
 export interface RelatedProductsResult extends PagedResult {
@@ -950,7 +1075,7 @@ export interface RelatedProductsResult extends PagedResult {
 /** A reservation of articles in specified quantites in a warehouse */
 export interface Reservation {
   __typename?: 'Reservation';
-  articles: Array<ReservedArticle>;
+  articles: Array<QuantifiedArticle>;
   customer?: Maybe<Customer>;
   customerId?: Maybe<Scalars['ID']>;
   email: Scalars['String'];
@@ -989,15 +1114,6 @@ export interface ReservationsResult extends PagedResult {
   results: Array<Reservation>;
 }
 
-/** A reserved article references an article in a specified quantity which is part of a reservation */
-export interface ReservedArticle {
-  __typename?: 'ReservedArticle';
-  article?: Maybe<Article>;
-  articleID: Scalars['ID'];
-  id: Scalars['ID'];
-  quantity: Scalars['Int'];
-}
-
 export type ResolveUrlResultType = 'ARTICLE' | 'BRAND' | 'CATEGORY' | 'PRODUCT';
 
 /** A sales unit is the unit in which an article is sold. Every article has to have at least SalesUnit, usually "piece" */
@@ -1006,13 +1122,50 @@ export interface SalesUnit {
   /** Factor which defines how to convert its BaseUnit to this SalesUnit */
   conversion: Scalars['Int'];
   id: Scalars['ID'];
-  name: Scalars['String'];
+  name?: Maybe<MeasurementUnitType>;
+}
+
+export interface Shipment {
+  __typename?: 'Shipment';
+  articles?: Maybe<Array<QuantifiedArticle>>;
+  method: Scalars['String'];
+  tracking?: Maybe<Tracking>;
+}
+
+export interface ShipmentMethod {
+  __typename?: 'ShipmentMethod';
+  expense?: Maybe<Expense>;
+  id: Scalars['ID'];
+  isActive: Scalars['Boolean'];
+  label: Scalars['String'];
+}
+
+/** Paged result of an ordered shipment method list */
+export interface ShipmentMethodsResult extends PagedResult {
+  __typename?: 'ShipmentMethodsResult';
+  paging: Paging;
+  results: Array<ShipmentMethod>;
 }
 
 /** Shop specific settings and configuration */
 export interface Shop {
   __typename?: 'Shop';
+  /** For analytics/tracking purposes, e.g.: web */
+  channel?: Maybe<Scalars['String']>;
+  currencies: Array<Currency>;
+  defaults: ShopDefaults;
+  locales: Array<Locale>;
+  /** PriceType enum should be used */
+  priceTypes: Array<Scalars['String']>;
+}
+
+/** Default settings and configurations for a specific shop */
+export interface ShopDefaults {
+  __typename?: 'ShopDefaults';
+  currency: Currency;
+  locale: Locale;
   pricePrecision: Scalars['Int'];
+  priceType: PriceType;
 }
 
 /** Sort specifier */
@@ -1029,6 +1182,7 @@ export interface Sorting {
   applied: Scalars['Boolean'];
   id: Scalars['String'];
   label: Scalars['String'];
+  value?: Maybe<Scalars['String']>;
 }
 
 /** Search Suggestion */
@@ -1046,8 +1200,8 @@ export type SuggestionType = 'ARTICLE' | 'BRAND' | 'CATEGORY' | 'PRODUCT';
 /** Tax class */
 export interface TaxClass {
   __typename?: 'TaxClass';
-  country: Country;
   id: Scalars['ID'];
+  locale: Locale;
   name: Scalars['String'];
   /** Fractional value in percent applied to the net amount, e.g. 19 */
   value: Scalars['Int'];
@@ -1063,11 +1217,21 @@ export interface TaxValue {
 /** Total amounts of a Cart or a CartItem */
 export interface Totals {
   __typename?: 'Totals';
-  discounts: Array<Discount>;
+  discounts?: Maybe<Array<Discount>>;
+  expenses?: Maybe<Array<Expense>>;
   gross: Scalars['Int'];
   net: Scalars['Int'];
   taxes: Array<Maybe<TaxValue>>;
 }
+
+export interface Tracking {
+  __typename?: 'Tracking';
+  label: Scalars['String'];
+  type?: Maybe<TrackingType>;
+  value: Scalars['String'];
+}
+
+export type TrackingType = 'CODE' | 'URL';
 
 /** Update cart item data */
 export interface UpdateCartItemInput {
@@ -1080,11 +1244,15 @@ export interface UpdateCartItemInput {
 export interface UpdateCheckoutInput {
   billingAddress?: InputMaybe<AddressInput>;
   email?: InputMaybe<Scalars['String']>;
+  paymentMethodId?: InputMaybe<Scalars['ID']>;
+  shipmentMethodId?: InputMaybe<Scalars['ID']>;
   shippingAddress?: InputMaybe<AddressInput>;
 }
 
 /** Customer data to be updated */
 export interface UpdateCustomerInput {
+  defaultBillingAddressId?: InputMaybe<Scalars['ID']>;
+  defaultShippingAddressId?: InputMaybe<Scalars['ID']>;
   email?: InputMaybe<Scalars['String']>;
   firstname?: InputMaybe<Scalars['String']>;
   lastname?: InputMaybe<Scalars['String']>;
@@ -1107,9 +1275,10 @@ export interface VendorsResult extends PagedResult {
 /** A warehouse */
 export interface Warehouse {
   __typename?: 'Warehouse';
+  closingTimes?: Maybe<Array<DateTime>>;
   id: Scalars['ID'];
   name: Scalars['String'];
-  openingTimes: Array<OpeningTime>;
+  openingTimes: Array<DateTime>;
 }
 
 /** Result of a warehouses query */
@@ -1124,6 +1293,7 @@ export interface Wishlist {
   __typename?: 'Wishlist';
   id: Scalars['ID'];
   items: Array<WishlistItem>;
+  name: Scalars['String'];
 }
 
 /** Wishlist */
@@ -1134,7 +1304,7 @@ export interface WishlistItemsArgs {
 /** Wishlist item */
 export interface WishlistItem {
   __typename?: 'WishlistItem';
-  article?: Maybe<Article>;
+  article?: Maybe<QuantifiedArticle>;
   articleId: Scalars['ID'];
   id: Scalars['ID'];
 }
@@ -1281,25 +1451,29 @@ export type ResolversTypes = {
   CartsResult: ResolverTypeWrapper<CartsResult>;
   CategoriesResult: ResolverTypeWrapper<CategoriesResult>;
   Category: ResolverTypeWrapper<Category>;
+  CharsetType: CharsetType;
   CheckoutState: ResolverTypeWrapper<CheckoutState>;
-  Country: ResolverTypeWrapper<Country>;
   Coupon: ResolverTypeWrapper<Coupon>;
   Currency: ResolverTypeWrapper<Currency>;
   CustomQueryConditionInput: CustomQueryConditionInput;
   Customer: ResolverTypeWrapper<Customer>;
   CustomerAddress: ResolverTypeWrapper<CustomerAddress>;
+  DateTime: ResolverTypeWrapper<DateTime>;
   DeleteResult: ResolverTypeWrapper<DeleteResult>;
   Discount: ResolverTypeWrapper<Discount>;
   Error: ResolverTypeWrapper<Error>;
+  Expense: ResolverTypeWrapper<Expense>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  Locale: ResolverTypeWrapper<Locale>;
+  MeasurementType: MeasurementType;
+  MeasurementUnitType: MeasurementUnitType;
   Media: ResolverTypeWrapper<Media>;
   MediaPurpose: MediaPurpose;
   MediaType: MediaType;
   Meta: ResolverTypeWrapper<Meta>;
   Mutation: ResolverTypeWrapper<{}>;
-  OpeningTime: ResolverTypeWrapper<OpeningTime>;
   Order: ResolverTypeWrapper<Order>;
   OrderItem: ResolverTypeWrapper<OrderItem>;
   OrdersResult: ResolverTypeWrapper<OrdersResult>;
@@ -1322,9 +1496,11 @@ export type ResolversTypes = {
     | ResolversTypes['CategoriesResult']
     | ResolversTypes['OrdersResult']
     | ResolversTypes['PagesResult']
+    | ResolversTypes['PaymentMethodsResult']
     | ResolversTypes['ProductsResult']
     | ResolversTypes['RelatedProductsResult']
     | ResolversTypes['ReservationsResult']
+    | ResolversTypes['ShipmentMethodsResult']
     | ResolversTypes['VendorsResult']
     | ResolversTypes['WarehousesResult']
     | ResolversTypes['WishlistsResult'];
@@ -1332,13 +1508,17 @@ export type ResolversTypes = {
   Paging: ResolverTypeWrapper<Paging>;
   PagingInput: PagingInput;
   PaymentInfo: ResolverTypeWrapper<PaymentInfo>;
+  PaymentMethod: ResolverTypeWrapper<PaymentMethod>;
+  PaymentMethodsResult: ResolverTypeWrapper<PaymentMethodsResult>;
   Price: ResolverTypeWrapper<Price>;
+  PriceType: PriceType;
   Product: ResolverTypeWrapper<Product>;
   ProductListFilter: ResolverTypeWrapper<ProductListFilter>;
   ProductListFilterValue: ResolverTypeWrapper<ProductListFilterValue>;
   ProductStatus: ProductStatus;
   ProductsResult: ResolverTypeWrapper<ProductsResult>;
   ProductsSearchFiltersInput: ProductsSearchFiltersInput;
+  QuantifiedArticle: ResolverTypeWrapper<QuantifiedArticle>;
   Query: ResolverTypeWrapper<{}>;
   ReferencePrice: ResolverTypeWrapper<ReferencePrice>;
   RegistrationInput: RegistrationInput;
@@ -1350,11 +1530,14 @@ export type ResolversTypes = {
   ReservationInput: ReservationInput;
   ReservationStatus: ReservationStatus;
   ReservationsResult: ResolverTypeWrapper<ReservationsResult>;
-  ReservedArticle: ResolverTypeWrapper<ReservedArticle>;
   ResolveUrlResultType: ResolveUrlResultType;
   SalesUnit: ResolverTypeWrapper<SalesUnit>;
   ScalarMap: ResolverTypeWrapper<Scalars['ScalarMap']>;
+  Shipment: ResolverTypeWrapper<Shipment>;
+  ShipmentMethod: ResolverTypeWrapper<ShipmentMethod>;
+  ShipmentMethodsResult: ResolverTypeWrapper<ShipmentMethodsResult>;
   Shop: ResolverTypeWrapper<Shop>;
+  ShopDefaults: ResolverTypeWrapper<ShopDefaults>;
   SortInput: SortInput;
   SortValue: SortValue;
   Sorting: ResolverTypeWrapper<Sorting>;
@@ -1364,6 +1547,8 @@ export type ResolversTypes = {
   TaxClass: ResolverTypeWrapper<TaxClass>;
   TaxValue: ResolverTypeWrapper<TaxValue>;
   Totals: ResolverTypeWrapper<Totals>;
+  Tracking: ResolverTypeWrapper<Tracking>;
+  TrackingType: TrackingType;
   UpdateCartItemInput: UpdateCartItemInput;
   UpdateCheckoutInput: UpdateCheckoutInput;
   UpdateCustomerInput: UpdateCustomerInput;
@@ -1405,22 +1590,23 @@ export type ResolversParentTypes = {
   CategoriesResult: CategoriesResult;
   Category: Category;
   CheckoutState: CheckoutState;
-  Country: Country;
   Coupon: Coupon;
   Currency: Currency;
   CustomQueryConditionInput: CustomQueryConditionInput;
   Customer: Customer;
   CustomerAddress: CustomerAddress;
+  DateTime: DateTime;
   DeleteResult: DeleteResult;
   Discount: Discount;
   Error: Error;
+  Expense: Expense;
   Float: Scalars['Float'];
   ID: Scalars['ID'];
   Int: Scalars['Int'];
+  Locale: Locale;
   Media: Media;
   Meta: Meta;
   Mutation: {};
-  OpeningTime: OpeningTime;
   Order: Order;
   OrderItem: OrderItem;
   OrdersResult: OrdersResult;
@@ -1439,9 +1625,11 @@ export type ResolversParentTypes = {
     | ResolversParentTypes['CategoriesResult']
     | ResolversParentTypes['OrdersResult']
     | ResolversParentTypes['PagesResult']
+    | ResolversParentTypes['PaymentMethodsResult']
     | ResolversParentTypes['ProductsResult']
     | ResolversParentTypes['RelatedProductsResult']
     | ResolversParentTypes['ReservationsResult']
+    | ResolversParentTypes['ShipmentMethodsResult']
     | ResolversParentTypes['VendorsResult']
     | ResolversParentTypes['WarehousesResult']
     | ResolversParentTypes['WishlistsResult'];
@@ -1449,12 +1637,15 @@ export type ResolversParentTypes = {
   Paging: Paging;
   PagingInput: PagingInput;
   PaymentInfo: PaymentInfo;
+  PaymentMethod: PaymentMethod;
+  PaymentMethodsResult: PaymentMethodsResult;
   Price: Price;
   Product: Product;
   ProductListFilter: ProductListFilter;
   ProductListFilterValue: ProductListFilterValue;
   ProductsResult: ProductsResult;
   ProductsSearchFiltersInput: ProductsSearchFiltersInput;
+  QuantifiedArticle: QuantifiedArticle;
   Query: {};
   ReferencePrice: ReferencePrice;
   RegistrationInput: RegistrationInput;
@@ -1464,10 +1655,13 @@ export type ResolversParentTypes = {
   ReservationContactDataInput: ReservationContactDataInput;
   ReservationInput: ReservationInput;
   ReservationsResult: ReservationsResult;
-  ReservedArticle: ReservedArticle;
   SalesUnit: SalesUnit;
   ScalarMap: Scalars['ScalarMap'];
+  Shipment: Shipment;
+  ShipmentMethod: ShipmentMethod;
+  ShipmentMethodsResult: ShipmentMethodsResult;
   Shop: Shop;
+  ShopDefaults: ShopDefaults;
   SortInput: SortInput;
   Sorting: Sorting;
   String: Scalars['String'];
@@ -1475,6 +1669,7 @@ export type ResolversParentTypes = {
   TaxClass: TaxClass;
   TaxValue: TaxValue;
   Totals: Totals;
+  Tracking: Tracking;
   UpdateCartItemInput: UpdateCartItemInput;
   UpdateCheckoutInput: UpdateCheckoutInput;
   UpdateCustomerInput: UpdateCustomerInput;
@@ -1866,20 +2061,16 @@ export type CheckoutStateResolvers<
     ParentType,
     ContextType
   >;
+  shipmentMethod?: Resolver<
+    Maybe<ResolversTypes['ShipmentMethod']>,
+    ParentType,
+    ContextType
+  >;
   shippingAddress?: Resolver<
     Maybe<ResolversTypes['Address']>,
     ParentType,
     ContextType
   >;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CountryResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Country'] = ResolversParentTypes['Country']
-> = {
-  isoCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1897,6 +2088,7 @@ export type CurrencyResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Currency'] = ResolversParentTypes['Currency']
 > = {
+  minorUnit?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   symbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1913,6 +2105,16 @@ export type CustomerResolvers<
   >;
   blocked?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   customerNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  defaultBillingAddress?: Resolver<
+    Maybe<ResolversTypes['CustomerAddress']>,
+    ParentType,
+    ContextType
+  >;
+  defaultShippingAddress?: Resolver<
+    Maybe<ResolversTypes['CustomerAddress']>,
+    ParentType,
+    ContextType
+  >;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   firstname?: Resolver<
     Maybe<ResolversTypes['String']>,
@@ -1934,6 +2136,17 @@ export type CustomerAddressResolvers<
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   street?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   zipCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type DateTimeResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['DateTime'] = ResolversParentTypes['DateTime']
+> = {
+  date?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  dayOfWeek?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  from?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  until?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1963,6 +2176,35 @@ export type ErrorResolvers<
   code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   ref?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ExpenseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Expense'] = ResolversParentTypes['Expense']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  label?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LocaleResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Locale'] = ResolversParentTypes['Locale']
+> = {
+  charset?: Resolver<ResolversTypes['CharsetType'], ParentType, ContextType>;
+  country?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  dateFormat?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  decimalSign?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  isoCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  language?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  measurement?: Resolver<
+    ResolversTypes['MeasurementType'],
+    ParentType,
+    ContextType
+  >;
+  timeZone?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2094,16 +2336,6 @@ export type MutationResolvers<
   >;
 };
 
-export type OpeningTimeResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['OpeningTime'] = ResolversParentTypes['OpeningTime']
-> = {
-  dayOfWeek?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  from?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  until?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type OrderResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order']
@@ -2117,6 +2349,11 @@ export type OrderResolvers<
     ContextType
   >;
   payment?: Resolver<ResolversTypes['PaymentInfo'], ParentType, ContextType>;
+  shipments?: Resolver<
+    Maybe<Array<ResolversTypes['Shipment']>>,
+    ParentType,
+    ContextType
+  >;
   shippingAddress?: Resolver<
     ResolversTypes['Address'],
     ParentType,
@@ -2135,6 +2372,7 @@ export type OrderItemResolvers<
   price?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   sku?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  state?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2231,9 +2469,11 @@ export type PagedResultResolvers<
     | 'CategoriesResult'
     | 'OrdersResult'
     | 'PagesResult'
+    | 'PaymentMethodsResult'
     | 'ProductsResult'
     | 'RelatedProductsResult'
     | 'ReservationsResult'
+    | 'ShipmentMethodsResult'
     | 'VendorsResult'
     | 'WarehousesResult'
     | 'WishlistsResult',
@@ -2266,7 +2506,35 @@ export type PaymentInfoResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['PaymentInfo'] = ResolversParentTypes['PaymentInfo']
 > = {
+  method?: Resolver<
+    Maybe<ResolversTypes['PaymentMethod']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PaymentMethodResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['PaymentMethod'] = ResolversParentTypes['PaymentMethod']
+> = {
+  expense?: Resolver<Maybe<ResolversTypes['Expense']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  isActive?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   method?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PaymentMethodsResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['PaymentMethodsResult'] = ResolversParentTypes['PaymentMethodsResult']
+> = {
+  paging?: Resolver<ResolversTypes['Paging'], ParentType, ContextType>;
+  results?: Resolver<
+    Array<ResolversTypes['PaymentMethod']>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2410,6 +2678,17 @@ export type ProductsResultResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type QuantifiedArticleResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['QuantifiedArticle'] = ResolversParentTypes['QuantifiedArticle']
+> = {
+  article?: Resolver<Maybe<ResolversTypes['Article']>, ParentType, ContextType>;
+  articleID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']
@@ -2509,6 +2788,12 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryPagesArgs, never>
   >;
+  paymentMethods?: Resolver<
+    Maybe<ResolversTypes['PaymentMethodsResult']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryPaymentMethodsArgs, 'sort'>
+  >;
   product?: Resolver<
     Maybe<ResolversTypes['Product']>,
     ParentType,
@@ -2544,6 +2829,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryReservationsArgs, never>
+  >;
+  shipmentMethods?: Resolver<
+    Maybe<ResolversTypes['ShipmentMethodsResult']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryShipmentMethodsArgs, 'sort'>
   >;
   shop?: Resolver<Maybe<ResolversTypes['Shop']>, ParentType, ContextType>;
   suggestions?: Resolver<
@@ -2646,7 +2937,7 @@ export type ReservationResolvers<
   ParentType extends ResolversParentTypes['Reservation'] = ResolversParentTypes['Reservation']
 > = {
   articles?: Resolver<
-    Array<ResolversTypes['ReservedArticle']>,
+    Array<ResolversTypes['QuantifiedArticle']>,
     ParentType,
     ContextType
   >;
@@ -2694,24 +2985,17 @@ export type ReservationsResultResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ReservedArticleResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['ReservedArticle'] = ResolversParentTypes['ReservedArticle']
-> = {
-  article?: Resolver<Maybe<ResolversTypes['Article']>, ParentType, ContextType>;
-  articleID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type SalesUnitResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['SalesUnit'] = ResolversParentTypes['SalesUnit']
 > = {
   conversion?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<
+    Maybe<ResolversTypes['MeasurementUnitType']>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2720,11 +3004,76 @@ export interface ScalarMapScalarConfig
   name: 'ScalarMap';
 }
 
+export type ShipmentResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Shipment'] = ResolversParentTypes['Shipment']
+> = {
+  articles?: Resolver<
+    Maybe<Array<ResolversTypes['QuantifiedArticle']>>,
+    ParentType,
+    ContextType
+  >;
+  method?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tracking?: Resolver<
+    Maybe<ResolversTypes['Tracking']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ShipmentMethodResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ShipmentMethod'] = ResolversParentTypes['ShipmentMethod']
+> = {
+  expense?: Resolver<Maybe<ResolversTypes['Expense']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  isActive?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ShipmentMethodsResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ShipmentMethodsResult'] = ResolversParentTypes['ShipmentMethodsResult']
+> = {
+  paging?: Resolver<ResolversTypes['Paging'], ParentType, ContextType>;
+  results?: Resolver<
+    Array<ResolversTypes['ShipmentMethod']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ShopResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Shop'] = ResolversParentTypes['Shop']
 > = {
+  channel?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  currencies?: Resolver<
+    Array<ResolversTypes['Currency']>,
+    ParentType,
+    ContextType
+  >;
+  defaults?: Resolver<ResolversTypes['ShopDefaults'], ParentType, ContextType>;
+  locales?: Resolver<Array<ResolversTypes['Locale']>, ParentType, ContextType>;
+  priceTypes?: Resolver<
+    Array<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ShopDefaultsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ShopDefaults'] = ResolversParentTypes['ShopDefaults']
+> = {
+  currency?: Resolver<ResolversTypes['Currency'], ParentType, ContextType>;
+  locale?: Resolver<ResolversTypes['Locale'], ParentType, ContextType>;
   pricePrecision?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  priceType?: Resolver<ResolversTypes['PriceType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2735,6 +3084,7 @@ export type SortingResolvers<
   applied?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2753,8 +3103,8 @@ export type TaxClassResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['TaxClass'] = ResolversParentTypes['TaxClass']
 > = {
-  country?: Resolver<ResolversTypes['Country'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  locale?: Resolver<ResolversTypes['Locale'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2774,7 +3124,12 @@ export type TotalsResolvers<
   ParentType extends ResolversParentTypes['Totals'] = ResolversParentTypes['Totals']
 > = {
   discounts?: Resolver<
-    Array<ResolversTypes['Discount']>,
+    Maybe<Array<ResolversTypes['Discount']>>,
+    ParentType,
+    ContextType
+  >;
+  expenses?: Resolver<
+    Maybe<Array<ResolversTypes['Expense']>>,
     ParentType,
     ContextType
   >;
@@ -2785,6 +3140,20 @@ export type TotalsResolvers<
     ParentType,
     ContextType
   >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TrackingResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Tracking'] = ResolversParentTypes['Tracking']
+> = {
+  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<
+    Maybe<ResolversTypes['TrackingType']>,
+    ParentType,
+    ContextType
+  >;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2810,10 +3179,15 @@ export type WarehouseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Warehouse'] = ResolversParentTypes['Warehouse']
 > = {
+  closingTimes?: Resolver<
+    Maybe<Array<ResolversTypes['DateTime']>>,
+    ParentType,
+    ContextType
+  >;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   openingTimes?: Resolver<
-    Array<ResolversTypes['OpeningTime']>,
+    Array<ResolversTypes['DateTime']>,
     ParentType,
     ContextType
   >;
@@ -2844,6 +3218,7 @@ export type WishlistResolvers<
     ContextType,
     RequireFields<WishlistItemsArgs, never>
   >;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2851,7 +3226,11 @@ export type WishlistItemResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['WishlistItem'] = ResolversParentTypes['WishlistItem']
 > = {
-  article?: Resolver<Maybe<ResolversTypes['Article']>, ParentType, ContextType>;
+  article?: Resolver<
+    Maybe<ResolversTypes['QuantifiedArticle']>,
+    ParentType,
+    ContextType
+  >;
   articleId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2891,18 +3270,19 @@ export type Resolvers<ContextType = any> = {
   CategoriesResult?: CategoriesResultResolvers<ContextType>;
   Category?: CategoryResolvers<ContextType>;
   CheckoutState?: CheckoutStateResolvers<ContextType>;
-  Country?: CountryResolvers<ContextType>;
   Coupon?: CouponResolvers<ContextType>;
   Currency?: CurrencyResolvers<ContextType>;
   Customer?: CustomerResolvers<ContextType>;
   CustomerAddress?: CustomerAddressResolvers<ContextType>;
+  DateTime?: DateTimeResolvers<ContextType>;
   DeleteResult?: DeleteResultResolvers<ContextType>;
   Discount?: DiscountResolvers<ContextType>;
   Error?: ErrorResolvers<ContextType>;
+  Expense?: ExpenseResolvers<ContextType>;
+  Locale?: LocaleResolvers<ContextType>;
   Media?: MediaResolvers<ContextType>;
   Meta?: MetaResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
-  OpeningTime?: OpeningTimeResolvers<ContextType>;
   Order?: OrderResolvers<ContextType>;
   OrderItem?: OrderItemResolvers<ContextType>;
   OrdersResult?: OrdersResultResolvers<ContextType>;
@@ -2913,26 +3293,33 @@ export type Resolvers<ContextType = any> = {
   PagesResult?: PagesResultResolvers<ContextType>;
   Paging?: PagingResolvers<ContextType>;
   PaymentInfo?: PaymentInfoResolvers<ContextType>;
+  PaymentMethod?: PaymentMethodResolvers<ContextType>;
+  PaymentMethodsResult?: PaymentMethodsResultResolvers<ContextType>;
   Price?: PriceResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
   ProductListFilter?: ProductListFilterResolvers<ContextType>;
   ProductListFilterValue?: ProductListFilterValueResolvers<ContextType>;
   ProductsResult?: ProductsResultResolvers<ContextType>;
+  QuantifiedArticle?: QuantifiedArticleResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   ReferencePrice?: ReferencePriceResolvers<ContextType>;
   RelatedProduct?: RelatedProductResolvers<ContextType>;
   RelatedProductsResult?: RelatedProductsResultResolvers<ContextType>;
   Reservation?: ReservationResolvers<ContextType>;
   ReservationsResult?: ReservationsResultResolvers<ContextType>;
-  ReservedArticle?: ReservedArticleResolvers<ContextType>;
   SalesUnit?: SalesUnitResolvers<ContextType>;
   ScalarMap?: GraphQLScalarType;
+  Shipment?: ShipmentResolvers<ContextType>;
+  ShipmentMethod?: ShipmentMethodResolvers<ContextType>;
+  ShipmentMethodsResult?: ShipmentMethodsResultResolvers<ContextType>;
   Shop?: ShopResolvers<ContextType>;
+  ShopDefaults?: ShopDefaultsResolvers<ContextType>;
   Sorting?: SortingResolvers<ContextType>;
   Suggestion?: SuggestionResolvers<ContextType>;
   TaxClass?: TaxClassResolvers<ContextType>;
   TaxValue?: TaxValueResolvers<ContextType>;
   Totals?: TotalsResolvers<ContextType>;
+  Tracking?: TrackingResolvers<ContextType>;
   Vendor?: VendorResolvers<ContextType>;
   VendorsResult?: VendorsResultResolvers<ContextType>;
   Warehouse?: WarehouseResolvers<ContextType>;

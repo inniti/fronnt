@@ -80,6 +80,7 @@ enum ReservationStatus {
 enum RelatedProductType {
   ACCESSORY
   ALTERNATIVE
+  SUCCESSOR
 }
 
 enum ArticleOptionType {
@@ -95,6 +96,81 @@ enum ArticleOptionConstraintOperator {
   GREATER_THAN
   LESS_THAN
   INCLUDES
+}
+
+enum MeasurementType {
+  METRIC
+  IMPERIAL_UK
+  IMPERIAL_US
+}
+
+"""
+Usable charsets according to https://www.iana.org/assignments/character-sets/character-sets.xhtml using _ instead of -
+"""
+enum CharsetType {
+  UTF_8
+  UTF_16
+}
+
+enum TrackingType {
+  URL
+  CODE
+}
+
+enum PriceType {
+  GROSS
+  NET
+}
+
+enum MeasurementUnitType {
+  ITEM # Item
+  KILO # Kilo
+  GRAM # Gram
+  TONE # Ton
+  GBOU # GB Ounce
+  USOU # US Ounce
+  PUND # Pound
+  HUWG # Hundredweight
+  GBTN # GB Ton
+  USTN # US Ton
+  OZTR # Troy Ounce
+  UCWT # US Hundredweight
+  METR # Meter
+  CMET # Centimeter
+  MMET # Millimetre
+  KMET # Kilometre
+  INCH # Inch
+  YARD # Yard
+  FOOT # Foot
+  MILE # Mile
+  SMET # Square Metre
+  SQKI # Square Kilometre
+  SMIL # Square Millimetre
+  SCMT # Square Centimetre
+  SQIN # Square Inch
+  SQFO # Square Foot
+  SQMI # Square Mile
+  SQYA # Square Yard
+  ACRE # Acre
+  ARES # Are
+  HECT # Hectare
+  LITR # Litre
+  CELI # Centilitre
+  MILI # Milli Litre
+  GBGA # GB Gallon
+  GBPI # GB Pint
+  USPI # US Pint
+  GBQA # GB Quart
+  USQA # US Quart
+  USGA # US Gallon
+  BARL # Barrel
+  BCUF # Billion Cubic Feet
+  BDFT # Board Feet
+  CBME # Cubic Meter
+  MIBA # Million Barrel
+  DGEU # Diesel Gallon Equivalent
+  GGEU # Gasoline Gallon Equivalent
+  BUSL # Bushel
 }
 
 interface PagedResult {
@@ -127,7 +203,41 @@ type Error {
 Shop specific settings and configuration
 """
 type Shop {
+  currencies: [Currency!]!
+  locales: [Locale!]!
+  """
+  PriceType enum should be used
+  """
+  priceTypes: [String!]!
+  defaults: ShopDefaults!
+  """
+  For analytics/tracking purposes, e.g.: web
+  """
+  channel: String
+}
+
+"""
+Default settings and configurations for a specific shop
+"""
+type ShopDefaults {
+  currency: Currency!
+  locale: Locale!
+  priceType: PriceType!
   pricePrecision: Int!
+}
+
+"""
+Locale configurations
+"""
+type Locale {
+  isoCode: String! #according to ISO 3166-1
+  dateFormat: String! #according to ISO 8601
+  language: String!
+  country: String!
+  charset: CharsetType! #default utf-8
+  measurement: MeasurementType!
+  timeZone: String!
+  decimalSign: String!
 }
 
 """
@@ -171,16 +281,19 @@ A warehouse
 type Warehouse {
   id: ID!
   name: String!
-  openingTimes: [OpeningTime!]!
+  openingTimes: [DateTime!]!
+  closingTimes: [DateTime!]
 }
 
 """
-Opening times of a warehouse/store
+Opening/closing times of a warehouse/store
+When no explicit date is specified dayOfWeek needs to be specified
 """
-type OpeningTime {
-  dayOfWeek: String!
+type DateTime {
+  dayOfWeek: Int
   from: String!
   until: String!
+  date: String
 }
 
 """
@@ -219,13 +332,23 @@ type TaxValue {
 }
 
 """
+An expense to an order/cart
+"""
+type Expense {
+  id: ID!
+  label: String
+  value: Int!
+}
+
+"""
 Total amounts of a Cart or a CartItem
 """
 type Totals {
   net: Int!
   gross: Int!
   taxes: [TaxValue]!
-  discounts: [Discount!]!
+  discounts: [Discount!]
+  expenses: [Expense!]
 }
 
 """
@@ -438,6 +561,7 @@ type Sorting {
   id: String!
   label: String!
   applied: Boolean!
+  value: String
 }
 
 """
@@ -531,10 +655,20 @@ type BrandsResult implements PagedResult {
 }
 
 """
+Payment method
+"""
+type PaymentMethod {
+  id: ID!
+  method: String!
+  expense: Expense
+  isActive: Boolean!
+}
+
+"""
 Container for payment information
 """
 type PaymentInfo {
-  method: String!
+  method: PaymentMethod
 }
 
 """
@@ -545,6 +679,7 @@ type CheckoutState {
   payment: PaymentInfo
   shippingAddress: Address
   billingAddress: Address
+  shipmentMethod: ShipmentMethod
 }
 
 interface AddressFields {
@@ -591,6 +726,26 @@ type Order {
   billingAddress: Address!
   shippingAddress: Address!
   payment: PaymentInfo!
+  shipments: [Shipment!]
+}
+
+type ShipmentMethod {
+  id: ID!
+  label: String!
+  expense: Expense
+  isActive: Boolean!
+}
+
+type Shipment {
+  articles: [QuantifiedArticle!]
+  method: String!
+  tracking: Tracking
+}
+
+type Tracking {
+  label: String!
+  value: String!
+  type: TrackingType
 }
 
 """
@@ -603,6 +758,7 @@ type OrderItem {
   quantity: Int!
   price: Int!
   orderId: ID!
+  state: String
 }
 
 """
@@ -614,20 +770,28 @@ type OrdersResult implements PagedResult {
 }
 
 """
+Paged result of an ordered shipment method list
+"""
+type ShipmentMethodsResult implements PagedResult {
+  paging: Paging!
+  results: [ShipmentMethod!]!
+}
+
+"""
+Paged result of an ordered payment method list
+"""
+type PaymentMethodsResult implements PagedResult {
+  paging: Paging!
+  results: [PaymentMethod!]!
+}
+
+"""
 Currency
 """
 type Currency {
   name: String!
   symbol: String!
-}
-
-"""
-Country
-"""
-type Country {
-  "ISO 3166-1 code"
-  isoCode: String!
-  name: String!
+  minorUnit: Int! #default 2, but there  are currencies with 3-4 decimal parts
 }
 
 """
@@ -638,7 +802,7 @@ type TaxClass {
   name: String!
   "Fractional value in percent applied to the net amount, e.g. 19"
   value: Int!
-  country: Country!
+  locale: Locale!
 }
 
 """
@@ -646,7 +810,7 @@ A sales unit is the unit in which an article is sold. Every article has to have 
 """
 type SalesUnit {
   id: ID!
-  name: String!
+  name: MeasurementUnitType
   "Factor which defines how to convert its BaseUnit to this SalesUnit"
   conversion: Int!
 }
@@ -665,7 +829,7 @@ type BaseUnit {
 
 """
 A reference price provides a baseline with which prices of different articles can be compared, even though these
-articles might be sond in different SalesUnits.
+articles might be sold in different SalesUnits.
 """
 type ReferencePrice {
   quantity: Int!
@@ -697,6 +861,7 @@ Wishlist
 """
 type Wishlist {
   id: ID!
+  name: String!
   items(customQueryConditions: [CustomQueryConditionInput!]): [WishlistItem!]!
 }
 
@@ -706,7 +871,7 @@ Wishlist item
 type WishlistItem {
   id: ID!
   articleId: ID!
-  article: Article
+  article: QuantifiedArticle
 }
 
 """
@@ -728,6 +893,8 @@ type Customer {
   blocked: Boolean!
   email: String!
   addresses: [CustomerAddress!]!
+  defaultBillingAddress: CustomerAddress
+  defaultShippingAddress: CustomerAddress
 }
 
 """
@@ -800,13 +967,13 @@ type Reservation {
   warehouseId: ID!
   warehouse: Warehouse
   validUntil: String!
-  articles: [ReservedArticle!]!
+  articles: [QuantifiedArticle!]!
 }
 
 """
 A reserved article references an article in a specified quantity which is part of a reservation
 """
-type ReservedArticle {
+type QuantifiedArticle {
   id: ID!
   articleID: ID!
   article: Article
@@ -905,6 +1072,8 @@ input UpdateCheckoutInput {
   email: String
   billingAddress: AddressInput
   shippingAddress: AddressInput
+  shipmentMethodId: ID
+  paymentMethodId: ID
 }
 
 """
@@ -926,6 +1095,8 @@ input UpdateCustomerInput {
   email: String
   firstname: String
   lastname: String
+  defaultBillingAddressId: ID
+  defaultShippingAddressId: ID
 }
 
 """
@@ -1018,6 +1189,24 @@ type Query {
     customQueryConditions: [CustomQueryConditionInput!]
   ): OrdersResult
   order(id: ID!): Order
+
+  paymentMethods(
+    paging: PagingInput
+    sort: [SortInput]!
+    cartId: ID
+    customerId: ID
+    addressId: ID
+    customQueryConditions: [CustomQueryConditionInput!]
+  ): PaymentMethodsResult
+
+  shipmentMethods(
+    paging: PagingInput
+    sort: [SortInput]!
+    cartId: ID
+    customerId: ID
+    addressId: ID
+    customQueryConditions: [CustomQueryConditionInput!]
+  ): ShipmentMethodsResult
 
   customer: Customer
 
