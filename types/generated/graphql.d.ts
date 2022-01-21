@@ -406,6 +406,15 @@ export interface DeleteResult {
   success: Scalars['Boolean'];
 }
 
+/** Opening hours can deviate from regular times in order to be able to reflect public holidays, for example. */
+export interface DeviatingOpeningTime {
+  __typename?: 'DeviatingOpeningTime';
+  closed: Scalars['Boolean'];
+  date: Scalars['String'];
+  from?: Maybe<Scalars['String']>;
+  until?: Maybe<Scalars['String']>;
+}
+
 /** Discounts can be applied by the system to either CartItems or the Cart as a whole */
 export interface Discount {
   __typename?: 'Discount';
@@ -530,12 +539,7 @@ export interface MutationUpdateCustomerArgs {
 }
 
 /** Opening times of a warehouse/store */
-export interface OpeningTime {
-  __typename?: 'OpeningTime';
-  dayOfWeek: Scalars['String'];
-  from: Scalars['String'];
-  until: Scalars['String'];
-}
+export type OpeningTime = DeviatingOpeningTime | RegularOpeningTime;
 
 /** Order */
 export interface Order {
@@ -932,6 +936,14 @@ export interface RegistrationInput {
   salutation?: InputMaybe<Scalars['String']>;
 }
 
+/** Regular (recurring) opening times of a warehouse/store */
+export interface RegularOpeningTime {
+  __typename?: 'RegularOpeningTime';
+  dayOfWeek: Scalars['String'];
+  from: Scalars['String'];
+  until: Scalars['String'];
+}
+
 /** A product which related to an other product */
 export interface RelatedProduct {
   __typename?: 'RelatedProduct';
@@ -1290,6 +1302,7 @@ export type ResolversTypes = {
   Customer: ResolverTypeWrapper<Customer>;
   CustomerAddress: ResolverTypeWrapper<CustomerAddress>;
   DeleteResult: ResolverTypeWrapper<DeleteResult>;
+  DeviatingOpeningTime: ResolverTypeWrapper<DeviatingOpeningTime>;
   Discount: ResolverTypeWrapper<Discount>;
   Error: ResolverTypeWrapper<Error>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
@@ -1300,7 +1313,9 @@ export type ResolversTypes = {
   MediaType: MediaType;
   Meta: ResolverTypeWrapper<Meta>;
   Mutation: ResolverTypeWrapper<{}>;
-  OpeningTime: ResolverTypeWrapper<OpeningTime>;
+  OpeningTime:
+    | ResolversTypes['DeviatingOpeningTime']
+    | ResolversTypes['RegularOpeningTime'];
   Order: ResolverTypeWrapper<Order>;
   OrderItem: ResolverTypeWrapper<OrderItem>;
   OrdersResult: ResolverTypeWrapper<OrdersResult>;
@@ -1343,6 +1358,7 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   ReferencePrice: ResolverTypeWrapper<ReferencePrice>;
   RegistrationInput: RegistrationInput;
+  RegularOpeningTime: ResolverTypeWrapper<RegularOpeningTime>;
   RelatedProduct: ResolverTypeWrapper<RelatedProduct>;
   RelatedProductType: RelatedProductType;
   RelatedProductsResult: ResolverTypeWrapper<RelatedProductsResult>;
@@ -1370,7 +1386,11 @@ export type ResolversTypes = {
   UpdateCustomerInput: UpdateCustomerInput;
   Vendor: ResolverTypeWrapper<Vendor>;
   VendorsResult: ResolverTypeWrapper<VendorsResult>;
-  Warehouse: ResolverTypeWrapper<Warehouse>;
+  Warehouse: ResolverTypeWrapper<
+    Omit<Warehouse, 'openingTimes'> & {
+      openingTimes: Array<ResolversTypes['OpeningTime']>;
+    }
+  >;
   WarehousesResult: ResolverTypeWrapper<WarehousesResult>;
   Wishlist: ResolverTypeWrapper<Wishlist>;
   WishlistItem: ResolverTypeWrapper<WishlistItem>;
@@ -1413,6 +1433,7 @@ export type ResolversParentTypes = {
   Customer: Customer;
   CustomerAddress: CustomerAddress;
   DeleteResult: DeleteResult;
+  DeviatingOpeningTime: DeviatingOpeningTime;
   Discount: Discount;
   Error: Error;
   Float: Scalars['Float'];
@@ -1421,7 +1442,9 @@ export type ResolversParentTypes = {
   Media: Media;
   Meta: Meta;
   Mutation: {};
-  OpeningTime: OpeningTime;
+  OpeningTime:
+    | ResolversParentTypes['DeviatingOpeningTime']
+    | ResolversParentTypes['RegularOpeningTime'];
   Order: Order;
   OrderItem: OrderItem;
   OrdersResult: OrdersResult;
@@ -1459,6 +1482,7 @@ export type ResolversParentTypes = {
   Query: {};
   ReferencePrice: ReferencePrice;
   RegistrationInput: RegistrationInput;
+  RegularOpeningTime: RegularOpeningTime;
   RelatedProduct: RelatedProduct;
   RelatedProductsResult: RelatedProductsResult;
   Reservation: Reservation;
@@ -1481,7 +1505,9 @@ export type ResolversParentTypes = {
   UpdateCustomerInput: UpdateCustomerInput;
   Vendor: Vendor;
   VendorsResult: VendorsResult;
-  Warehouse: Warehouse;
+  Warehouse: Omit<Warehouse, 'openingTimes'> & {
+    openingTimes: Array<ResolversParentTypes['OpeningTime']>;
+  };
   WarehousesResult: WarehousesResult;
   Wishlist: Wishlist;
   WishlistItem: WishlistItem;
@@ -1947,6 +1973,17 @@ export type DeleteResultResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type DeviatingOpeningTimeResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['DeviatingOpeningTime'] = ResolversParentTypes['DeviatingOpeningTime']
+> = {
+  closed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  date?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  from?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  until?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type DiscountResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Discount'] = ResolversParentTypes['Discount']
@@ -2099,10 +2136,11 @@ export type OpeningTimeResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['OpeningTime'] = ResolversParentTypes['OpeningTime']
 > = {
-  dayOfWeek?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  from?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  until?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+  __resolveType: TypeResolveFn<
+    'DeviatingOpeningTime' | 'RegularOpeningTime',
+    ParentType,
+    ContextType
+  >;
 };
 
 export type OrderResolvers<
@@ -2617,6 +2655,16 @@ export type ReferencePriceResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type RegularOpeningTimeResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['RegularOpeningTime'] = ResolversParentTypes['RegularOpeningTime']
+> = {
+  dayOfWeek?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  from?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  until?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type RelatedProductResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['RelatedProduct'] = ResolversParentTypes['RelatedProduct']
@@ -2899,6 +2947,7 @@ export type Resolvers<ContextType = any> = {
   Customer?: CustomerResolvers<ContextType>;
   CustomerAddress?: CustomerAddressResolvers<ContextType>;
   DeleteResult?: DeleteResultResolvers<ContextType>;
+  DeviatingOpeningTime?: DeviatingOpeningTimeResolvers<ContextType>;
   Discount?: DiscountResolvers<ContextType>;
   Error?: ErrorResolvers<ContextType>;
   Media?: MediaResolvers<ContextType>;
@@ -2922,6 +2971,7 @@ export type Resolvers<ContextType = any> = {
   ProductsResult?: ProductsResultResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   ReferencePrice?: ReferencePriceResolvers<ContextType>;
+  RegularOpeningTime?: RegularOpeningTimeResolvers<ContextType>;
   RelatedProduct?: RelatedProductResolvers<ContextType>;
   RelatedProductsResult?: RelatedProductsResultResolvers<ContextType>;
   Reservation?: ReservationResolvers<ContextType>;

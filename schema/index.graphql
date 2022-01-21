@@ -167,21 +167,36 @@ type Meta {
 }
 
 """
+Opening times of a warehouse/store
+"""
+union OpeningTime = RegularOpeningTime | DeviatingOpeningTime
+
+"""
+Regular (recurring) opening times of a warehouse/store
+"""
+type RegularOpeningTime {
+  dayOfWeek: String!
+  from: String!
+  until: String!
+}
+
+"""
+Opening hours can deviate from regular times in order to be able to reflect public holidays, for example.
+"""
+type DeviatingOpeningTime {
+  date: String!
+  from: String
+  until: String
+  closed: Boolean!
+}
+
+"""
 A warehouse
 """
 type Warehouse {
   id: ID!
   name: String!
   openingTimes: [OpeningTime!]!
-}
-
-"""
-Opening times of a warehouse/store
-"""
-type OpeningTime {
-  dayOfWeek: String!
-  from: String!
-  until: String!
 }
 
 """
