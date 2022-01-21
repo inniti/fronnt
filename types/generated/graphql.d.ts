@@ -573,7 +573,7 @@ export interface Page {
   children: Array<Page>;
   createdAt?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
-  language?: Maybe<Scalars['String']>;
+  locale?: Maybe<Scalars['String']>;
   meta: Meta;
   reference?: Maybe<PageReference>;
   referenceId?: Maybe<Scalars['ID']>;
@@ -591,6 +591,7 @@ export interface PageBlock {
   createdAt?: Maybe<Scalars['String']>;
   data: Scalars['ScalarMap'];
   id: Scalars['ID'];
+  locale?: Maybe<Scalars['String']>;
   /** Page blocks have a specific order within a page. The order field can be null if the page block is global (i.e. not associated with a page) */
   order?: Maybe<Scalars['Int']>;
   slot?: Maybe<Scalars['String']>;
@@ -2167,7 +2168,7 @@ export type PageResolvers<
     ContextType
   >;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  language?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  locale?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   meta?: Resolver<ResolversTypes['Meta'], ParentType, ContextType>;
   reference?: Resolver<
     Maybe<ResolversTypes['PageReference']>,
@@ -2199,6 +2200,7 @@ export type PageBlockResolvers<
   >;
   data?: Resolver<ResolversTypes['ScalarMap'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  locale?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   order?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   slot?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['PageBlockStatus'], ParentType, ContextType>;

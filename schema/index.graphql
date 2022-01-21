@@ -750,7 +750,7 @@ type Page {
   url: String!
   status: PageStatus!
   blocks: [PageBlock!]!
-  language: String
+  locale: String
   createdAt: String
   updatedAt: String
   children: [Page!]!
@@ -768,6 +768,7 @@ type PageBlock {
   data: ScalarMap!
   status: PageBlockStatus!
   slot: String
+  locale: String
   createdAt: String
   updatedAt: String
   """
