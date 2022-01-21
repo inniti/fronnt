@@ -235,6 +235,15 @@ type TaxValue {
 }
 
 """
+Expenses are additional costs that will be charged to the customer
+"""
+type Expense {
+  id: ID!
+  label: String!
+  value: Int!
+}
+
+"""
 Total amounts of a Cart or a CartItem
 """
 type Totals {
@@ -242,6 +251,7 @@ type Totals {
   gross: Int!
   taxes: [TaxValue]!
   discounts: [Discount!]!
+  expenses: [Expense!]!
 }
 
 """

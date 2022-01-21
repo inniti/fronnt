@@ -431,6 +431,14 @@ export interface Error {
   ref?: Maybe<Scalars['String']>;
 }
 
+/** Expenses are additional costs that will be charged to the customer */
+export interface Expense {
+  __typename?: 'Expense';
+  id: Scalars['ID'];
+  label: Scalars['String'];
+  value: Scalars['Int'];
+}
+
 /** A media object */
 export interface Media {
   __typename?: 'Media';
@@ -1077,6 +1085,7 @@ export interface TaxValue {
 export interface Totals {
   __typename?: 'Totals';
   discounts: Array<Discount>;
+  expenses: Array<Expense>;
   gross: Scalars['Int'];
   net: Scalars['Int'];
   taxes: Array<Maybe<TaxValue>>;
@@ -1305,6 +1314,7 @@ export type ResolversTypes = {
   DeviatingOpeningTime: ResolverTypeWrapper<DeviatingOpeningTime>;
   Discount: ResolverTypeWrapper<Discount>;
   Error: ResolverTypeWrapper<Error>;
+  Expense: ResolverTypeWrapper<Expense>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
@@ -1436,6 +1446,7 @@ export type ResolversParentTypes = {
   DeviatingOpeningTime: DeviatingOpeningTime;
   Discount: Discount;
   Error: Error;
+  Expense: Expense;
   Float: Scalars['Float'];
   ID: Scalars['ID'];
   Int: Scalars['Int'];
@@ -2001,6 +2012,16 @@ export type ErrorResolvers<
   code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   ref?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ExpenseResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Expense'] = ResolversParentTypes['Expense']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2828,6 +2849,11 @@ export type TotalsResolvers<
     ParentType,
     ContextType
   >;
+  expenses?: Resolver<
+    Array<ResolversTypes['Expense']>,
+    ParentType,
+    ContextType
+  >;
   gross?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   net?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   taxes?: Resolver<
@@ -2950,6 +2976,7 @@ export type Resolvers<ContextType = any> = {
   DeviatingOpeningTime?: DeviatingOpeningTimeResolvers<ContextType>;
   Discount?: DiscountResolvers<ContextType>;
   Error?: ErrorResolvers<ContextType>;
+  Expense?: ExpenseResolvers<ContextType>;
   Media?: MediaResolvers<ContextType>;
   Meta?: MetaResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
