@@ -605,6 +605,7 @@ type CustomerAddress implements AddressFields {
   zipCode: String!
   city: String!
   country: String!
+  isDefault: Boolean!
 }
 
 """

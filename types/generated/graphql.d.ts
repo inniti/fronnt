@@ -394,6 +394,7 @@ export interface CustomerAddress extends AddressFields {
   city: Scalars['String'];
   country: Scalars['String'];
   id: Scalars['ID'];
+  isDefault: Scalars['Boolean'];
   name: Scalars['String'];
   street: Scalars['String'];
   zipCode: Scalars['String'];
@@ -1970,6 +1971,7 @@ export type CustomerAddressResolvers<
   city?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   country?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  isDefault?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   street?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   zipCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
