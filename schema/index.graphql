@@ -80,6 +80,7 @@ enum ReservationStatus {
 enum RelatedProductType {
   ACCESSORY
   ALTERNATIVE
+  SUCCESSOR
 }
 
 enum ArticleOptionType {

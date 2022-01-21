@@ -939,7 +939,7 @@ export interface RelatedProduct {
   type: RelatedProductType;
 }
 
-export type RelatedProductType = 'ACCESSORY' | 'ALTERNATIVE';
+export type RelatedProductType = 'ACCESSORY' | 'ALTERNATIVE' | 'SUCCESSOR';
 
 /** Paged result of a related-product list */
 export interface RelatedProductsResult extends PagedResult {
