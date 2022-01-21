@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.26](https://github.com/inniti/middle/compare/v1.0.0-alpha.25...v1.0.0-alpha.26) (2022-01-21)
+
+
+### Features
+
+* **schema:** add expenses to Totals type ([48efee3](https://github.com/inniti/middle/commit/48efee3de9ca9ca4c912b22a5e6b9a0dd039447e))
+* **schema:** add isDefault flag to CustomerAddress type ([2381e08](https://github.com/inniti/middle/commit/2381e0872aa80d9104c9b846610cca0c0f0aa571))
+* **schema:** add quantity field to WishlistItem type ([6853cc5](https://github.com/inniti/middle/commit/6853cc508d297ac76da3d0947a26889bb276e5a6))
+* **schema:** add SUCCESSOR To RelatedProductType enum ([6ca34ca](https://github.com/inniti/middle/commit/6ca34cae97000d834c9c446f87c92e14535cb1fa))
+* **schema:** add support for deviating opening times to warehouses ([dabccf7](https://github.com/inniti/middle/commit/dabccf76c0667667d4ba048551a3fc62fcaafcce))
+* **schema:** make Product:vendorId optional ([45d53d4](https://github.com/inniti/middle/commit/45d53d4a71077f17e14f924d341a58d7b12086a8))
+* **schema:** make suggestions input "searchTerm" mandatory ([84a9b11](https://github.com/inniti/middle/commit/84a9b112ab0b94b71925d406e464460662085bbb))
+* **schema:** rename language field in Page type to locale, add locale field to PageBlock type ([b503fb2](https://github.com/inniti/middle/commit/b503fb2bbb5e5c174cf6f8cc6f7bab0edb60b3d7))
+
 ## [1.0.0-alpha.25](https://github.com/inniti/middle/compare/v1.0.0-alpha.24...v1.0.0-alpha.25) (2021-12-22)
 
 
