@@ -733,6 +733,7 @@ type WishlistItem {
   id: ID!
   articleId: ID!
   article: Article
+  quantity: Int!
 }
 
 """

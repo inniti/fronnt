@@ -1159,6 +1159,7 @@ export interface WishlistItem {
   article?: Maybe<Article>;
   articleId: Scalars['ID'];
   id: Scalars['ID'];
+  quantity: Scalars['Int'];
 }
 
 /** Paged result of a wishlist list */
@@ -2930,6 +2931,7 @@ export type WishlistItemResolvers<
   article?: Resolver<Maybe<ResolversTypes['Article']>, ParentType, ContextType>;
   articleId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
