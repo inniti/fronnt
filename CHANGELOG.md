@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.27](https://github.com/inniti/middle/compare/v1.0.0-alpha.26...v1.0.0-alpha.27) (2022-01-26)
+
+
+### Features
+
+* **schema:** remove paging from sub categories queries, add paging input to root categories query ([c0603e2](https://github.com/inniti/middle/commit/c0603e210065aee90e191eb10e79addedb58b297))
+
 ## [1.0.0-alpha.26](https://github.com/inniti/middle/compare/v1.0.0-alpha.25...v1.0.0-alpha.26) (2022-01-21)
 
 
