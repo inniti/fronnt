@@ -220,7 +220,7 @@ export interface BaseUnit {
 /** Brand */
 export interface Brand {
   __typename?: 'Brand';
-  categories?: Maybe<CategoriesResult>;
+  categories: Array<Category>;
   categoryIds: Array<Scalars['String']>;
   description: Scalars['String'];
   id: Scalars['ID'];
@@ -305,7 +305,7 @@ export interface CategoriesResult extends PagedResult {
 /** Categories are hierarchical containers for products */
 export interface Category {
   __typename?: 'Category';
-  children?: Maybe<CategoriesResult>;
+  children: Array<Category>;
   childrenIds: Array<Maybe<Scalars['String']>>;
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -813,6 +813,7 @@ export interface QueryCartsArgs {
 
 export interface QueryCategoriesArgs {
   customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
+  paging?: InputMaybe<PagingInput>;
 }
 
 export interface QueryCategoryArgs {
@@ -1749,7 +1750,7 @@ export type BrandResolvers<
   ParentType extends ResolversParentTypes['Brand'] = ResolversParentTypes['Brand']
 > = {
   categories?: Resolver<
-    Maybe<ResolversTypes['CategoriesResult']>,
+    Array<ResolversTypes['Category']>,
     ParentType,
     ContextType,
     RequireFields<BrandCategoriesArgs, never>
@@ -1856,7 +1857,7 @@ export type CategoryResolvers<
   ParentType extends ResolversParentTypes['Category'] = ResolversParentTypes['Category']
 > = {
   children?: Resolver<
-    Maybe<ResolversTypes['CategoriesResult']>,
+    Array<ResolversTypes['Category']>,
     ParentType,
     ContextType,
     RequireFields<CategoryChildrenArgs, never>

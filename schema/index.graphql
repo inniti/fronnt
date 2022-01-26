@@ -485,9 +485,7 @@ type Category {
     customQueryConditions: [CustomQueryConditionInput!]
   ): ProductsResult
   parent: Category
-  children(
-    customQueryConditions: [CustomQueryConditionInput!]
-  ): CategoriesResult
+  children(customQueryConditions: [CustomQueryConditionInput!]): [Category!]!
 }
 
 """
@@ -500,9 +498,7 @@ type Brand {
   slug: String!
   description: String!
   categoryIds: [String!]!
-  categories(
-    customQueryConditions: [CustomQueryConditionInput!]
-  ): CategoriesResult
+  categories(customQueryConditions: [CustomQueryConditionInput!]): [Category!]!
   products(
     query: String
     filters: [ProductsSearchFiltersInput!]
@@ -1022,6 +1018,7 @@ type Query {
   brandByField(field: String!, value: String!): Brand
 
   categories(
+    paging: PagingInput
     customQueryConditions: [CustomQueryConditionInput!]
   ): CategoriesResult
   category(id: ID!): Category
