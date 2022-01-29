@@ -1,0 +1,8 @@
+.eslintignore
+.gitignore
+.eslintrc.json
+.prettierrc.json
+tsconfig.json
+.idea
+.eslintcache
+.husky
