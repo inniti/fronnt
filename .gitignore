@@ -3,3 +3,4 @@ packages/**/dist
 .idea
 .eslintcache
 .pnpm-debug.log
+.env
