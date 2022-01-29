@@ -1,9 +1,9 @@
-import { MiddleConnector } from '@inniti/middle-core';
-import { PluginOrDisabledPlugin } from '@envelop/core';
+import type { MiddleConnector } from '@inniti/middle-core';
+import type { Plugin } from '@envelop/core';
 
 export function createServer(
   connectors: MiddleConnector[],
-  envelopPlugins: PluginOrDisabledPlugin[] = []
+  envelopPlugins: Plugin[] = []
 ): {
   listen: (port: number) => void;
 };
