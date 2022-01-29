@@ -28,7 +28,15 @@ export class MiddleError extends Error implements _MiddleError {
       Object.defineProperty(this, 'name', { value: 'MiddleError' });
     }
 
-    this.extensions = { ...extensions, code };
+    const _extensions: GraphQLErrorExtensions = {
+      ...extensions,
+      code,
+    };
+    if (process.env.NODE_ENV === 'development') {
+      _extensions.stack = this.stack;
+    }
+
+    this.extensions = _extensions;
   }
 
   toJSON(): GraphQLFormattedError {

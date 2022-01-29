@@ -5,5 +5,5 @@ export function createServer(
   connectors: MiddleConnector[],
   envelopPlugins: Plugin[] = []
 ): {
-  listen: (port: number) => void;
+  listen: (port: number, cb: (error: Error | null) => void) => void;
 };

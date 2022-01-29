@@ -2,7 +2,8 @@
 	"extends": "../../config/tsconfig.json",
 	"compilerOptions": {
 		"typeRoots": [
-			"./shims.d.ts"
+			"./shims.d.ts",
+			"./node_modules/@types"
 		]
 	}
 }

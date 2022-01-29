@@ -3,7 +3,7 @@ import type { GetEnvelopedFn } from '@envelop/core';
 
 export * from './generated/graphql';
 
-export class MiddleError extends GraphQLError {
+export declare class MiddleError extends GraphQLError {
   constructor(
     message: string,
     code?: string,
@@ -11,15 +11,15 @@ export class MiddleError extends GraphQLError {
   ) {}
 }
 
-export interface NotImplementedError extends MiddleError {
+export declare interface NotImplementedError extends MiddleError {
   code: 'NOT_IMPLEMENTED';
 }
 
-export interface Context {
+export declare interface Context {
   dataSources: Record<string, unknown>;
 }
 
-export interface MiddleConnector {
+export declare interface MiddleConnector {
   getTypeDefs(): Array<DocumentNode | string>;
 
   getResolvers(): Array<ResolverTree>;
@@ -29,6 +29,6 @@ export interface MiddleConnector {
   getDataSources?(): Record<string, unknown>;
 }
 
-export function createMiddleEnvelop(
+export declare function createMiddleEnvelop(
   connectors: MiddleConnector[]
 ): GetEnvelopedFn<any>;
