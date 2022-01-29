@@ -9,6 +9,6 @@ generates:
     config:
       declarationKind: "interface"
       enumsAsTypes: true
-  ./graphql.schema.json:
+  ./dist/graphql.schema.json:
     plugins:
       - "introspection"
