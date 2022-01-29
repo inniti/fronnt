@@ -1,0 +1,4 @@
+{
+  "name": "middle GraphQL Schema",
+  "schema": "./middle.graphql.json"
+}
