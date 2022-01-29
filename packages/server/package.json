@@ -1,0 +1,40 @@
+{
+  "name": "@inniti/middle-server",
+  "version": "1.0.0-alpha.27",
+  "description": "Scalable eCommerce GraphQL API middleware architecture",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "types": "types",
+  "author": "inniti",
+  "keywords": [
+    "middleware",
+    "graphql",
+    "eCommerce",
+    "api"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "node ./build.js"
+  },
+  "dependencies": {
+    "fastify": "^3.27.0",
+    "@inniti/middle-core": "workspace:*",
+    "graphql-helix": "^1.11.0",
+    "@envelop/core": "^1.7.1",
+    "graphql": "^16.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.13",
+    "esbuild": "^0.14.5",
+    "graphql-tag": "^2.12.6",
+    "prettier": "^2.5.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.5.4"
+  }
+}

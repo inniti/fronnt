@@ -4,21 +4,17 @@ const { build } = require('esbuild');
 const graphqlLoaderPlugin = require('@luckycatfactory/esbuild-graphql-loader')
   .default;
 
+const pkg = require('./package.json')
+
 const buildConfig = {
   entryPoints: ['./src/index.ts'],
   bundle: true,
   platform: 'node',
   outfile: './dist/index.js',
   minify: false,
-  external: ['express', 'apollo-server', 'apollo-server-core'],
+  external: Object.keys(pkg.dependencies),
   format: 'cjs',
   plugins: [graphqlLoaderPlugin()],
-};
-
-const buildConfigMin = {
-  ...buildConfig,
-  outfile: './dist/index.min.js',
-  minify: true,
 };
 
 const buildConfigEsm = {
@@ -29,7 +25,6 @@ const buildConfigEsm = {
 
 Promise.all([
   build(buildConfig),
-  build(buildConfigMin),
   build(buildConfigEsm),
 ]).catch((e) => {
   console.error(e);

@@ -1,60 +1,42 @@
 {
   "name": "@inniti/middle",
-  "version": "1.0.0-alpha.27",
+  "version": "1.0.0",
   "description": "Scalable eCommerce GraphQL API middleware architecture",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
-    }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inniti/middle.git"
   },
-  "types": "types",
-  "author": "inniti",
   "keywords": [
     "middleware",
-    "graphql",
     "eCommerce",
+    "graphql",
+    "envelop",
     "api"
   ],
+  "author": "inniti",
   "license": "MIT",
-  "scripts": {
-    "build": "npm run codegen && node ./build.js",
-    "lint": "eslint src/**/*.ts",
-    "codegen": "rimraf types/generated && graphql-codegen --config codegen.yml && prettier --write types/generated",
-    "prepare": "husky install",
-    "release": "standard-version"
+  "bugs": {
+    "url": "https://github.com/inniti/middle/issues"
   },
-  "dependencies": {
-    "apollo-server": "^3.5.0",
-    "graphql": "^15.8.0"
-  },
+  "homepage": "https://middle.inniti.de",
   "devDependencies": {
-    "@graphql-codegen/cli": "^2.3.0",
-    "@graphql-codegen/introspection": "^2.1.0",
-    "@graphql-codegen/typescript": "^2.4.1",
-    "@graphql-codegen/typescript-resolvers": "^2.4.2",
-    "@luckycatfactory/esbuild-graphql-loader": "^3.7.0",
-    "@types/node": "^16.11.13",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.7.0",
-    "esbuild": "^0.14.5",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
-    "graphql-tag": "^2.12.6",
-    "husky": "^7.0.4",
-    "lint-staged": "^12.1.2",
     "prettier": "^2.5.1",
-    "rimraf": "^3.0.2",
-    "standard-version": "^9.3.2",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.4",
+    "husky": "^7.0.4"
   },
   "lint-staged": {
-    "*.js": "eslint --cache --fix",
+    "*.{js,ts}": "eslint --cache --fix",
     "*.{ts,graphql}": "prettier --write"
+  },
+  "scripts": {
+    "prepare": "husky install",
+    "lint": "eslint --cache --fix"
   }
 }
