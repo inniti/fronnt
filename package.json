@@ -20,16 +20,16 @@
   },
   "homepage": "https://middle.inniti.de",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.7.0",
-    "@typescript-eslint/parser": "^5.7.0",
+    "@typescript-eslint/eslint-plugin": "^5.10.1",
+    "@typescript-eslint/parser": "^5.10.1",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
+    "husky": "^7.0.4",
     "prettier": "^2.5.1",
-    "typescript": "^4.5.4",
-    "husky": "^7.0.4"
+    "typescript": "^4.5.5"
   },
   "lint-staged": {
     "*.{js,ts}": "eslint --cache --fix",
