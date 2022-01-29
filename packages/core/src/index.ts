@@ -35,9 +35,7 @@ export const createMiddleEnvelop: typeof createEnvelopFn = function (
   const typeDefs = [baseTypeDefs];
   const resolvers = [...baseResolvers];
 
-  const contextExtensions = {
-    bla: 'blub',
-  };
+  const contextExtensions = {};
 
   const dataSources = {};
 
