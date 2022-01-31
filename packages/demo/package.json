@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "@inniti/middle demo project",
   "scripts": {
-    "start": "nodemon --watch .env index.js"
+    "start": "nodemon --watch .env --watch connectors index.ts"
   },
   "author": "inniti",
   "private": true,
@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.15",
-    "dotenv": "^14.3.2"
+    "dotenv": "^14.3.2",
+    "ts-node": "^10.4.0"
   }
 }
