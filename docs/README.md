@@ -1,7 +1,7 @@
 # Documentation
 
-[development](development/README.md)
-[development](deployment/README.md)
+* [Development](development/README.md)
+* [Deployment](deployment/README.md)
 
 ## core
 
