@@ -440,6 +440,13 @@ export interface Expense {
   value: Scalars['Int'];
 }
 
+/** Locale */
+export interface Locale {
+  __typename?: 'Locale';
+  isoCode: Scalars['String'];
+  label?: Maybe<Scalars['String']>;
+}
+
 /** A media object */
 export interface Media {
   __typename?: 'Media';
@@ -1059,6 +1066,9 @@ export type ShippingStatus = 'DELIVERED' | 'SHIPPED';
 /** Shop specific settings and configuration */
 export interface Shop {
   __typename?: 'Shop';
+  currencies: Array<Currency>;
+  defaultLocale?: Maybe<Locale>;
+  locales: Array<Locale>;
   pricePrecision: Scalars['Int'];
 }
 
@@ -1345,6 +1355,7 @@ export type ResolversTypes = {
   Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  Locale: ResolverTypeWrapper<Locale>;
   Media: ResolverTypeWrapper<Media>;
   MediaPurpose: MediaPurpose;
   MediaType: MediaType;
@@ -1481,6 +1492,7 @@ export type ResolversParentTypes = {
   Float: Scalars['Float'];
   ID: Scalars['ID'];
   Int: Scalars['Int'];
+  Locale: Locale;
   Media: Media;
   Meta: Meta;
   Mutation: {};
@@ -2056,6 +2068,15 @@ export type ExpenseResolvers<
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LocaleResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Locale'] = ResolversParentTypes['Locale']
+> = {
+  isoCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  label?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2865,6 +2886,17 @@ export type ShopResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Shop'] = ResolversParentTypes['Shop']
 > = {
+  currencies?: Resolver<
+    Array<ResolversTypes['Currency']>,
+    ParentType,
+    ContextType
+  >;
+  defaultLocale?: Resolver<
+    Maybe<ResolversTypes['Locale']>,
+    ParentType,
+    ContextType
+  >;
+  locales?: Resolver<Array<ResolversTypes['Locale']>, ParentType, ContextType>;
   pricePrecision?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -3048,6 +3080,7 @@ export type Resolvers<ContextType = any> = {
   Discount?: DiscountResolvers<ContextType>;
   Error?: ErrorResolvers<ContextType>;
   Expense?: ExpenseResolvers<ContextType>;
+  Locale?: LocaleResolvers<ContextType>;
   Media?: MediaResolvers<ContextType>;
   Meta?: MetaResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;

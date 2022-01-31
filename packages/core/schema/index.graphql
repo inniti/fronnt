@@ -137,10 +137,21 @@ type Error {
 }
 
 """
+Locale
+"""
+type Locale {
+  isoCode: String!
+  label: String
+}
+
+"""
 Shop specific settings and configuration
 """
 type Shop {
   pricePrecision: Int!
+  currencies: [Currency!]!
+  locales: [Locale!]!
+  defaultLocale: Locale
 }
 
 """
