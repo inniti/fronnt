@@ -213,7 +213,7 @@ export interface BaseUnit {
   interval?: Maybe<Scalars['Int']>;
   maxQuantity?: Maybe<Scalars['Int']>;
   minQuantity?: Maybe<Scalars['Int']>;
-  name: Scalars['String'];
+  name: MeasurementUnit;
   standardQuantity?: Maybe<Scalars['Int']>;
 }
 
@@ -446,6 +446,56 @@ export interface Locale {
   isoCode: Scalars['String'];
   label?: Maybe<Scalars['String']>;
 }
+
+export type MeasurementUnit =
+  | 'ACRE'
+  | 'ARES'
+  | 'BARL'
+  | 'BCUF'
+  | 'BDFT'
+  | 'BUSL'
+  | 'CBME'
+  | 'CELI'
+  | 'CMET'
+  | 'DGEU'
+  | 'FOOT'
+  | 'GBGA'
+  | 'GBOU'
+  | 'GBPI'
+  | 'GBQA'
+  | 'GBTN'
+  | 'GGEU'
+  | 'GRAM'
+  | 'HECT'
+  | 'HUWG'
+  | 'INCH'
+  | 'ITEM'
+  | 'KILO'
+  | 'KMET'
+  | 'LITR'
+  | 'METR'
+  | 'MIBA'
+  | 'MILE'
+  | 'MILI'
+  | 'MMET'
+  | 'OZTR'
+  | 'PUND'
+  | 'SCMT'
+  | 'SMET'
+  | 'SMIL'
+  | 'SQFO'
+  | 'SQIN'
+  | 'SQKI'
+  | 'SQMI'
+  | 'SQYA'
+  | 'TONE'
+  | 'UCWT'
+  | 'USGA'
+  | 'USOU'
+  | 'USPI'
+  | 'USQA'
+  | 'USTN'
+  | 'YARD';
 
 /** A media object */
 export interface Media {
@@ -1041,7 +1091,7 @@ export interface SalesUnit {
   /** Factor which defines how to convert its BaseUnit to this SalesUnit */
   conversion: Scalars['Int'];
   id: Scalars['ID'];
-  name: Scalars['String'];
+  name: MeasurementUnit;
 }
 
 /** A Shipping Info provides information about a shipping */
@@ -1356,6 +1406,7 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Locale: ResolverTypeWrapper<Locale>;
+  MeasurementUnit: MeasurementUnit;
   Media: ResolverTypeWrapper<Media>;
   MediaPurpose: MediaPurpose;
   MediaType: MediaType;
@@ -1778,7 +1829,7 @@ export type BaseUnitResolvers<
   interval?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   maxQuantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   minQuantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['MeasurementUnit'], ParentType, ContextType>;
   standardQuantity?: Resolver<
     Maybe<ResolversTypes['Int']>,
     ParentType,
@@ -2844,7 +2895,7 @@ export type SalesUnitResolvers<
 > = {
   conversion?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['MeasurementUnit'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

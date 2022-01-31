@@ -110,6 +110,57 @@ enum OrderStatus {
   CANCELED
 }
 
+enum MeasurementUnit {
+  ITEM # Item
+  KILO # Kilo
+  GRAM # Gram
+  TONE # Ton
+  GBOU # GB Ounce
+  USOU # US Ounce
+  PUND # Pound
+  HUWG # Hundredweight
+  GBTN # GB Ton
+  USTN # US Ton
+  OZTR # Troy Ounce
+  UCWT # US Hundredweight
+  METR # Meter
+  CMET # Centimeter
+  MMET # Millimetre
+  KMET # Kilometre
+  INCH # Inch
+  YARD # Yard
+  FOOT # Foot
+  MILE # Mile
+  SMET # Square Metre
+  SQKI # Square Kilometre
+  SMIL # Square Millimetre
+  SCMT # Square Centimetre
+  SQIN # Square Inch
+  SQFO # Square Foot
+  SQMI # Square Mile
+  SQYA # Square Yard
+  ACRE # Acre
+  ARES # Are
+  HECT # Hectare
+  LITR # Litre
+  CELI # Centilitre
+  MILI # Milli Litre
+  GBGA # GB Gallon
+  GBPI # GB Pint
+  USPI # US Pint
+  GBQA # GB Quart
+  USQA # US Quart
+  USGA # US Gallon
+  BARL # Barrel
+  BCUF # Billion Cubic Feet
+  BDFT # Board Feet
+  CBME # Cubic Meter
+  MIBA # Million Barrel
+  DGEU # Diesel Gallon Equivalent
+  GGEU # Gasoline Gallon Equivalent
+  BUSL # Bushel
+}
+
 interface PagedResult {
   paging: Paging!
 }
@@ -714,7 +765,7 @@ A sales unit is the unit in which an article is sold. Every article has to have 
 """
 type SalesUnit {
   id: ID!
-  name: String!
+  name: MeasurementUnit!
   "Factor which defines how to convert its BaseUnit to this SalesUnit"
   conversion: Int!
 }
@@ -724,7 +775,7 @@ The base unit is used for all internal calculations
 """
 type BaseUnit {
   id: ID!
-  name: String!
+  name: MeasurementUnit!
   minQuantity: Int
   maxQuantity: Int
   standardQuantity: Int
