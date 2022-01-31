@@ -9,7 +9,9 @@
 
 ## Links
 
-- [Documentation](https://middle.inniti.de)
+- [Architecture](https://middle.inniti.de/)
+- [Schema](https://middle.inniti.de/schema/)
+- [Developer documentation](docs/README.md)
 
 ## Contribution
 
