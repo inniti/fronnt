@@ -2,12 +2,8 @@
   "name": "@inniti/create-middle-connector",
   "description": "Generator for @inniti/middle connectors",
   "author": "inniti",
-  "version": "1.2.0",
-  "main": "index.js",
+  "version": "2.0.0",
   "homepage": "https://middle.inniti.de",
-  "scripts": {
-    "start": "plop"
-  },
   "keywords": [
     "middleware",
     "graphql",
