@@ -559,6 +559,8 @@ export interface Order {
   items?: Maybe<Array<OrderItem>>;
   payment: PaymentInfo;
   shippingAddress: Address;
+  shippingInfo: Array<ShippingInfo>;
+  status: OrderStatus;
 }
 
 /** Order item */
@@ -570,7 +572,10 @@ export interface OrderItem {
   price: Scalars['Int'];
   quantity: Scalars['Int'];
   sku: Scalars['ID'];
+  title: Scalars['String'];
 }
+
+export type OrderStatus = 'CANCELED' | 'CLOSED' | 'NEW' | 'SHIPPED';
 
 /** Paged result of an order list */
 export interface OrdersResult extends PagedResult {
@@ -1032,6 +1037,25 @@ export interface SalesUnit {
   name: Scalars['String'];
 }
 
+/** A Shipping Info provides information about a shipping */
+export interface ShippingInfo {
+  __typename?: 'ShippingInfo';
+  carrier?: Maybe<Scalars['String']>;
+  items: Array<ShippingItem>;
+  status: ShippingStatus;
+  trackingNumber?: Maybe<Scalars['String']>;
+}
+
+/** A Shipping Item describes which articles have been shipped in which quantity */
+export interface ShippingItem {
+  __typename?: 'ShippingItem';
+  article?: Maybe<Article>;
+  id: Scalars['ID'];
+  quantity: Scalars['Int'];
+}
+
+export type ShippingStatus = 'DELIVERED' | 'SHIPPED';
+
 /** Shop specific settings and configuration */
 export interface Shop {
   __typename?: 'Shop';
@@ -1331,6 +1355,7 @@ export type ResolversTypes = {
     | ResolversTypes['RegularOpeningTime'];
   Order: ResolverTypeWrapper<Order>;
   OrderItem: ResolverTypeWrapper<OrderItem>;
+  OrderStatus: OrderStatus;
   OrdersResult: ResolverTypeWrapper<OrdersResult>;
   Page: ResolverTypeWrapper<
     Omit<Page, 'reference'> & {
@@ -1384,6 +1409,9 @@ export type ResolversTypes = {
   ResolveUrlResultType: ResolveUrlResultType;
   SalesUnit: ResolverTypeWrapper<SalesUnit>;
   ScalarMap: ResolverTypeWrapper<Scalars['ScalarMap']>;
+  ShippingInfo: ResolverTypeWrapper<ShippingInfo>;
+  ShippingItem: ResolverTypeWrapper<ShippingItem>;
+  ShippingStatus: ShippingStatus;
   Shop: ResolverTypeWrapper<Shop>;
   SortInput: SortInput;
   SortValue: SortValue;
@@ -1506,6 +1534,8 @@ export type ResolversParentTypes = {
   ReservedArticle: ReservedArticle;
   SalesUnit: SalesUnit;
   ScalarMap: Scalars['ScalarMap'];
+  ShippingInfo: ShippingInfo;
+  ShippingItem: ShippingItem;
   Shop: Shop;
   SortInput: SortInput;
   Sorting: Sorting;
@@ -2186,6 +2216,12 @@ export type OrderResolvers<
     ParentType,
     ContextType
   >;
+  shippingInfo?: Resolver<
+    Array<ResolversTypes['ShippingInfo']>,
+    ParentType,
+    ContextType
+  >;
+  status?: Resolver<ResolversTypes['OrderStatus'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2199,6 +2235,7 @@ export type OrderItemResolvers<
   price?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   sku?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2795,6 +2832,35 @@ export interface ScalarMapScalarConfig
   name: 'ScalarMap';
 }
 
+export type ShippingInfoResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ShippingInfo'] = ResolversParentTypes['ShippingInfo']
+> = {
+  carrier?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  items?: Resolver<
+    Array<ResolversTypes['ShippingItem']>,
+    ParentType,
+    ContextType
+  >;
+  status?: Resolver<ResolversTypes['ShippingStatus'], ParentType, ContextType>;
+  trackingNumber?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ShippingItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ShippingItem'] = ResolversParentTypes['ShippingItem']
+> = {
+  article?: Resolver<Maybe<ResolversTypes['Article']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ShopResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Shop'] = ResolversParentTypes['Shop']
@@ -3011,6 +3077,8 @@ export type Resolvers<ContextType = any> = {
   ReservedArticle?: ReservedArticleResolvers<ContextType>;
   SalesUnit?: SalesUnitResolvers<ContextType>;
   ScalarMap?: GraphQLScalarType;
+  ShippingInfo?: ShippingInfoResolvers<ContextType>;
+  ShippingItem?: ShippingItemResolvers<ContextType>;
   Shop?: ShopResolvers<ContextType>;
   Sorting?: SortingResolvers<ContextType>;
   Suggestion?: SuggestionResolvers<ContextType>;

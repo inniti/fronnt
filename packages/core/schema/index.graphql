@@ -98,6 +98,18 @@ enum ArticleOptionConstraintOperator {
   INCLUDES
 }
 
+enum ShippingStatus {
+  SHIPPED
+  DELIVERED
+}
+
+enum OrderStatus {
+  NEW
+  SHIPPED
+  CLOSED
+  CANCELED
+}
+
 interface PagedResult {
   paging: Paging!
 }
@@ -605,15 +617,36 @@ type CustomerAddress implements AddressFields {
 }
 
 """
+A Shipping Item describes which articles have been shipped in which quantity
+"""
+type ShippingItem {
+  id: ID!
+  quantity: Int!
+  article: Article
+}
+
+"""
+A Shipping Info provides information about a shipping
+"""
+type ShippingInfo {
+  status: ShippingStatus!
+  items: [ShippingItem!]!
+  trackingNumber: String
+  carrier: String
+}
+
+"""
 Order
 """
 type Order {
   id: ID!
   createdAt: String!
+  status: OrderStatus!
   items: [OrderItem!]
   billingAddress: Address!
   shippingAddress: Address!
   payment: PaymentInfo!
+  shippingInfo: [ShippingInfo!]!
 }
 
 """
@@ -622,10 +655,11 @@ Order item
 type OrderItem {
   id: ID!
   sku: ID!
-  article: Article
+  title: String!
   quantity: Int!
   price: Int!
   orderId: ID!
+  article: Article
 }
 
 """
