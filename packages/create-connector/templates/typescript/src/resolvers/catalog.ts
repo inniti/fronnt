@@ -1,19 +1,17 @@
-import { PagingInput, Resolvers } from '@inniti/middle';
-import { ResolverContext } from '../../types';
+import { Resolvers } from '@inniti/middle-core';
+import { Context } from '../../types';
 import { extractPaging } from '../utils';
 
-const resolvers: Resolvers<ResolverContext> = {
+const resolvers: Resolvers<Context> = {
   Query: {
     products(_, args, ctx) {
-      const { page, limit } = extractPaging(args.paging as PagingInput);
+      const { page, limit } = extractPaging(args.paging!);
 
       // TODO find products
 
       return {
         paging: {
           total: 0,
-          page,
-          limit,
         },
         results: [],
         filters: [],

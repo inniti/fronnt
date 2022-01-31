@@ -1,5 +1,6 @@
 import type { DocumentNode, GraphQLError } from 'graphql';
 import type { GetEnvelopedFn } from '@envelop/core';
+export type { Resolvers } from './generated/graphql';
 
 export * from './generated/graphql';
 
@@ -19,12 +20,12 @@ export declare interface Context {
   dataSources: Record<string, unknown>;
 }
 
-export declare interface MiddleConnector {
+export declare interface MiddleConnector<ContextType extends Context> {
   getTypeDefs(): Array<DocumentNode | string>;
 
-  getResolvers(): Array<ResolverTree>;
+  getResolvers(): Array<Resolvers<ContextType>>;
 
-  extendContext?(context: Context): Record<string, unknown>;
+  extendContext?(context: Readonly<ContextType>): Record<string, unknown>;
 
   getDataSources?(): Record<string, unknown>;
 }

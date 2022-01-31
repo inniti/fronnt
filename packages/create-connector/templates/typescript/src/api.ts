@@ -1,6 +1,6 @@
-import { Api as ApiInterface } from '../types';
+import { Api as _Api } from '../types';
 
-export default class Api implements ApiInterface {
+export default class Api implements _Api {
   private readonly baseUrl;
 
   constructor(baseUrl: string) {

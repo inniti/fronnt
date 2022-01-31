@@ -87,8 +87,8 @@ function generate(config) {
     const packageJson = JSON.parse(packageJsonContent);
     packageJson.name = name;
     packageJson.author = author || '';
-    fs.writeFileSync(packageJsonDestPath, JSON.stringify(packageJson, null, 2), 'utf8');
-    fs.unlinkSync(packageJsonSrcPath);
+    fs.writeFileSync(packageJsonSrcPath, JSON.stringify(packageJson, null, 2), 'utf8');
+    fs.renameSync(packageJsonSrcPath, packageJsonDestPath);
 
     const envFilePath = path.join(currentDir, name, 'sample.env');
     if (fs.existsSync(envFilePath)) {

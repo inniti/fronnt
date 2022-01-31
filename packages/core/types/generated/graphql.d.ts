@@ -694,8 +694,6 @@ export interface PagesResult extends PagedResult {
 /** Paging information */
 export interface Paging {
   __typename?: 'Paging';
-  limit?: Maybe<Scalars['Int']>;
-  page?: Maybe<Scalars['Int']>;
   total: Scalars['Int'];
 }
 
@@ -2430,8 +2428,6 @@ export type PagingResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Paging'] = ResolversParentTypes['Paging']
 > = {
-  limit?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  page?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

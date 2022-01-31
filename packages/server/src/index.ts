@@ -10,9 +10,10 @@ import {
   sendResult,
   shouldRenderGraphiQL,
 } from 'graphql-helix';
+import type { Context } from '../types';
 
 export const createServer = function (
-  connectors: MiddleConnector[],
+  connectors: MiddleConnector<Context>[],
   envelopPlugins: Plugin[] = []
 ) {
   const getEnveloped = envelop({

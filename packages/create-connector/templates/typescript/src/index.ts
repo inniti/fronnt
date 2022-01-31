@@ -1,9 +1,16 @@
-import { ContextArguments, MiddleConnector } from '@inniti/middle';
+import type { MiddleConnector } from '@inniti/middle-core';
 import resolvers from './resolvers';
 import Api from './api';
 import schemaExtensions from './schema/extensions';
+import type { Context } from '../types';
 
-export default class Connector implements MiddleConnector {
+export default class Connector implements MiddleConnector<Context> {
+  public readonly api: Api;
+
+  constructor(apiBaseUrl: string) {
+    this.api = new Api(apiBaseUrl);
+  }
+
   getTypeDefs() {
     return [schemaExtensions];
   }
@@ -14,13 +21,13 @@ export default class Connector implements MiddleConnector {
 
   getDataSources() {
     return {
-      api: new Api(process.env.API_BASE_URL as string),
+      api: this.api,
     };
   }
 
-  extendContext(context: ContextArguments) {
+  extendContext(context: Context) {
     let token = null;
-    const authorizationHeader = context.req.header('Authorization');
+    const authorizationHeader = context.req.headers['authorization'];
     if (authorizationHeader) {
       token = authorizationHeader.split(' ')[1] || null;
     }

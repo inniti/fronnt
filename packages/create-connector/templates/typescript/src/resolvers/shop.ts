@@ -1,12 +1,27 @@
-import { Resolvers } from '@inniti/middle';
-import { ResolverContext } from '../../types';
+import type { Resolvers } from '@inniti/middle-core';
+import type { Context } from '../../types';
 
-const resolvers: Resolvers<ResolverContext> = {
+const resolvers: Resolvers<Context> = {
   Query: {
     shop: (_, args, ctx) => {
-      // console.log(ctx);
       return {
         pricePrecision: 1000,
+        currencies: [
+          {
+            name: 'Euro',
+            symbol: '€',
+          },
+        ],
+        locales: [
+          {
+            isoCode: 'de-DE',
+            label: 'Deutsch (Deutschland)',
+          },
+        ],
+        defaultLocale: {
+          isoCode: 'de-DE',
+          label: 'Deutsch (Deutschland)',
+        },
       };
     },
   },

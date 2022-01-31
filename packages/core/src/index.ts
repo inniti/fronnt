@@ -1,9 +1,10 @@
 import type { Plugin } from '@envelop/core';
 import { envelop, useSchema } from '@envelop/core';
 import { makeExecutableSchema } from '@graphql-tools/schema';
-import { createMiddleEnvelop as createEnvelopFn } from '../types';
+import { createMiddleEnvelop as createEnvelopFn, Resolvers } from '../types';
 import baseTypeDefs from './typeDefs';
 import baseResolvers from './resolvers';
+import { DocumentNode } from 'graphql';
 
 export * from './errors';
 
@@ -19,10 +20,10 @@ const useDataSources = function (dataSources: Record<string, unknown>): Plugin {
 
 const useContextExtensions = function (functions: Function[]): Plugin {
   return {
-    onContextBuilding({ extendContext }) {
+    onContextBuilding({ context, extendContext }) {
       const extensions = {};
       for (let i = 0; i < functions.length; i++) {
-        Object.assign(extensions, functions[i]());
+        Object.assign(extensions, functions[i](context));
       }
       extendContext(extensions);
     },
@@ -49,8 +50,12 @@ export const createMiddleEnvelop: typeof createEnvelopFn = function (
       throw new Error('Connectors must implement a `getResolvers` function!');
     }
 
-    c.getTypeDefs().forEach((typeDef) => typeDefs.push(typeDef));
-    c.getResolvers().forEach((resolverTree) => resolvers.push(resolverTree));
+    c.getTypeDefs().forEach((typeDef: DocumentNode | string) =>
+      typeDefs.push(typeDef)
+    );
+    c.getResolvers().forEach((resolverTree: Resolvers) =>
+      resolvers.push(resolverTree)
+    );
 
     if (typeof c.extendContext === 'function') {
       contextFunctions.push(c.extendContext);

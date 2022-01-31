@@ -1,6 +1,6 @@
-import '@inniti/middle';
+import '@inniti/middle-core';
 
-declare module '@inniti/middle' {
+declare module '@inniti/middle-core' {
   /*
    * Extend Product type
    */

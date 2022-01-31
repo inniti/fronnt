@@ -218,8 +218,6 @@ Paging information
 """
 type Paging {
   total: Int!
-  limit: Int
-  page: Int
 }
 
 """

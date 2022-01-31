@@ -1,7 +1,7 @@
-import { Resolvers } from '@inniti/middle';
-import { ResolverContext } from '../../types';
+import { Resolvers } from '@inniti/middle-core';
+import { Context } from '../../types';
 
-const resolvers: Resolvers<ResolverContext> = {
+const resolvers: Resolvers<Context> = {
   Query: {
     carts: (_, args, ctx) => {
       return {
