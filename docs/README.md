@@ -33,11 +33,11 @@ implementation based on [fastify](https://www.fastify.io/) and [graphql-helix](h
 
 ```js
 import { createServer } from '@inniti/middle-server';
-import Connector1 from './connectors/connector1';
 
 const otherEnvelopPlugins = [ /*...*/ ];
 const connectors = [ /*...*/ ];
-createServer(connecrtors,  otherEnvelopPlugins).listen(4000, err => {
+
+createServer(connectors,  otherEnvelopPlugins).listen(4000, err => {
   if (err) {
     console.error('An error occured while starting the middle server', err);
   } else {
