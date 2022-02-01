@@ -98,9 +98,15 @@ enum ArticleOptionConstraintOperator {
   INCLUDES
 }
 
-enum ShippingStatus {
+enum ShipmentStatus {
+  PENDING
   SHIPPED
   DELIVERED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETE
 }
 
 enum OrderStatus {
@@ -335,6 +341,14 @@ type Cart {
   items: [CartItem!]!
   coupons: [Coupon!]!
   totals: Totals!
+  """
+  List of available shipping methods for this cart
+  """
+  shippingMethods: [ShippingMethod!]!
+  """
+  List of available payment methods for this cart
+  """
+  paymentMethods: [PaymentMethod!]!
 }
 
 """
@@ -625,18 +639,13 @@ type BrandsResult implements PagedResult {
 }
 
 """
-Container for payment information
-"""
-type PaymentInfo {
-  method: String!
-}
-
-"""
 Checkout state
 """
 type CheckoutState {
   id: ID!
-  payment: PaymentInfo
+  email: String
+  paymentMethod: PaymentMethod
+  shippingMethod: ShippingMethod
   shippingAddress: Address
   billingAddress: Address
 }
@@ -677,22 +686,65 @@ type CustomerAddress implements AddressFields {
 }
 
 """
-A Shipping Item describes which articles have been shipped in which quantity
+Shipping Method
 """
-type ShippingItem {
+type ShippingMethod {
+  id: ID!
+  label: String
+  expense: Expense
+  description: String
+}
+
+"""
+Payment Method
+"""
+type PaymentMethod {
+  id: ID!
+  label: String
+  expense: Expense
+  description: String
+}
+
+"""
+Payment
+"""
+type Payment {
+  status: PaymentStatus!
+}
+
+"""
+Container for payment information of an order
+"""
+type OrderPaymentInfo {
+  method: PaymentMethod!
+  payments: [Payment!]!
+}
+
+"""
+A Shipment Item describes which articles have been shipped in which quantity
+"""
+type ShipmentItem {
   id: ID!
   quantity: Int!
   article: Article
 }
 
 """
-A Shipping Info provides information about a shipping
+Shipment
 """
-type ShippingInfo {
-  status: ShippingStatus!
-  items: [ShippingItem!]!
+type Shipment {
+  status: ShipmentStatus!
+  items: [ShipmentItem!]!
   trackingNumber: String
   carrier: String
+}
+
+"""
+Container for shipping information
+"""
+type OrderShippingInfo {
+  method: ShippingMethod!
+  shipments: [Shipment!]!
 }
 
 """
@@ -705,8 +757,8 @@ type Order {
   items: [OrderItem!]
   billingAddress: Address!
   shippingAddress: Address!
-  payment: PaymentInfo!
-  shippingInfo: [ShippingInfo!]!
+  paymentInfo: OrderPaymentInfo!
+  shippingInfo: OrderShippingInfo!
 }
 
 """
@@ -1022,6 +1074,8 @@ Checkout data to be updated
 """
 input UpdateCheckoutInput {
   email: String
+  shippingMethod: ID
+  paymentMethod: ID
   billingAddress: AddressInput
   shippingAddress: AddressInput
 }
