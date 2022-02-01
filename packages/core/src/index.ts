@@ -73,7 +73,7 @@ export const createMiddleEnvelop: typeof createEnvelopFn = function (
   return envelop({
     plugins: [
       useSchema(executableSchema),
-      useDataSources(contextExtensions),
+      useDataSources(dataSources),
       useContextExtensions(contextFunctions),
     ],
   });
