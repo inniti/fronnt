@@ -36,8 +36,6 @@ export const createMiddleEnvelop: typeof createEnvelopFn = function (
   const typeDefs = [baseTypeDefs];
   const resolvers = [...baseResolvers];
 
-  const contextExtensions = {};
-
   const dataSources = {};
 
   const contextFunctions: Function[] = [];
