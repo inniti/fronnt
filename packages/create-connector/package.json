@@ -2,7 +2,7 @@
   "name": "@inniti/create-middle-connector",
   "description": "Generator for @inniti/middle connectors",
   "author": "inniti",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "homepage": "https://middle.inniti.de",
   "keywords": [
     "middleware",
