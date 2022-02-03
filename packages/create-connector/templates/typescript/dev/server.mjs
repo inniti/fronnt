@@ -1,7 +1,7 @@
 import { config } from 'dotenv';
 import { createServer } from '@inniti/middle-server';
 import { useTiming } from '@envelop/core';
-import Connector from '../dist/index2.mjs';
+import Connector from '../dist/index.mjs';
 
 config();
 

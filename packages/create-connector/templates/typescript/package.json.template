@@ -21,8 +21,9 @@
 	],
 	"scripts": {
 		"build": "tsc --noemit && node build.js",
-    "dev:mjs": "nodemon ./dev/server.mjs --watch ./dist/index.mjs",
-    "dev:cjs": "nodemon ./dev/Server.cjs --watch ./dist/index.cjs"
+		"dev:mjs:build"
+    "dev:mjs": "concurrently \"node build.js --watch\" \"nodemon ./dev/server.mjs --watch ./dist/index.mjs\"",
+        "dev:cjs": "concurrently \"node build.js --watch\" \"nodemon ./dev/server.cjs --watch ./dist/index.cjs\""
 	},
 	"dependencies": {
 		"@inniti/middle-core": "latest",
@@ -37,6 +38,7 @@
     "minimist": "^1.2.5",
     "nodemon": "^2.0.15",
     "ts-node": "^10.4.0",
+    "concurrently": "^7.0.0",
     "typescript": "^4.5.5"
 	}
 }

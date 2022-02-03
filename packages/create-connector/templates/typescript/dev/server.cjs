@@ -1,7 +1,7 @@
 const { config } = require('dotenv');
 const { createServer } = require('@inniti/middle-server');
 const { useTiming } = require('@envelop/core');
-const Connector = require('../dist/index2.cjs');
+const Connector = require('../dist/index.cjs').default;
 
 config();
 
