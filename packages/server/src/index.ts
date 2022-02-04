@@ -2,7 +2,7 @@ import type { MiddleConnector } from '@inniti/middle-core';
 import { createMiddleEnvelop } from '@inniti/middle-core';
 import type { Plugin } from '@envelop/core';
 import { envelop, useEnvelop } from '@envelop/core';
-import fastify from 'fastify';
+import fastify, { FastifyReply } from 'fastify';
 import {
   getGraphQLParameters,
   processRequest,
@@ -10,22 +10,42 @@ import {
   sendResult,
   shouldRenderGraphiQL,
 } from 'graphql-helix';
-import type { Context } from '../types';
+import type { Context, CorsConfig } from '../types';
+import { getConfig, getCorsHeaders } from './cors';
+
+function applyHeaders(reply: FastifyReply, headers: Record<string, string>) {
+  Object.keys(headers).forEach((h) => {
+    reply.header(h, headers[h]);
+    reply.raw.setHeader(h, headers[h]);
+  });
+}
 
 export const createServer = function (
   connectors: MiddleConnector<Context>[],
-  envelopPlugins: Plugin[] = []
+  envelopPlugins: Plugin[] = [],
+  cors?: CorsConfig
 ) {
   const getEnveloped = envelop({
     plugins: [useEnvelop(createMiddleEnvelop(connectors)), ...envelopPlugins],
   });
 
+  const corsConfig = getConfig(cors);
+  let additionalHeaders: Record<string, string> = {};
+
   const server = fastify();
+
+  if (corsConfig.enable) {
+    additionalHeaders = getCorsHeaders(corsConfig);
+    server.options('*', {}, (req, reply) => {
+      applyHeaders(reply, additionalHeaders);
+      reply.code(204).header('Content-Length', '0').send();
+    });
+  }
 
   server.route({
     method: ['GET', 'POST'],
     url: '/',
-    async handler(req, res) {
+    async handler(req, reply) {
       const { parse, validate, contextFactory, execute, schema } = getEnveloped(
         { req }
       );
@@ -36,9 +56,11 @@ export const createServer = function (
         query: req.query,
       };
 
+      applyHeaders(reply, additionalHeaders);
+
       if (shouldRenderGraphiQL(request)) {
-        res.type('text/html');
-        res.send(
+        reply.type('text/html');
+        reply.send(
           renderGraphiQL({
             endpoint: '/',
           })
@@ -58,10 +80,9 @@ export const createServer = function (
           contextFactory,
         });
 
-        sendResult(result, res.raw);
+        await sendResult(result, reply.raw);
 
-        // Tell fastify a response was sent
-        res.sent = true;
+        reply.sent = true;
       }
     },
   });

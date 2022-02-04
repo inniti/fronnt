@@ -9,9 +9,18 @@ export declare interface Context extends CoreContext {
   req: FastifyRequest;
 }
 
+export declare interface CorsConfig {
+  enable?: boolean;
+  origin?: string;
+  allowedMethods?: string[] | string;
+  allowedHeaders?: string[] | string;
+  allowCredentials?: boolean;
+}
+
 export declare function createServer(
   connectors: MiddleConnector<Context>[],
-  envelopPlugins: Plugin[] = []
+  envelopPlugins: Plugin[] = [],
+  cors?: CorsConfig
 ): {
   listen: (port: number | string, cb: (error: Error | null) => void) => void;
 };

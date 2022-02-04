@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 
 const { build } = require('esbuild');
-const graphqlLoaderPlugin = require('@luckycatfactory/esbuild-graphql-loader')
-  .default;
 
 const pkg = require('./package.json')
 
@@ -14,7 +12,7 @@ const buildConfig = {
   minify: false,
   external: Object.keys(pkg.dependencies),
   format: 'cjs',
-  plugins: [graphqlLoaderPlugin()],
+  plugins: [],
 };
 
 const buildConfigEsm = {
