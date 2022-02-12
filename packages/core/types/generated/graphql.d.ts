@@ -41,8 +41,8 @@ export interface AddToCartItemInput {
 /** Result of adding one or many articles to the cart */
 export interface AddToCartResult {
   __typename?: 'AddToCartResult';
+  cart: Cart;
   errors: Array<Error>;
-  items: Array<CartItem>;
 }
 
 /** An address */
@@ -1179,11 +1179,14 @@ export interface Sorting {
 /** Search Suggestion */
 export interface Suggestion {
   __typename?: 'Suggestion';
+  result?: Maybe<SuggestionResult>;
   resultId: Scalars['ID'];
   slug?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   type: SuggestionType;
 }
+
+export type SuggestionResult = Article | Brand | Category | Product;
 
 /** Type of a suggestion entry */
 export type SuggestionType = 'ARTICLE' | 'BRAND' | 'CATEGORY' | 'PRODUCT';
@@ -1524,7 +1527,16 @@ export type ResolversTypes = {
   SortValue: SortValue;
   Sorting: ResolverTypeWrapper<Sorting>;
   String: ResolverTypeWrapper<Scalars['String']>;
-  Suggestion: ResolverTypeWrapper<Suggestion>;
+  Suggestion: ResolverTypeWrapper<
+    Omit<Suggestion, 'result'> & {
+      result?: Maybe<ResolversTypes['SuggestionResult']>;
+    }
+  >;
+  SuggestionResult:
+    | ResolversTypes['Article']
+    | ResolversTypes['Brand']
+    | ResolversTypes['Category']
+    | ResolversTypes['Product'];
   SuggestionType: SuggestionType;
   TaxClass: ResolverTypeWrapper<TaxClass>;
   TaxValue: ResolverTypeWrapper<TaxValue>;
@@ -1652,7 +1664,14 @@ export type ResolversParentTypes = {
   SortInput: SortInput;
   Sorting: Sorting;
   String: Scalars['String'];
-  Suggestion: Suggestion;
+  Suggestion: Omit<Suggestion, 'result'> & {
+    result?: Maybe<ResolversParentTypes['SuggestionResult']>;
+  };
+  SuggestionResult:
+    | ResolversParentTypes['Article']
+    | ResolversParentTypes['Brand']
+    | ResolversParentTypes['Category']
+    | ResolversParentTypes['Product'];
   TaxClass: TaxClass;
   TaxValue: TaxValue;
   Totals: Totals;
@@ -1674,8 +1693,8 @@ export type AddToCartResultResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['AddToCartResult'] = ResolversParentTypes['AddToCartResult']
 > = {
+  cart?: Resolver<ResolversTypes['Cart'], ParentType, ContextType>;
   errors?: Resolver<Array<ResolversTypes['Error']>, ParentType, ContextType>;
-  items?: Resolver<Array<ResolversTypes['CartItem']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3089,11 +3108,27 @@ export type SuggestionResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Suggestion'] = ResolversParentTypes['Suggestion']
 > = {
+  result?: Resolver<
+    Maybe<ResolversTypes['SuggestionResult']>,
+    ParentType,
+    ContextType
+  >;
   resultId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   slug?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['SuggestionType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SuggestionResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['SuggestionResult'] = ResolversParentTypes['SuggestionResult']
+> = {
+  __resolveType: TypeResolveFn<
+    'Article' | 'Brand' | 'Category' | 'Product',
+    ParentType,
+    ContextType
+  >;
 };
 
 export type TaxClassResolvers<
@@ -3293,6 +3328,7 @@ export type Resolvers<ContextType = any> = {
   Shop?: ShopResolvers<ContextType>;
   Sorting?: SortingResolvers<ContextType>;
   Suggestion?: SuggestionResolvers<ContextType>;
+  SuggestionResult?: SuggestionResultResolvers<ContextType>;
   TaxClass?: TaxClassResolvers<ContextType>;
   TaxValue?: TaxValueResolvers<ContextType>;
   Totals?: TotalsResolvers<ContextType>;

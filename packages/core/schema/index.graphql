@@ -594,6 +594,8 @@ type Brand {
   ): ProductsResult
 }
 
+union SuggestionResult = Product | Article | Brand | Category
+
 """
 Search Suggestion
 """
@@ -602,6 +604,7 @@ type Suggestion {
   resultId: ID!
   title: String!
   slug: String
+  result: SuggestionResult
 }
 
 """
@@ -905,7 +908,7 @@ Result of adding one or many articles to the cart
 """
 type AddToCartResult {
   errors: [Error!]!
-  items: [CartItem!]!
+  cart: Cart!
 }
 
 union PageReference = Product | Article | Brand | Category
