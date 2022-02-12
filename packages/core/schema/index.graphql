@@ -908,7 +908,7 @@ Result of adding one or many articles to the cart
 """
 type AddToCartResult {
   errors: [Error!]!
-  cart: Cart!
+  cart: Cart
 }
 
 union PageReference = Product | Article | Brand | Category

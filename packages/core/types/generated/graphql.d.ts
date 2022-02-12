@@ -41,7 +41,7 @@ export interface AddToCartItemInput {
 /** Result of adding one or many articles to the cart */
 export interface AddToCartResult {
   __typename?: 'AddToCartResult';
-  cart: Cart;
+  cart?: Maybe<Cart>;
   errors: Array<Error>;
 }
 
@@ -1693,7 +1693,7 @@ export type AddToCartResultResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['AddToCartResult'] = ResolversParentTypes['AddToCartResult']
 > = {
-  cart?: Resolver<ResolversTypes['Cart'], ParentType, ContextType>;
+  cart?: Resolver<Maybe<ResolversTypes['Cart']>, ParentType, ContextType>;
   errors?: Resolver<Array<ResolversTypes['Error']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
