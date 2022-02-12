@@ -3,7 +3,8 @@
 > Scalable API architecture for modern eCommerce frontends
 > Connecting frontends and backend services with one extensible + open source middleware to provide a fully integrated and MACH embracing eCommerce architecture.
 
-![@inniti/middle on npm](https://img.shields.io/npm/v/@inniti/middle?style=flat-square)
+![@inniti/middle-core on npm](https://img.shields.io/npm/v/@inniti/middle-core?style=flat-square&label=middle-core)
+![@inniti/middle-server on npm](https://img.shields.io/npm/v/@inniti/middle-server?style=flat-square&label=middle-server)
 
 **🚧 This package is still under active development and should not yet be considered production ready. 🚧**
 
