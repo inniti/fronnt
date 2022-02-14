@@ -338,6 +338,7 @@ An instance of a shopping cart
 type Cart {
   id: ID!
   createdAt: String
+  updatedAt: String
   items: [CartItem!]!
   coupons: [Coupon!]!
   totals: Totals!

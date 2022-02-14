@@ -269,6 +269,7 @@ export interface Cart {
   /** List of available shipping methods for this cart */
   shippingMethods: Array<ShippingMethod>;
   totals: Totals;
+  updatedAt?: Maybe<Scalars['String']>;
 }
 
 /** A cart line item */
@@ -1972,6 +1973,11 @@ export type CartResolvers<
     ContextType
   >;
   totals?: Resolver<ResolversTypes['Totals'], ParentType, ContextType>;
+  updatedAt?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
