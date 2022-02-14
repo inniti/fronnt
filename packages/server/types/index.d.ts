@@ -3,10 +3,13 @@ import type {
   MiddleConnector,
 } from '@inniti/middle-core';
 import type { Plugin } from '@envelop/core';
-import type { FastifyRequest } from 'fastify';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 
 export declare interface Context extends CoreContext {
   req: FastifyRequest;
+  res: FastifyReply;
+
+  setResponseHeader(key: string, value: string | string[]): void;
 }
 
 export declare interface CorsConfig {

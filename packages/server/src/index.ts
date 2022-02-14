@@ -13,10 +13,17 @@ import {
 import type { Context, CorsConfig } from '../types';
 import { getConfig, getCorsHeaders } from './cors';
 
-function applyHeaders(reply: FastifyReply, headers: Record<string, string>) {
+function applyHeaders(
+  reply: FastifyReply,
+  headers: Record<string, string | string[]>
+) {
   Object.keys(headers).forEach((h) => {
-    reply.header(h, headers[h]);
-    reply.raw.setHeader(h, headers[h]);
+    let value = headers[h];
+    if (Array.isArray(value)) {
+      value = value.join(', ');
+    }
+    reply.header(h, value);
+    reply.raw.setHeader(h, value);
   });
 }
 
@@ -47,7 +54,15 @@ export const createServer = function (
     url: '/',
     async handler(req, reply) {
       const { parse, validate, contextFactory, execute, schema } = getEnveloped(
-        { req }
+        {
+          req,
+          res: reply,
+          setResponseHeader(key: string, value: string) {
+            applyHeaders(reply, {
+              [key]: value,
+            });
+          },
+        }
       );
       const request = {
         body: req.body,
