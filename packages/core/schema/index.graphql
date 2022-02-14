@@ -377,6 +377,17 @@ type CartsResult implements PagedResult {
   results: [Cart!]!
 }
 
+interface SellableInfo {
+  description: String
+}
+
+"""
+Product information
+"""
+type ProductInfo implements SellableInfo {
+  description: String!
+}
+
 """
 The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable.
 """
@@ -386,7 +397,7 @@ type Product {
   articleIds: [String!]!
   categoryIds: [ID!]!
   media(purpose: MediaPurpose, mediaType: MediaType): [Media!]!
-  description: String!
+  info: ProductInfo!
   brandId: ID!
   brand: Brand
   labels: [String!]!
@@ -479,6 +490,13 @@ type ArticleOption {
 }
 
 """
+Article information
+"""
+type ArticleInfo implements SellableInfo {
+  description: String
+}
+
+"""
 An article is a concrete shape of a product
 """
 type Article {
@@ -487,7 +505,7 @@ type Article {
   title: String!
   productId: ID!
   media(purpose: MediaPurpose, mediaType: MediaType): [Media!]!
-  description: String
+  info: ArticleInfo!
   brandId: ID!
   brand: Brand
   isBuyable: Boolean!
