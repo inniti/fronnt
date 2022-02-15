@@ -316,7 +316,8 @@ export interface CategoriesResult extends PagedResult {
 /** Categories are hierarchical containers for products */
 export interface Category {
   __typename?: 'Category';
-  children: Array<Category>;
+  breadcrumbs: Array<Maybe<CategoryBreadcrumb>>;
+  children?: Maybe<Array<Category>>;
   childrenIds: Array<Maybe<Scalars['String']>>;
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -346,6 +347,13 @@ export interface CategoryProductsArgs {
   paging?: InputMaybe<PagingInput>;
   query?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Array<SortInput>>;
+}
+
+export interface CategoryBreadcrumb {
+  __typename?: 'CategoryBreadcrumb';
+  id: Scalars['ID'];
+  slug: Scalars['String'];
+  title: Scalars['String'];
 }
 
 /** Checkout state */
@@ -1451,6 +1459,7 @@ export type ResolversTypes = {
   CartsResult: ResolverTypeWrapper<CartsResult>;
   CategoriesResult: ResolverTypeWrapper<CategoriesResult>;
   Category: ResolverTypeWrapper<Category>;
+  CategoryBreadcrumb: ResolverTypeWrapper<CategoryBreadcrumb>;
   CheckoutState: ResolverTypeWrapper<CheckoutState>;
   Country: ResolverTypeWrapper<Country>;
   Coupon: ResolverTypeWrapper<Coupon>;
@@ -1606,6 +1615,7 @@ export type ResolversParentTypes = {
   CartsResult: CartsResult;
   CategoriesResult: CategoriesResult;
   Category: Category;
+  CategoryBreadcrumb: CategoryBreadcrumb;
   CheckoutState: CheckoutState;
   Country: Country;
   Coupon: Coupon;
@@ -2065,8 +2075,13 @@ export type CategoryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Category'] = ResolversParentTypes['Category']
 > = {
+  breadcrumbs?: Resolver<
+    Array<Maybe<ResolversTypes['CategoryBreadcrumb']>>,
+    ParentType,
+    ContextType
+  >;
   children?: Resolver<
-    Array<ResolversTypes['Category']>,
+    Maybe<Array<ResolversTypes['Category']>>,
     ParentType,
     ContextType,
     RequireFields<CategoryChildrenArgs, never>
@@ -2096,6 +2111,16 @@ export type CategoryResolvers<
     ContextType,
     RequireFields<CategoryProductsArgs, never>
   >;
+  slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CategoryBreadcrumbResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['CategoryBreadcrumb'] = ResolversParentTypes['CategoryBreadcrumb']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -3341,6 +3366,7 @@ export type Resolvers<ContextType = any> = {
   CartsResult?: CartsResultResolvers<ContextType>;
   CategoriesResult?: CategoriesResultResolvers<ContextType>;
   Category?: CategoryResolvers<ContextType>;
+  CategoryBreadcrumb?: CategoryBreadcrumbResolvers<ContextType>;
   CheckoutState?: CheckoutStateResolvers<ContextType>;
   Country?: CountryResolvers<ContextType>;
   Coupon?: CouponResolvers<ContextType>;

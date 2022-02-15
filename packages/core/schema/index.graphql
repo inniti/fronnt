@@ -572,6 +572,15 @@ type Sorting {
 }
 
 """
+Breadcrumbs for hierarchical categories
+"""
+type CategoryBreadcrumb {
+  id: ID!
+  title: String!
+  slug: String!
+}
+
+"""
 Categories are hierarchical containers for products
 """
 type Category {
@@ -590,7 +599,8 @@ type Category {
     customQueryConditions: [CustomQueryConditionInput!]
   ): ProductsResult
   parent: Category
-  children(customQueryConditions: [CustomQueryConditionInput!]): [Category!]!
+  breadcrumbs: [CategoryBreadcrumb]!
+  children(customQueryConditions: [CustomQueryConditionInput!]): [Category!]
 }
 
 """
