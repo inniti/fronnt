@@ -637,11 +637,23 @@ type Suggestion {
 }
 
 """
+A search result entry for product searches
+"""
+type ProductSearchResult {
+  id: ID!
+  title: String!
+  product: Product
+  slug: String
+  price: Price
+  previewImage: String
+}
+
+"""
 Paged result of a product list
 """
 type ProductsResult implements PagedResult {
   paging: Paging!
-  results: [Product!]!
+  results: [ProductSearchResult!]!
   filters: [ProductListFilter!]!
   sortings: [Sorting!]!
 }
