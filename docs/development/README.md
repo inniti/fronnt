@@ -11,7 +11,7 @@ the [@inniti/create-middle-connector initializier package](https://www.npmjs.com
 .
 
 ```shell
-npm init @inniti/middle-connector
+npm init @inniti/middle-connector@latest
 ```
 
 This will setup an example connector project using TypeScript and tools for bundling the connector to use it in your
