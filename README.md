@@ -5,6 +5,7 @@
 
 ![@inniti/middle-core on npm](https://img.shields.io/npm/v/@inniti/middle-core?style=flat-square&label=middle-core)
 ![@inniti/middle-server on npm](https://img.shields.io/npm/v/@inniti/middle-server?style=flat-square&label=middle-server)
+![@inniti/create-middle-connector on npm](https://img.shields.io/npm/v/@inniti/create-middle-connector?style=flat-square&label=create-middle-connector)
 
 **🚧 This package is still under active development and should not yet be considered production ready. 🚧**
 
