@@ -526,8 +526,8 @@ type Article {
 Value of a product list filter
 """
 type ProductListFilterValue {
-  type: String!
-  value: AttributeType!
+  type: AttributeType!
+  value: String!
   applied: Boolean!
   count: Int!
 }
