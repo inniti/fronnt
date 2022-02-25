@@ -861,6 +861,7 @@ export interface ProductListFilterValue {
 /** A search result entry for product searches */
 export interface ProductSearchResult {
   __typename?: 'ProductSearchResult';
+  bag?: Maybe<Scalars['ScalarMap']>;
   id: Scalars['ID'];
   previewImage?: Maybe<Scalars['String']>;
   price?: Maybe<Price>;
@@ -2819,6 +2820,7 @@ export type ProductSearchResultResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ProductSearchResult'] = ResolversParentTypes['ProductSearchResult']
 > = {
+  bag?: Resolver<Maybe<ResolversTypes['ScalarMap']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   previewImage?: Resolver<
     Maybe<ResolversTypes['String']>,
