@@ -82,6 +82,7 @@ export interface AddressInput {
 export interface AroundLocationInput {
   latitude?: InputMaybe<Scalars['Float']>;
   longitude?: InputMaybe<Scalars['Float']>;
+  radius?: InputMaybe<Scalars['Int']>;
   searchQuery?: InputMaybe<Scalars['String']>;
 }
 

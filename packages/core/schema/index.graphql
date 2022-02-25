@@ -1223,6 +1223,7 @@ input AroundLocationInput {
   searchQuery: String
   longitude: Float
   latitude: Float
+  radius: Int
 }
 
 """
