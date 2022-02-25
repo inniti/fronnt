@@ -1062,12 +1062,19 @@ type WarehousesResult implements PagedResult {
   results: [Warehouse!]!
 }
 
+type AuthToken {
+  expiresIn: Int
+  value: String!
+}
+
 """
 LoginResult
 """
 type LoginResult {
   customer: Customer!
-  token: String
+  accessToken: AuthToken
+  refreshToken: AuthToken
+  errors: [Error!]!
 }
 
 ####################################################################################
@@ -1214,7 +1221,7 @@ Login data may either be a combination of username and password or a token
 input LoginInput {
   username: String
   password: String
-  token: String
+  refreshToken: String
 }
 
 ####################################################################################

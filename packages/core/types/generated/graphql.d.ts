@@ -204,6 +204,12 @@ export interface AttributeDefinition {
 
 export type AttributeType = 'BOOLEAN' | 'COLOR' | 'NUMBER' | 'TEXT';
 
+export interface AuthToken {
+  __typename?: 'AuthToken';
+  expiresIn?: Maybe<Scalars['Int']>;
+  value: Scalars['String'];
+}
+
 /** Tells how many items of an article are available. Refers to the BaseUnit of the article. */
 export interface Availability {
   __typename?: 'Availability';
@@ -472,15 +478,17 @@ export interface Locale {
 /** Login data may either be a combination of username and password or a token */
 export interface LoginInput {
   password?: InputMaybe<Scalars['String']>;
-  token?: InputMaybe<Scalars['String']>;
+  refreshToken?: InputMaybe<Scalars['String']>;
   username?: InputMaybe<Scalars['String']>;
 }
 
 /** LoginResult */
 export interface LoginResult {
   __typename?: 'LoginResult';
+  accessToken?: Maybe<AuthToken>;
   customer: Customer;
-  token?: Maybe<Scalars['String']>;
+  errors: Array<Error>;
+  refreshToken?: Maybe<AuthToken>;
 }
 
 export type MeasurementUnit =
@@ -1503,6 +1511,7 @@ export type ResolversTypes = {
   Attribute: ResolverTypeWrapper<Attribute>;
   AttributeDefinition: ResolverTypeWrapper<AttributeDefinition>;
   AttributeType: AttributeType;
+  AuthToken: ResolverTypeWrapper<AuthToken>;
   Availability: ResolverTypeWrapper<Availability>;
   BaseUnit: ResolverTypeWrapper<BaseUnit>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
@@ -1673,6 +1682,7 @@ export type ResolversParentTypes = {
   ArticleOptionConstraint: ArticleOptionConstraint;
   Attribute: Attribute;
   AttributeDefinition: AttributeDefinition;
+  AuthToken: AuthToken;
   Availability: Availability;
   BaseUnit: BaseUnit;
   Boolean: Scalars['Boolean'];
@@ -1995,6 +2005,15 @@ export type AttributeDefinitionResolvers<
   >;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   label?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AuthTokenResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['AuthToken'] = ResolversParentTypes['AuthToken']
+> = {
+  expiresIn?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2362,8 +2381,18 @@ export type LoginResultResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['LoginResult'] = ResolversParentTypes['LoginResult']
 > = {
+  accessToken?: Resolver<
+    Maybe<ResolversTypes['AuthToken']>,
+    ParentType,
+    ContextType
+  >;
   customer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType>;
-  token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  errors?: Resolver<Array<ResolversTypes['Error']>, ParentType, ContextType>;
+  refreshToken?: Resolver<
+    Maybe<ResolversTypes['AuthToken']>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3520,6 +3549,7 @@ export type Resolvers<ContextType = any> = {
   ArticleOptionConstraint?: ArticleOptionConstraintResolvers<ContextType>;
   Attribute?: AttributeResolvers<ContextType>;
   AttributeDefinition?: AttributeDefinitionResolvers<ContextType>;
+  AuthToken?: AuthTokenResolvers<ContextType>;
   Availability?: AvailabilityResolvers<ContextType>;
   BaseUnit?: BaseUnitResolvers<ContextType>;
   Brand?: BrandResolvers<ContextType>;
