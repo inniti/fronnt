@@ -1044,6 +1044,13 @@ type WarehousesResult implements PagedResult {
   results: [Warehouse!]!
 }
 
+"""
+LoginResult
+"""
+type LoginResult {
+  customer: Customer!
+}
+
 ####################################################################################
 # Inputs
 ####################################################################################
@@ -1182,6 +1189,15 @@ input AroundLocationInput {
   latitude: Float
 }
 
+"""
+Login data may either be a combination of username and password or a token
+"""
+input LoginInput {
+  username: String
+  password: String
+  token: String
+}
+
 ####################################################################################
 # Root
 ####################################################################################
@@ -1292,4 +1308,6 @@ type Mutation {
     reservationData: ReservationInput!
   ): Reservation
   cancelReservation(reservationId: ID!): DeleteResult
+
+  login(input: LoginInput): LoginResult
 }
