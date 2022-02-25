@@ -480,6 +480,7 @@ export interface LoginInput {
 export interface LoginResult {
   __typename?: 'LoginResult';
   customer: Customer;
+  token?: Maybe<Scalars['String']>;
 }
 
 export type MeasurementUnit =
@@ -2319,6 +2320,7 @@ export type LoginResultResolvers<
   ParentType extends ResolversParentTypes['LoginResult'] = ResolversParentTypes['LoginResult']
 > = {
   customer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType>;
+  token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
