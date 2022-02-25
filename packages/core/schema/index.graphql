@@ -1309,5 +1309,5 @@ type Mutation {
   ): Reservation
   cancelReservation(reservationId: ID!): DeleteResult
 
-  login(input: LoginInput): LoginResult
+  login(input: LoginInput!): LoginResult
 }

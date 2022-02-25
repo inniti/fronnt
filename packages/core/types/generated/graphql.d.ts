@@ -469,6 +469,19 @@ export interface Locale {
   label?: Maybe<Scalars['String']>;
 }
 
+/** Login data may either be a combination of username and password or a token */
+export interface LoginInput {
+  password?: InputMaybe<Scalars['String']>;
+  token?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+}
+
+/** LoginResult */
+export interface LoginResult {
+  __typename?: 'LoginResult';
+  customer: Customer;
+}
+
 export type MeasurementUnit =
   | 'ACRE'
   | 'ARES'
@@ -553,6 +566,7 @@ export interface Mutation {
   deleteCart?: Maybe<DeleteResult>;
   deleteWishlist?: Maybe<DeleteResult>;
   finishCheckout?: Maybe<Order>;
+  login?: Maybe<LoginResult>;
   register?: Maybe<Customer>;
   removeFromCart?: Maybe<DeleteResult>;
   removeFromWishlist?: Maybe<DeleteResult>;
@@ -592,6 +606,10 @@ export interface MutationDeleteCartArgs {
 
 export interface MutationFinishCheckoutArgs {
   cartId: Scalars['ID'];
+}
+
+export interface MutationLoginArgs {
+  input: LoginInput;
 }
 
 export interface MutationRegisterArgs {
@@ -835,8 +853,8 @@ export interface ProductListFilterValue {
   __typename?: 'ProductListFilterValue';
   applied: Scalars['Boolean'];
   count: Scalars['Int'];
-  type: Scalars['String'];
-  value: AttributeType;
+  type: AttributeType;
+  value: Scalars['String'];
 }
 
 /** A search result entry for product searches */
@@ -1488,6 +1506,8 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Locale: ResolverTypeWrapper<Locale>;
+  LoginInput: LoginInput;
+  LoginResult: ResolverTypeWrapper<LoginResult>;
   MeasurementUnit: MeasurementUnit;
   Media: ResolverTypeWrapper<Media>;
   MediaPurpose: MediaPurpose;
@@ -1645,6 +1665,8 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'];
   Int: Scalars['Int'];
   Locale: Locale;
+  LoginInput: LoginInput;
+  LoginResult: LoginResult;
   Media: Media;
   Meta: Meta;
   Mutation: {};
@@ -2292,6 +2314,14 @@ export type LocaleResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type LoginResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['LoginResult'] = ResolversParentTypes['LoginResult']
+> = {
+  customer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MediaResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Media'] = ResolversParentTypes['Media']
@@ -2375,6 +2405,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationFinishCheckoutArgs, 'cartId'>
+  >;
+  login?: Resolver<
+    Maybe<ResolversTypes['LoginResult']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationLoginArgs, 'input'>
   >;
   register?: Resolver<
     Maybe<ResolversTypes['Customer']>,
@@ -2772,8 +2808,8 @@ export type ProductListFilterValueResolvers<
 > = {
   applied?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['AttributeType'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['AttributeType'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3414,6 +3450,7 @@ export type Resolvers<ContextType = any> = {
   Error?: ErrorResolvers<ContextType>;
   Expense?: ExpenseResolvers<ContextType>;
   Locale?: LocaleResolvers<ContextType>;
+  LoginResult?: LoginResultResolvers<ContextType>;
   Media?: MediaResolvers<ContextType>;
   Meta?: MetaResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
