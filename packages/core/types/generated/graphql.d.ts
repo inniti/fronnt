@@ -576,7 +576,7 @@ export interface Mutation {
   deleteWishlist?: Maybe<DeleteResult>;
   finishCheckout?: Maybe<Order>;
   login?: Maybe<LoginResult>;
-  register?: Maybe<Customer>;
+  register?: Maybe<RegistrationResult>;
   removeFromCart?: Maybe<DeleteResult>;
   removeFromWishlist?: Maybe<DeleteResult>;
   startCheckout?: Maybe<CheckoutState>;
@@ -1095,6 +1095,15 @@ export interface RegistrationInput {
   salutation?: InputMaybe<Scalars['String']>;
 }
 
+/** RegistrationResult */
+export interface RegistrationResult {
+  __typename?: 'RegistrationResult';
+  accessToken?: Maybe<AuthToken>;
+  customer: Customer;
+  errors: Array<Error>;
+  refreshToken?: Maybe<AuthToken>;
+}
+
 /** Regular (recurring) opening times of a warehouse/store */
 export interface RegularOpeningTime {
   __typename?: 'RegularOpeningTime';
@@ -1600,6 +1609,7 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   ReferencePrice: ResolverTypeWrapper<ReferencePrice>;
   RegistrationInput: RegistrationInput;
+  RegistrationResult: ResolverTypeWrapper<RegistrationResult>;
   RegularOpeningTime: ResolverTypeWrapper<RegularOpeningTime>;
   RelatedProduct: ResolverTypeWrapper<RelatedProduct>;
   RelatedProductType: RelatedProductType;
@@ -1761,6 +1771,7 @@ export type ResolversParentTypes = {
   Query: {};
   ReferencePrice: ReferencePrice;
   RegistrationInput: RegistrationInput;
+  RegistrationResult: RegistrationResult;
   RegularOpeningTime: RegularOpeningTime;
   RelatedProduct: RelatedProduct;
   RelatedProductsResult: RelatedProductsResult;
@@ -2487,7 +2498,7 @@ export type MutationResolvers<
     RequireFields<MutationLoginArgs, 'input'>
   >;
   register?: Resolver<
-    Maybe<ResolversTypes['Customer']>,
+    Maybe<ResolversTypes['RegistrationResult']>,
     ParentType,
     ContextType,
     RequireFields<MutationRegisterArgs, 'data'>
@@ -3118,6 +3129,25 @@ export type ReferencePriceResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type RegistrationResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['RegistrationResult'] = ResolversParentTypes['RegistrationResult']
+> = {
+  accessToken?: Resolver<
+    Maybe<ResolversTypes['AuthToken']>,
+    ParentType,
+    ContextType
+  >;
+  customer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType>;
+  errors?: Resolver<Array<ResolversTypes['Error']>, ParentType, ContextType>;
+  refreshToken?: Resolver<
+    Maybe<ResolversTypes['AuthToken']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type RegularOpeningTimeResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['RegularOpeningTime'] = ResolversParentTypes['RegularOpeningTime']
@@ -3598,6 +3628,7 @@ export type Resolvers<ContextType = any> = {
   ProductsResult?: ProductsResultResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   ReferencePrice?: ReferencePriceResolvers<ContextType>;
+  RegistrationResult?: RegistrationResultResolvers<ContextType>;
   RegularOpeningTime?: RegularOpeningTimeResolvers<ContextType>;
   RelatedProduct?: RelatedProductResolvers<ContextType>;
   RelatedProductsResult?: RelatedProductsResultResolvers<ContextType>;

@@ -1077,6 +1077,16 @@ type LoginResult {
   errors: [Error!]!
 }
 
+"""
+RegistrationResult
+"""
+type RegistrationResult {
+  customer: Customer!
+  accessToken: AuthToken
+  refreshToken: AuthToken
+  errors: [Error!]!
+}
+
 ####################################################################################
 # Inputs
 ####################################################################################
@@ -1333,7 +1343,7 @@ type Mutation {
   updateCheckout(cartId: ID!, data: UpdateCheckoutInput!): CheckoutState
   finishCheckout(cartId: ID!): Order
 
-  register(data: RegistrationInput!): Customer
+  register(data: RegistrationInput!): RegistrationResult
   updateCustomer(id: ID!, data: UpdateCustomerInput!): Customer
 
   createReservation(
