@@ -21,7 +21,7 @@
 	],
 	"license": "MIT",
 	"scripts": {
-		"build": "npm run codegen && node ./build.js",
+		"build": "pnpm run codegen && node ./build.js",
 		"codegen": "rimraf types/generated && graphql-codegen --config codegen.yml && prettier --write types/generated"
 	},
 	"dependencies": {
