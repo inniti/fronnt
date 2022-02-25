@@ -858,18 +858,6 @@ export interface ProductListFilterValue {
   value: Scalars['String'];
 }
 
-/** A search result entry for product searches */
-export interface ProductSearchResult {
-  __typename?: 'ProductSearchResult';
-  bag?: Maybe<Scalars['ScalarMap']>;
-  id: Scalars['ID'];
-  previewImage?: Maybe<Scalars['String']>;
-  price?: Maybe<Price>;
-  product?: Maybe<Product>;
-  slug?: Maybe<Scalars['String']>;
-  title: Scalars['String'];
-}
-
 /** Status of a product */
 export type ProductStatus = 'DISCONTINUED' | 'DRAFT' | 'PUBLISHED';
 
@@ -878,7 +866,7 @@ export interface ProductsResult extends PagedResult {
   __typename?: 'ProductsResult';
   filters: Array<ProductListFilter>;
   paging: Paging;
-  results: Array<ProductSearchResult>;
+  results: Array<Product>;
   sortings: Array<Sorting>;
 }
 
@@ -912,6 +900,7 @@ export interface Query {
   reservation?: Maybe<Reservation>;
   reservationByField?: Maybe<Reservation>;
   reservations?: Maybe<ReservationsResult>;
+  search?: Maybe<SearchResult>;
   shop?: Maybe<Shop>;
   suggestions: Array<Suggestion>;
   vendor?: Maybe<Vendor>;
@@ -1023,6 +1012,14 @@ export interface QueryReservationByFieldArgs {
 
 export interface QueryReservationsArgs {
   customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
+}
+
+export interface QuerySearchArgs {
+  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
+  filters?: InputMaybe<Array<ProductsSearchFiltersInput>>;
+  paging?: InputMaybe<PagingInput>;
+  query?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<SortInput>>;
 }
 
 export interface QuerySuggestionsArgs {
@@ -1175,6 +1172,32 @@ export interface SalesUnit {
   id: Scalars['ID'];
   name: MeasurementUnit;
 }
+
+/** Paged search result */
+export interface SearchResult extends PagedResult {
+  __typename?: 'SearchResult';
+  filters: Array<ProductListFilter>;
+  paging: Paging;
+  results: Array<SearchResultItem>;
+  sortings: Array<Sorting>;
+}
+
+/** A search result entry for product searches */
+export interface SearchResultItem {
+  __typename?: 'SearchResultItem';
+  bag?: Maybe<Scalars['ScalarMap']>;
+  previewImage?: Maybe<Scalars['String']>;
+  price?: Maybe<Price>;
+  reference?: Maybe<SearchResultItemReference>;
+  referenceId?: Maybe<Scalars['ID']>;
+  slug?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  type: SearchResultItemType;
+}
+
+export type SearchResultItemReference = Brand | Category | Product;
+
+export type SearchResultItemType = 'PRODUCT';
 
 export interface SellableInfo {
   description?: Maybe<Scalars['String']>;
@@ -1547,6 +1570,7 @@ export type ResolversTypes = {
     | ResolversTypes['ProductsResult']
     | ResolversTypes['RelatedProductsResult']
     | ResolversTypes['ReservationsResult']
+    | ResolversTypes['SearchResult']
     | ResolversTypes['VendorsResult']
     | ResolversTypes['WarehousesResult']
     | ResolversTypes['WishlistsResult'];
@@ -1561,7 +1585,6 @@ export type ResolversTypes = {
   ProductInfo: ResolverTypeWrapper<ProductInfo>;
   ProductListFilter: ResolverTypeWrapper<ProductListFilter>;
   ProductListFilterValue: ResolverTypeWrapper<ProductListFilterValue>;
-  ProductSearchResult: ResolverTypeWrapper<ProductSearchResult>;
   ProductStatus: ProductStatus;
   ProductsResult: ResolverTypeWrapper<ProductsResult>;
   ProductsSearchFiltersInput: ProductsSearchFiltersInput;
@@ -1581,6 +1604,17 @@ export type ResolversTypes = {
   ResolveUrlResultType: ResolveUrlResultType;
   SalesUnit: ResolverTypeWrapper<SalesUnit>;
   ScalarMap: ResolverTypeWrapper<Scalars['ScalarMap']>;
+  SearchResult: ResolverTypeWrapper<SearchResult>;
+  SearchResultItem: ResolverTypeWrapper<
+    Omit<SearchResultItem, 'reference'> & {
+      reference?: Maybe<ResolversTypes['SearchResultItemReference']>;
+    }
+  >;
+  SearchResultItemReference:
+    | ResolversTypes['Brand']
+    | ResolversTypes['Category']
+    | ResolversTypes['Product'];
+  SearchResultItemType: SearchResultItemType;
   SellableInfo: ResolversTypes['ArticleInfo'] | ResolversTypes['ProductInfo'];
   Shipment: ResolverTypeWrapper<Shipment>;
   ShipmentItem: ResolverTypeWrapper<ShipmentItem>;
@@ -1698,6 +1732,7 @@ export type ResolversParentTypes = {
     | ResolversParentTypes['ProductsResult']
     | ResolversParentTypes['RelatedProductsResult']
     | ResolversParentTypes['ReservationsResult']
+    | ResolversParentTypes['SearchResult']
     | ResolversParentTypes['VendorsResult']
     | ResolversParentTypes['WarehousesResult']
     | ResolversParentTypes['WishlistsResult'];
@@ -1711,7 +1746,6 @@ export type ResolversParentTypes = {
   ProductInfo: ProductInfo;
   ProductListFilter: ProductListFilter;
   ProductListFilterValue: ProductListFilterValue;
-  ProductSearchResult: ProductSearchResult;
   ProductsResult: ProductsResult;
   ProductsSearchFiltersInput: ProductsSearchFiltersInput;
   Query: {};
@@ -1727,6 +1761,14 @@ export type ResolversParentTypes = {
   ReservedArticle: ReservedArticle;
   SalesUnit: SalesUnit;
   ScalarMap: Scalars['ScalarMap'];
+  SearchResult: SearchResult;
+  SearchResultItem: Omit<SearchResultItem, 'reference'> & {
+    reference?: Maybe<ResolversParentTypes['SearchResultItemReference']>;
+  };
+  SearchResultItemReference:
+    | ResolversParentTypes['Brand']
+    | ResolversParentTypes['Category']
+    | ResolversParentTypes['Product'];
   SellableInfo:
     | ResolversParentTypes['ArticleInfo']
     | ResolversParentTypes['ProductInfo'];
@@ -2638,6 +2680,7 @@ export type PagedResultResolvers<
     | 'ProductsResult'
     | 'RelatedProductsResult'
     | 'ReservationsResult'
+    | 'SearchResult'
     | 'VendorsResult'
     | 'WarehousesResult'
     | 'WishlistsResult',
@@ -2816,24 +2859,6 @@ export type ProductListFilterValueResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProductSearchResultResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['ProductSearchResult'] = ResolversParentTypes['ProductSearchResult']
-> = {
-  bag?: Resolver<Maybe<ResolversTypes['ScalarMap']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  previewImage?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
-  price?: Resolver<Maybe<ResolversTypes['Price']>, ParentType, ContextType>;
-  product?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType>;
-  slug?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type ProductsResultResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ProductsResult'] = ResolversParentTypes['ProductsResult']
@@ -2844,11 +2869,7 @@ export type ProductsResultResolvers<
     ContextType
   >;
   paging?: Resolver<ResolversTypes['Paging'], ParentType, ContextType>;
-  results?: Resolver<
-    Array<ResolversTypes['ProductSearchResult']>,
-    ParentType,
-    ContextType
-  >;
+  results?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>;
   sortings?: Resolver<
     Array<ResolversTypes['Sorting']>,
     ParentType,
@@ -2991,6 +3012,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryReservationsArgs, never>
+  >;
+  search?: Resolver<
+    Maybe<ResolversTypes['SearchResult']>,
+    ParentType,
+    ContextType,
+    RequireFields<QuerySearchArgs, never>
   >;
   shop?: Resolver<Maybe<ResolversTypes['Shop']>, ParentType, ContextType>;
   suggestions?: Resolver<
@@ -3176,6 +3203,67 @@ export interface ScalarMapScalarConfig
   extends GraphQLScalarTypeConfig<ResolversTypes['ScalarMap'], any> {
   name: 'ScalarMap';
 }
+
+export type SearchResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['SearchResult'] = ResolversParentTypes['SearchResult']
+> = {
+  filters?: Resolver<
+    Array<ResolversTypes['ProductListFilter']>,
+    ParentType,
+    ContextType
+  >;
+  paging?: Resolver<ResolversTypes['Paging'], ParentType, ContextType>;
+  results?: Resolver<
+    Array<ResolversTypes['SearchResultItem']>,
+    ParentType,
+    ContextType
+  >;
+  sortings?: Resolver<
+    Array<ResolversTypes['Sorting']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SearchResultItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['SearchResultItem'] = ResolversParentTypes['SearchResultItem']
+> = {
+  bag?: Resolver<Maybe<ResolversTypes['ScalarMap']>, ParentType, ContextType>;
+  previewImage?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  price?: Resolver<Maybe<ResolversTypes['Price']>, ParentType, ContextType>;
+  reference?: Resolver<
+    Maybe<ResolversTypes['SearchResultItemReference']>,
+    ParentType,
+    ContextType
+  >;
+  referenceId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  slug?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<
+    ResolversTypes['SearchResultItemType'],
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SearchResultItemReferenceResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['SearchResultItemReference'] = ResolversParentTypes['SearchResultItemReference']
+> = {
+  __resolveType: TypeResolveFn<
+    'Brand' | 'Category' | 'Product',
+    ParentType,
+    ContextType
+  >;
+};
 
 export type SellableInfoResolvers<
   ContextType = any,
@@ -3477,7 +3565,6 @@ export type Resolvers<ContextType = any> = {
   ProductInfo?: ProductInfoResolvers<ContextType>;
   ProductListFilter?: ProductListFilterResolvers<ContextType>;
   ProductListFilterValue?: ProductListFilterValueResolvers<ContextType>;
-  ProductSearchResult?: ProductSearchResultResolvers<ContextType>;
   ProductsResult?: ProductsResultResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   ReferencePrice?: ReferencePriceResolvers<ContextType>;
@@ -3489,6 +3576,9 @@ export type Resolvers<ContextType = any> = {
   ReservedArticle?: ReservedArticleResolvers<ContextType>;
   SalesUnit?: SalesUnitResolvers<ContextType>;
   ScalarMap?: GraphQLScalarType;
+  SearchResult?: SearchResultResolvers<ContextType>;
+  SearchResultItem?: SearchResultItemResolvers<ContextType>;
+  SearchResultItemReference?: SearchResultItemReferenceResolvers<ContextType>;
   SellableInfo?: SellableInfoResolvers<ContextType>;
   Shipment?: ShipmentResolvers<ContextType>;
   ShipmentItem?: ShipmentItemResolvers<ContextType>;

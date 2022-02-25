@@ -167,6 +167,10 @@ enum MeasurementUnit {
   BUSL # Bushel
 }
 
+enum SearchResultItemType {
+  PRODUCT
+}
+
 interface PagedResult {
   paging: Paging!
 }
@@ -636,13 +640,16 @@ type Suggestion {
   result: SuggestionResult
 }
 
+union SearchResultItemReference = Product | Category | Brand
+
 """
 A search result entry for product searches
 """
-type ProductSearchResult {
-  id: ID!
+type SearchResultItem {
   title: String!
-  product: Product
+  type: SearchResultItemType!
+  referenceId: ID
+  reference: SearchResultItemReference
   slug: String
   price: Price
   previewImage: String
@@ -650,11 +657,21 @@ type ProductSearchResult {
 }
 
 """
+Paged search result
+"""
+type SearchResult implements PagedResult {
+  paging: Paging!
+  results: [SearchResultItem!]!
+  filters: [ProductListFilter!]!
+  sortings: [Sorting!]!
+}
+
+"""
 Paged result of a product list
 """
 type ProductsResult implements PagedResult {
   paging: Paging!
-  results: [ProductSearchResult!]!
+  results: [Product!]!
   filters: [ProductListFilter!]!
   sortings: [Sorting!]!
 }
@@ -1206,6 +1223,14 @@ input LoginInput {
 
 type Query {
   shop: Shop
+
+  search(
+    query: String
+    filters: [ProductsSearchFiltersInput!]
+    sort: [SortInput!]
+    paging: PagingInput
+    customQueryConditions: [CustomQueryConditionInput!]
+  ): SearchResult
 
   products(
     query: String
