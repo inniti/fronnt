@@ -1,6 +1,6 @@
 {
 	"name": "@inniti/middle-core",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"description": "Scalable eCommerce GraphQL API middleware architecture",
 	"main": "dist/index.js",
 	"module": "dist/index.mjs",
