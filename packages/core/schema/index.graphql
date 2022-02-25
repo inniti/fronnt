@@ -944,6 +944,15 @@ type Customer {
   addresses: [CustomerAddress!]!
 }
 
+type AuthResult {
+  id: ID!
+  authToken: String
+  refreshToken: String
+  expiresIn: String
+  customer: Customer
+  errors: [Error]
+}
+
 """
 Result of adding one or many articles to the cart
 """
@@ -1137,6 +1146,15 @@ input RegistrationInput {
 }
 
 """
+Authentication data for login
+"""
+input AuthInput {
+  user: String
+  password: String
+  refreshToken: String
+}
+
+"""
 Customer data to be updated
 """
 input UpdateCustomerInput {
@@ -1285,6 +1303,7 @@ type Mutation {
 
   register(data: RegistrationInput!): Customer
   updateCustomer(id: ID!, data: UpdateCustomerInput!): Customer
+  authenticate(data: AuthInput!): AuthResult
 
   createReservation(
     articleId: ID!
