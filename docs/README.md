@@ -1,6 +1,10 @@
 # Documentation
 
 * [Development](development/README.md)
+  * [Building a connector](development/README.md#building-a-connector)
+  * [Authentication and Authorization](development/auth/README.md)
+  * [Error Handling](development/error-handling/README.md)
+  * [Schema Extensions](development/schema-extensions/README.md)
 * [Deployment](deployment/README.md)
 
 ## core

@@ -17,3 +17,4 @@ middle projects.
 
 * [Authentication and Authorization](auth/README.md)
 * [Error Handling](error-handling/README.md)
+* [Schema Extensions](schema-extensions/README.md)
