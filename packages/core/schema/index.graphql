@@ -653,7 +653,6 @@ type SearchResultItem {
   slug: String
   price: Price
   previewImage: String
-  bag: ScalarMap
 }
 
 """

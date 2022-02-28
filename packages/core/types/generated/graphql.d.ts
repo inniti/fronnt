@@ -1203,7 +1203,6 @@ export interface SearchResult extends PagedResult {
 /** A search result entry for product searches */
 export interface SearchResultItem {
   __typename?: 'SearchResultItem';
-  bag?: Maybe<Scalars['ScalarMap']>;
   previewImage?: Maybe<Scalars['String']>;
   price?: Maybe<Price>;
   reference?: Maybe<SearchResultItemReference>;
@@ -3291,7 +3290,6 @@ export type SearchResultItemResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['SearchResultItem'] = ResolversParentTypes['SearchResultItem']
 > = {
-  bag?: Resolver<Maybe<ResolversTypes['ScalarMap']>, ParentType, ContextType>;
   previewImage?: Resolver<
     Maybe<ResolversTypes['String']>,
     ParentType,
