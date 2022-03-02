@@ -1089,6 +1089,7 @@ export interface ReferencePrice {
 /** Customer data for registration */
 export interface RegistrationInput {
   addresses: Array<AddressInput>;
+  company?: InputMaybe<Scalars['String']>;
   email: Scalars['String'];
   firstname?: InputMaybe<Scalars['String']>;
   lastname?: InputMaybe<Scalars['String']>;

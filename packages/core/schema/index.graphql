@@ -1174,6 +1174,7 @@ input RegistrationInput {
   firstname: String
   lastname: String
   password: String
+  company: String
   addresses: [AddressInput!]!
   salutation: String
 }
