@@ -77,9 +77,10 @@ export interface AddressInput {
   company?: InputMaybe<Scalars['String']>;
   country: Scalars['String'];
   name: Scalars['String'];
-  name2?: InputMaybe<Scalars['String']>;
-  name3?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  province?: InputMaybe<Scalars['String']>;
   street: Scalars['String'];
+  street2?: InputMaybe<Scalars['String']>;
   zipCode: Scalars['String'];
 }
 
@@ -576,6 +577,7 @@ export interface Meta {
 
 export interface Mutation {
   __typename?: 'Mutation';
+  addCustomerAddress?: Maybe<CustomerAddress>;
   addToCart?: Maybe<AddToCartResult>;
   addToWishlist?: Maybe<Wishlist>;
   applyCoupon?: Maybe<Cart>;
@@ -584,6 +586,7 @@ export interface Mutation {
   createReservation?: Maybe<Reservation>;
   createWishlist?: Maybe<Wishlist>;
   deleteCart?: Maybe<DeleteResult>;
+  deleteCustomerAddress?: Maybe<DeleteResult>;
   deleteWishlist?: Maybe<DeleteResult>;
   finishCheckout?: Maybe<Order>;
   login?: Maybe<LoginResult>;
@@ -595,6 +598,11 @@ export interface Mutation {
   updateCartItem?: Maybe<CartItem>;
   updateCheckout?: Maybe<CheckoutState>;
   updateCustomer?: Maybe<Customer>;
+  updateCustomerAddress?: Maybe<CustomerAddress>;
+}
+
+export interface MutationAddCustomerAddressArgs {
+  data: AddressInput;
 }
 
 export interface MutationAddToCartArgs {
@@ -622,6 +630,10 @@ export interface MutationCreateReservationArgs {
 }
 
 export interface MutationDeleteCartArgs {
+  id: Scalars['ID'];
+}
+
+export interface MutationDeleteCustomerAddressArgs {
   id: Scalars['ID'];
 }
 
@@ -663,6 +675,12 @@ export interface MutationUpdateCheckoutArgs {
 export interface MutationUpdateCustomerArgs {
   data: UpdateCustomerInput;
   id: Scalars['ID'];
+}
+
+export interface MutationUpdateCustomerAddressArgs {
+  data?: InputMaybe<AddressInput>;
+  setDefaultBilling?: InputMaybe<Scalars['Boolean']>;
+  setDefaultShipping?: InputMaybe<Scalars['Boolean']>;
 }
 
 /** Opening times of a warehouse/store */
@@ -2477,6 +2495,12 @@ export type MutationResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
 > = {
+  addCustomerAddress?: Resolver<
+    Maybe<ResolversTypes['CustomerAddress']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationAddCustomerAddressArgs, 'data'>
+  >;
   addToCart?: Resolver<
     Maybe<ResolversTypes['AddToCartResult']>,
     ParentType,
@@ -2521,6 +2545,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationDeleteCartArgs, 'id'>
+  >;
+  deleteCustomerAddress?: Resolver<
+    Maybe<ResolversTypes['DeleteResult']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteCustomerAddressArgs, 'id'>
   >;
   deleteWishlist?: Resolver<
     Maybe<ResolversTypes['DeleteResult']>,
@@ -2585,6 +2615,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationUpdateCustomerArgs, 'data' | 'id'>
+  >;
+  updateCustomerAddress?: Resolver<
+    Maybe<ResolversTypes['CustomerAddress']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateCustomerAddressArgs, never>
   >;
 };
 

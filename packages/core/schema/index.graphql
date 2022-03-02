@@ -1163,13 +1163,14 @@ Address data
 """
 input AddressInput {
   name: String!
-  name2: String
-  name3: String
-  company: String
   street: String!
+  street2: String
+  company: String
   zipCode: String!
   city: String!
+  province: String
   country: String!
+  phone: String
 }
 
 """
@@ -1363,6 +1364,13 @@ type Mutation {
 
   register(data: RegistrationInput!): RegistrationResult
   updateCustomer(id: ID!, data: UpdateCustomerInput!): Customer
+  addCustomerAddress(data: AddressInput!): CustomerAddress
+  updateCustomerAddress(
+    data: AddressInput
+    setDefaultBilling: Boolean
+    setDefaultShipping: Boolean
+  ): CustomerAddress
+  deleteCustomerAddress(id: ID!): DeleteResult
 
   createReservation(
     articleId: ID!
