@@ -581,6 +581,7 @@ export interface Mutation {
   removeFromCart?: Maybe<DeleteResult>;
   removeFromWishlist?: Maybe<DeleteResult>;
   startCheckout?: Maybe<CheckoutState>;
+  startSession?: Maybe<Session>;
   updateCartItem?: Maybe<CartItem>;
   updateCheckout?: Maybe<CheckoutState>;
   updateCustomer?: Maybe<Customer>;
@@ -1221,6 +1222,12 @@ export interface SellableInfo {
   description?: Maybe<Scalars['String']>;
 }
 
+/** Session */
+export interface Session {
+  __typename?: 'Session';
+  id: Scalars['String'];
+}
+
 /** Shipment */
 export interface Shipment {
   __typename?: 'Shipment';
@@ -1636,6 +1643,7 @@ export type ResolversTypes = {
     | ResolversTypes['Product'];
   SearchResultItemType: SearchResultItemType;
   SellableInfo: ResolversTypes['ArticleInfo'] | ResolversTypes['ProductInfo'];
+  Session: ResolverTypeWrapper<Session>;
   Shipment: ResolverTypeWrapper<Shipment>;
   ShipmentItem: ResolverTypeWrapper<ShipmentItem>;
   ShipmentStatus: ShipmentStatus;
@@ -1794,6 +1802,7 @@ export type ResolversParentTypes = {
   SellableInfo:
     | ResolversParentTypes['ArticleInfo']
     | ResolversParentTypes['ProductInfo'];
+  Session: Session;
   Shipment: Shipment;
   ShipmentItem: ShipmentItem;
   ShippingMethod: ShippingMethod;
@@ -2525,6 +2534,11 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationStartCheckoutArgs, 'cartId' | 'data'>
+  >;
+  startSession?: Resolver<
+    Maybe<ResolversTypes['Session']>,
+    ParentType,
+    ContextType
   >;
   updateCartItem?: Resolver<
     Maybe<ResolversTypes['CartItem']>,
@@ -3348,6 +3362,14 @@ export type SellableInfoResolvers<
   >;
 };
 
+export type SessionResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Session'] = ResolversParentTypes['Session']
+> = {
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ShipmentResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Shipment'] = ResolversParentTypes['Shipment']
@@ -3649,6 +3671,7 @@ export type Resolvers<ContextType = any> = {
   SearchResultItem?: SearchResultItemResolvers<ContextType>;
   SearchResultItemReference?: SearchResultItemReferenceResolvers<ContextType>;
   SellableInfo?: SellableInfoResolvers<ContextType>;
+  Session?: SessionResolvers<ContextType>;
   Shipment?: ShipmentResolvers<ContextType>;
   ShipmentItem?: ShipmentItemResolvers<ContextType>;
   ShippingMethod?: ShippingMethodResolvers<ContextType>;

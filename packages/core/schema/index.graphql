@@ -1086,6 +1086,13 @@ type RegistrationResult {
   errors: [Error!]!
 }
 
+"""
+Session
+"""
+type Session {
+  id: String!
+}
+
 ####################################################################################
 # Inputs
 ####################################################################################
@@ -1355,4 +1362,6 @@ type Mutation {
   cancelReservation(reservationId: ID!): DeleteResult
 
   login(input: LoginInput!): LoginResult
+
+  startSession: Session
 }
