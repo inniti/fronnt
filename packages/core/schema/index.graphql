@@ -714,9 +714,13 @@ type CheckoutState {
 interface AddressFields {
   name: String!
   street: String!
+  street2: String
+  company: String
   zipCode: String!
   city: String!
+  province: String
   country: String!
+  phone: String
 }
 
 """
@@ -724,13 +728,14 @@ An address
 """
 type Address implements AddressFields {
   name: String!
-  name2: String
-  name3: String
-  company: String
   street: String!
+  street2: String
+  company: String
   zipCode: String!
   city: String!
+  province: String
   country: String!
+  phone: String
 }
 
 """
@@ -740,10 +745,15 @@ type CustomerAddress implements AddressFields {
   id: ID!
   name: String!
   street: String!
+  street2: String
+  company: String
   zipCode: String!
   city: String!
+  province: String
   country: String!
-  isDefault: Boolean!
+  phone: String
+  isDefaultBillingAddress: Boolean!
+  isDefaultShippingAddress: Boolean!
 }
 
 """

@@ -52,17 +52,22 @@ export interface Address extends AddressFields {
   company?: Maybe<Scalars['String']>;
   country: Scalars['String'];
   name: Scalars['String'];
-  name2?: Maybe<Scalars['String']>;
-  name3?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  province?: Maybe<Scalars['String']>;
   street: Scalars['String'];
+  street2?: Maybe<Scalars['String']>;
   zipCode: Scalars['String'];
 }
 
 export interface AddressFields {
   city: Scalars['String'];
+  company?: Maybe<Scalars['String']>;
   country: Scalars['String'];
   name: Scalars['String'];
+  phone?: Maybe<Scalars['String']>;
+  province?: Maybe<Scalars['String']>;
   street: Scalars['String'];
+  street2?: Maybe<Scalars['String']>;
   zipCode: Scalars['String'];
 }
 
@@ -421,11 +426,16 @@ export interface Customer {
 export interface CustomerAddress extends AddressFields {
   __typename?: 'CustomerAddress';
   city: Scalars['String'];
+  company?: Maybe<Scalars['String']>;
   country: Scalars['String'];
   id: Scalars['ID'];
-  isDefault: Scalars['Boolean'];
+  isDefaultBillingAddress: Scalars['Boolean'];
+  isDefaultShippingAddress: Scalars['Boolean'];
   name: Scalars['String'];
+  phone?: Maybe<Scalars['String']>;
+  province?: Maybe<Scalars['String']>;
   street: Scalars['String'];
+  street2?: Maybe<Scalars['String']>;
   zipCode: Scalars['String'];
 }
 
@@ -1852,9 +1862,10 @@ export type AddressResolvers<
   company?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   country?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  name2?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  name3?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  phone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  province?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   street?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  street2?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   zipCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1869,9 +1880,13 @@ export type AddressFieldsResolvers<
     ContextType
   >;
   city?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  company?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   country?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  phone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  province?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   street?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  street2?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   zipCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };
 
@@ -2330,11 +2345,24 @@ export type CustomerAddressResolvers<
   ParentType extends ResolversParentTypes['CustomerAddress'] = ResolversParentTypes['CustomerAddress']
 > = {
   city?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  company?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   country?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isDefault?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isDefaultBillingAddress?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType
+  >;
+  isDefaultShippingAddress?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType
+  >;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  phone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  province?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   street?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  street2?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   zipCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
