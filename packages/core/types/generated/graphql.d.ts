@@ -263,7 +263,7 @@ export interface BrandMediaArgs {
 /** Brand */
 export interface BrandProductsArgs {
   customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
-  filters?: InputMaybe<Array<ProductsSearchFiltersInput>>;
+  filters?: InputMaybe<Array<ProductsFiltersInput>>;
   paging?: InputMaybe<PagingInput>;
   query?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Array<SortInput>>;
@@ -356,7 +356,7 @@ export interface CategoryMediaArgs {
 /** Categories are hierarchical containers for products */
 export interface CategoryProductsArgs {
   customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
-  filters?: InputMaybe<Array<ProductsSearchFiltersInput>>;
+  filters?: InputMaybe<Array<ProductsFiltersInput>>;
   paging?: InputMaybe<PagingInput>;
   query?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Array<SortInput>>;
@@ -899,6 +899,12 @@ export interface ProductListFilterValue {
 /** Status of a product */
 export type ProductStatus = 'DISCONTINUED' | 'DRAFT' | 'PUBLISHED';
 
+/** Product list filters */
+export interface ProductsFiltersInput {
+  id: Scalars['ID'];
+  values: Array<Scalars['String']>;
+}
+
 /** Paged result of a product list */
 export interface ProductsResult extends PagedResult {
   __typename?: 'ProductsResult';
@@ -906,12 +912,6 @@ export interface ProductsResult extends PagedResult {
   paging: Paging;
   results: Array<Product>;
   sortings: Array<Sorting>;
-}
-
-/** Product list search filters */
-export interface ProductsSearchFiltersInput {
-  id: Scalars['ID'];
-  values: Array<Scalars['String']>;
 }
 
 export interface Query {
@@ -1033,7 +1033,7 @@ export interface QueryProductByFieldArgs {
 
 export interface QueryProductsArgs {
   customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
-  filters?: InputMaybe<Array<ProductsSearchFiltersInput>>;
+  filters?: InputMaybe<Array<ProductsFiltersInput>>;
   paging?: InputMaybe<PagingInput>;
   query?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Array<SortInput>>;
@@ -1053,8 +1053,7 @@ export interface QueryReservationsArgs {
 }
 
 export interface QuerySearchArgs {
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
-  filters?: InputMaybe<Array<ProductsSearchFiltersInput>>;
+  filters?: InputMaybe<Array<SearchFiltersInput>>;
   paging?: InputMaybe<PagingInput>;
   query?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Array<SortInput>>;
@@ -1219,6 +1218,12 @@ export interface SalesUnit {
   conversion: Scalars['Int'];
   id: Scalars['ID'];
   name: MeasurementUnit;
+}
+
+/** Search filters */
+export interface SearchFiltersInput {
+  id: Scalars['ID'];
+  values: Array<Scalars['String']>;
 }
 
 /** Paged search result */
@@ -1640,8 +1645,8 @@ export type ResolversTypes = {
   ProductListFilter: ResolverTypeWrapper<ProductListFilter>;
   ProductListFilterValue: ResolverTypeWrapper<ProductListFilterValue>;
   ProductStatus: ProductStatus;
+  ProductsFiltersInput: ProductsFiltersInput;
   ProductsResult: ResolverTypeWrapper<ProductsResult>;
-  ProductsSearchFiltersInput: ProductsSearchFiltersInput;
   Query: ResolverTypeWrapper<{}>;
   ReferencePrice: ResolverTypeWrapper<ReferencePrice>;
   RegistrationInput: RegistrationInput;
@@ -1659,6 +1664,7 @@ export type ResolversTypes = {
   ResolveUrlResultType: ResolveUrlResultType;
   SalesUnit: ResolverTypeWrapper<SalesUnit>;
   ScalarMap: ResolverTypeWrapper<Scalars['ScalarMap']>;
+  SearchFiltersInput: SearchFiltersInput;
   SearchResult: ResolverTypeWrapper<SearchResult>;
   SearchResultItem: ResolverTypeWrapper<
     Omit<SearchResultItem, 'reference'> & {
@@ -1803,8 +1809,8 @@ export type ResolversParentTypes = {
   ProductInfo: ProductInfo;
   ProductListFilter: ProductListFilter;
   ProductListFilterValue: ProductListFilterValue;
+  ProductsFiltersInput: ProductsFiltersInput;
   ProductsResult: ProductsResult;
-  ProductsSearchFiltersInput: ProductsSearchFiltersInput;
   Query: {};
   ReferencePrice: ReferencePrice;
   RegistrationInput: RegistrationInput;
@@ -1819,6 +1825,7 @@ export type ResolversParentTypes = {
   ReservedArticle: ReservedArticle;
   SalesUnit: SalesUnit;
   ScalarMap: Scalars['ScalarMap'];
+  SearchFiltersInput: SearchFiltersInput;
   SearchResult: SearchResult;
   SearchResultItem: Omit<SearchResultItem, 'reference'> & {
     reference?: Maybe<ResolversParentTypes['SearchResultItemReference']>;
