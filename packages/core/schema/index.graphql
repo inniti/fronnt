@@ -1070,7 +1070,7 @@ type AuthToken {
 LoginResult
 """
 type LoginResult {
-  customer: Customer!
+  customer: Customer
   accessToken: AuthToken
   refreshToken: AuthToken
   errors: [Error!]!
@@ -1080,7 +1080,7 @@ type LoginResult {
 RegistrationResult
 """
 type RegistrationResult {
-  customer: Customer!
+  customer: Customer
   accessToken: AuthToken
   refreshToken: AuthToken
   errors: [Error!]!
