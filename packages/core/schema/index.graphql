@@ -415,11 +415,10 @@ type Product {
   slug: String!
   status: ProductStatus!
   articles: [Article!]
-  categories(customQueryConditions: [CustomQueryConditionInput!]): [Category!]
+  categories: [Category!]
   relatedProducts(
     type: RelatedProductType
     paging: PagingInput
-    customQueryConditions: [CustomQueryConditionInput!]
   ): RelatedProductsResult
   vendorId: ID
   vendor: Vendor
@@ -600,11 +599,10 @@ type Category {
     filters: [ProductsFiltersInput!]
     sort: [SortInput!]
     paging: PagingInput
-    customQueryConditions: [CustomQueryConditionInput!]
   ): ProductsResult
   parent: Category
   breadcrumbs: [CategoryBreadcrumb]!
-  children(customQueryConditions: [CustomQueryConditionInput!]): [Category!]
+  children: [Category!]
 }
 
 """
@@ -617,13 +615,12 @@ type Brand {
   slug: String!
   description: String!
   categoryIds: [String!]!
-  categories(customQueryConditions: [CustomQueryConditionInput!]): [Category!]!
+  categories: [Category!]
   products(
     query: String
     filters: [ProductsFiltersInput!]
     sort: [SortInput!]
     paging: PagingInput
-    customQueryConditions: [CustomQueryConditionInput!]
   ): ProductsResult
 }
 
@@ -937,7 +934,7 @@ Wishlist
 """
 type Wishlist {
   id: ID!
-  items(customQueryConditions: [CustomQueryConditionInput!]): [WishlistItem!]!
+  items: [WishlistItem!]!
 }
 
 """
@@ -1167,6 +1164,14 @@ input SearchFiltersInput {
 }
 
 """
+Order list filters
+"""
+input OrdersFiltersInput {
+  from: String
+  until: String
+}
+
+"""
 Address data
 """
 input AddressInput {
@@ -1212,15 +1217,6 @@ input UpdateCustomerInput {
   email: String
   firstname: String
   lastname: String
-}
-
-"""
-Custom query condition applied to filterable list queries
-"""
-input CustomQueryConditionInput {
-  field: String!
-  operator: String!
-  value: String!
 }
 
 """
@@ -1280,7 +1276,6 @@ type Query {
     filters: [ProductsFiltersInput!]
     sort: [SortInput!]
     paging: PagingInput
-    customQueryConditions: [CustomQueryConditionInput!]
   ): ProductsResult
   product(id: ID!): Product
   productByField(field: String!, value: String!): Product
@@ -1288,38 +1283,26 @@ type Query {
   article(id: ID!): Article
   articleByField(field: String!, value: String!): Article
 
-  brands(
-    paging: PagingInput
-    customQueryConditions: [CustomQueryConditionInput!]
-  ): BrandsResult
+  brands(paging: PagingInput): BrandsResult
   brand(id: ID!): Brand
   brandByField(field: String!, value: String!): Brand
 
-  categories(
-    paging: PagingInput
-    customQueryConditions: [CustomQueryConditionInput!]
-  ): CategoriesResult
+  categories(paging: PagingInput): CategoriesResult
   category(id: ID!): Category
   categoryByField(field: String!, value: String!): Category
 
-  suggestions(
-    searchTerm: String!
-    customQueryConditions: [CustomQueryConditionInput!]
-  ): [Suggestion!]!
+  suggestions(searchTerm: String!): [Suggestion!]!
 
-  carts(customQueryConditions: [CustomQueryConditionInput!]): CartsResult
+  carts: CartsResult
   cart(id: ID!): Cart
 
-  wishlists(
-    sort: [SortInput!]
-    customQueryConditions: [CustomQueryConditionInput!]
-  ): WishlistsResult
+  wishlists(sort: [SortInput!]): WishlistsResult
   wishlist(id: ID!): Wishlist
 
   orders(
     paging: PagingInput
     sort: [SortInput!]
-    customQueryConditions: [CustomQueryConditionInput!]
+    filters: [OrdersFiltersInput!]
   ): OrdersResult
   order(id: ID!): Order
 
@@ -1329,25 +1312,19 @@ type Query {
     paging: PagingInput
     sort: [SortInput!]
     status: [PageStatus!]
-    customQueryConditions: [CustomQueryConditionInput!]
   ): PagesResult
   page(id: ID!): Page
   pageByField(field: String!, value: String!): Page
 
-  warehouses(
-    aroundLocation: AroundLocationInput
-    customQueryConditions: [CustomQueryConditionInput!]
-  ): WarehousesResult
+  warehouses(aroundLocation: AroundLocationInput): WarehousesResult
   warehouse(id: ID!): Warehouse
   warehouseByField(field: String!, value: String!): Warehouse
 
-  reservations(
-    customQueryConditions: [CustomQueryConditionInput!]
-  ): ReservationsResult
+  reservations: ReservationsResult
   reservation(id: ID!): Reservation
   reservationByField(field: String!, value: String!): Reservation
 
-  vendors(customQueryConditions: [CustomQueryConditionInput!]): VendorsResult
+  vendors: VendorsResult
   vendor(id: ID!): Vendor
   vendorByField(field: String!, value: String!): Vendor
 }

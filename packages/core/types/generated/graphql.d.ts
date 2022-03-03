@@ -239,7 +239,7 @@ export interface BaseUnit {
 /** Brand */
 export interface Brand {
   __typename?: 'Brand';
-  categories: Array<Category>;
+  categories?: Maybe<Array<Category>>;
   categoryIds: Array<Scalars['String']>;
   description: Scalars['String'];
   id: Scalars['ID'];
@@ -250,11 +250,6 @@ export interface Brand {
 }
 
 /** Brand */
-export interface BrandCategoriesArgs {
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
-}
-
-/** Brand */
 export interface BrandMediaArgs {
   mediaType?: InputMaybe<MediaType>;
   purpose?: InputMaybe<MediaPurpose>;
@@ -262,7 +257,6 @@ export interface BrandMediaArgs {
 
 /** Brand */
 export interface BrandProductsArgs {
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
   filters?: InputMaybe<Array<ProductsFiltersInput>>;
   paging?: InputMaybe<PagingInput>;
   query?: InputMaybe<Scalars['String']>;
@@ -343,11 +337,6 @@ export interface Category {
 }
 
 /** Categories are hierarchical containers for products */
-export interface CategoryChildrenArgs {
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
-}
-
-/** Categories are hierarchical containers for products */
 export interface CategoryMediaArgs {
   mediaType?: InputMaybe<MediaType>;
   purpose?: InputMaybe<MediaPurpose>;
@@ -355,7 +344,6 @@ export interface CategoryMediaArgs {
 
 /** Categories are hierarchical containers for products */
 export interface CategoryProductsArgs {
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
   filters?: InputMaybe<Array<ProductsFiltersInput>>;
   paging?: InputMaybe<PagingInput>;
   query?: InputMaybe<Scalars['String']>;
@@ -402,13 +390,6 @@ export interface Currency {
   __typename?: 'Currency';
   name: Scalars['String'];
   symbol: Scalars['String'];
-}
-
-/** Custom query condition applied to filterable list queries */
-export interface CustomQueryConditionInput {
-  field: Scalars['String'];
-  operator: Scalars['String'];
-  value: Scalars['String'];
 }
 
 /** Saved Customer */
@@ -727,6 +708,12 @@ export interface OrderShippingInfo {
 
 export type OrderStatus = 'CANCELED' | 'CLOSED' | 'NEW' | 'SHIPPED';
 
+/** Order list filters */
+export interface OrdersFiltersInput {
+  from?: InputMaybe<Scalars['String']>;
+  until?: InputMaybe<Scalars['String']>;
+}
+
 /** Paged result of an order list */
 export interface OrdersResult extends PagedResult {
   __typename?: 'OrdersResult';
@@ -855,11 +842,6 @@ export interface Product {
 }
 
 /** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
-export interface ProductCategoriesArgs {
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
-}
-
-/** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
 export interface ProductMediaArgs {
   mediaType?: InputMaybe<MediaType>;
   purpose?: InputMaybe<MediaPurpose>;
@@ -867,7 +849,6 @@ export interface ProductMediaArgs {
 
 /** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
 export interface ProductRelatedProductsArgs {
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
   paging?: InputMaybe<PagingInput>;
   type?: InputMaybe<RelatedProductType>;
 }
@@ -970,7 +951,6 @@ export interface QueryBrandByFieldArgs {
 }
 
 export interface QueryBrandsArgs {
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
   paging?: InputMaybe<PagingInput>;
 }
 
@@ -978,12 +958,7 @@ export interface QueryCartArgs {
   id: Scalars['ID'];
 }
 
-export interface QueryCartsArgs {
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
-}
-
 export interface QueryCategoriesArgs {
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
   paging?: InputMaybe<PagingInput>;
 }
 
@@ -1001,7 +976,7 @@ export interface QueryOrderArgs {
 }
 
 export interface QueryOrdersArgs {
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
+  filters?: InputMaybe<Array<OrdersFiltersInput>>;
   paging?: InputMaybe<PagingInput>;
   sort?: InputMaybe<Array<SortInput>>;
 }
@@ -1016,7 +991,6 @@ export interface QueryPageByFieldArgs {
 }
 
 export interface QueryPagesArgs {
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
   paging?: InputMaybe<PagingInput>;
   sort?: InputMaybe<Array<SortInput>>;
   status?: InputMaybe<Array<PageStatus>>;
@@ -1032,7 +1006,6 @@ export interface QueryProductByFieldArgs {
 }
 
 export interface QueryProductsArgs {
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
   filters?: InputMaybe<Array<ProductsFiltersInput>>;
   paging?: InputMaybe<PagingInput>;
   query?: InputMaybe<Scalars['String']>;
@@ -1048,10 +1021,6 @@ export interface QueryReservationByFieldArgs {
   value: Scalars['String'];
 }
 
-export interface QueryReservationsArgs {
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
-}
-
 export interface QuerySearchArgs {
   filters?: InputMaybe<Array<SearchFiltersInput>>;
   paging?: InputMaybe<PagingInput>;
@@ -1060,7 +1029,6 @@ export interface QuerySearchArgs {
 }
 
 export interface QuerySuggestionsArgs {
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
   searchTerm: Scalars['String'];
 }
 
@@ -1071,10 +1039,6 @@ export interface QueryVendorArgs {
 export interface QueryVendorByFieldArgs {
   field: Scalars['String'];
   value: Scalars['String'];
-}
-
-export interface QueryVendorsArgs {
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
 }
 
 export interface QueryWarehouseArgs {
@@ -1088,7 +1052,6 @@ export interface QueryWarehouseByFieldArgs {
 
 export interface QueryWarehousesArgs {
   aroundLocation?: InputMaybe<AroundLocationInput>;
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
 }
 
 export interface QueryWishlistArgs {
@@ -1096,7 +1059,6 @@ export interface QueryWishlistArgs {
 }
 
 export interface QueryWishlistsArgs {
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
   sort?: InputMaybe<Array<SortInput>>;
 }
 
@@ -1415,11 +1377,6 @@ export interface Wishlist {
   items: Array<WishlistItem>;
 }
 
-/** Wishlist */
-export interface WishlistItemsArgs {
-  customQueryConditions?: InputMaybe<Array<CustomQueryConditionInput>>;
-}
-
 /** Wishlist item */
 export interface WishlistItem {
   __typename?: 'WishlistItem';
@@ -1578,7 +1535,6 @@ export type ResolversTypes = {
   Country: ResolverTypeWrapper<Country>;
   Coupon: ResolverTypeWrapper<Coupon>;
   Currency: ResolverTypeWrapper<Currency>;
-  CustomQueryConditionInput: CustomQueryConditionInput;
   Customer: ResolverTypeWrapper<Customer>;
   CustomerAddress: ResolverTypeWrapper<CustomerAddress>;
   DeleteResult: ResolverTypeWrapper<DeleteResult>;
@@ -1606,6 +1562,7 @@ export type ResolversTypes = {
   OrderPaymentInfo: ResolverTypeWrapper<OrderPaymentInfo>;
   OrderShippingInfo: ResolverTypeWrapper<OrderShippingInfo>;
   OrderStatus: OrderStatus;
+  OrdersFiltersInput: OrdersFiltersInput;
   OrdersResult: ResolverTypeWrapper<OrdersResult>;
   Page: ResolverTypeWrapper<
     Omit<Page, 'reference'> & {
@@ -1752,7 +1709,6 @@ export type ResolversParentTypes = {
   Country: Country;
   Coupon: Coupon;
   Currency: Currency;
-  CustomQueryConditionInput: CustomQueryConditionInput;
   Customer: Customer;
   CustomerAddress: CustomerAddress;
   DeleteResult: DeleteResult;
@@ -1776,6 +1732,7 @@ export type ResolversParentTypes = {
   OrderItem: OrderItem;
   OrderPaymentInfo: OrderPaymentInfo;
   OrderShippingInfo: OrderShippingInfo;
+  OrdersFiltersInput: OrdersFiltersInput;
   OrdersResult: OrdersResult;
   Page: Omit<Page, 'reference'> & {
     reference?: Maybe<ResolversParentTypes['PageReference']>;
@@ -2114,10 +2071,9 @@ export type BrandResolvers<
   ParentType extends ResolversParentTypes['Brand'] = ResolversParentTypes['Brand']
 > = {
   categories?: Resolver<
-    Array<ResolversTypes['Category']>,
+    Maybe<Array<ResolversTypes['Category']>>,
     ParentType,
-    ContextType,
-    RequireFields<BrandCategoriesArgs, never>
+    ContextType
   >;
   categoryIds?: Resolver<
     Array<ResolversTypes['String']>,
@@ -2243,8 +2199,7 @@ export type CategoryResolvers<
   children?: Resolver<
     Maybe<Array<ResolversTypes['Category']>>,
     ParentType,
-    ContextType,
-    RequireFields<CategoryChildrenArgs, never>
+    ContextType
   >;
   childrenIds?: Resolver<
     Array<Maybe<ResolversTypes['String']>>,
@@ -2913,8 +2868,7 @@ export type ProductResolvers<
   categories?: Resolver<
     Maybe<Array<ResolversTypes['Category']>>,
     ParentType,
-    ContextType,
-    RequireFields<ProductCategoriesArgs, never>
+    ContextType
   >;
   categoryIds?: Resolver<Array<ResolversTypes['ID']>, ParentType, ContextType>;
   createdAt?: Resolver<
@@ -3051,8 +3005,7 @@ export type QueryResolvers<
   carts?: Resolver<
     Maybe<ResolversTypes['CartsResult']>,
     ParentType,
-    ContextType,
-    RequireFields<QueryCartsArgs, never>
+    ContextType
   >;
   categories?: Resolver<
     Maybe<ResolversTypes['CategoriesResult']>,
@@ -3140,8 +3093,7 @@ export type QueryResolvers<
   reservations?: Resolver<
     Maybe<ResolversTypes['ReservationsResult']>,
     ParentType,
-    ContextType,
-    RequireFields<QueryReservationsArgs, never>
+    ContextType
   >;
   search?: Resolver<
     Maybe<ResolversTypes['SearchResult']>,
@@ -3171,8 +3123,7 @@ export type QueryResolvers<
   vendors?: Resolver<
     Maybe<ResolversTypes['VendorsResult']>,
     ParentType,
-    ContextType,
-    RequireFields<QueryVendorsArgs, never>
+    ContextType
   >;
   warehouse?: Resolver<
     Maybe<ResolversTypes['Warehouse']>,
@@ -3638,8 +3589,7 @@ export type WishlistResolvers<
   items?: Resolver<
     Array<ResolversTypes['WishlistItem']>,
     ParentType,
-    ContextType,
-    RequireFields<WishlistItemsArgs, never>
+    ContextType
   >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
