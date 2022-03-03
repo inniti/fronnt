@@ -991,7 +991,8 @@ type Page {
   locale: String
   createdAt: String
   updatedAt: String
-  children: [Page!]!
+  childrenIds: [ID!]!
+  children: [Page!]
   template: String
   referenceId: ID
   reference: PageReference

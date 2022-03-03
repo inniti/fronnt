@@ -725,7 +725,8 @@ export interface OrdersResult extends PagedResult {
 export interface Page {
   __typename?: 'Page';
   blocks: Array<PageBlock>;
-  children: Array<Page>;
+  children?: Maybe<Array<Page>>;
+  childrenIds: Array<Scalars['ID']>;
   createdAt?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   locale?: Maybe<Scalars['String']>;
@@ -2690,7 +2691,12 @@ export type PageResolvers<
     ParentType,
     ContextType
   >;
-  children?: Resolver<Array<ResolversTypes['Page']>, ParentType, ContextType>;
+  children?: Resolver<
+    Maybe<Array<ResolversTypes['Page']>>,
+    ParentType,
+    ContextType
+  >;
+  childrenIds?: Resolver<Array<ResolversTypes['ID']>, ParentType, ContextType>;
   createdAt?: Resolver<
     Maybe<ResolversTypes['String']>,
     ParentType,
