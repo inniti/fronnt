@@ -1081,7 +1081,6 @@ type LoginResult {
   customer: Customer
   accessToken: AuthToken
   refreshToken: AuthToken
-  errors: [Error!]!
 }
 
 """
@@ -1091,7 +1090,6 @@ type RegistrationResult {
   customer: Customer
   accessToken: AuthToken
   refreshToken: AuthToken
-  errors: [Error!]!
 }
 
 """

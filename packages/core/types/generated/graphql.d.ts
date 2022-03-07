@@ -480,7 +480,6 @@ export interface LoginResult {
   __typename?: 'LoginResult';
   accessToken?: Maybe<AuthToken>;
   customer?: Maybe<Customer>;
-  errors: Array<Error>;
   refreshToken?: Maybe<AuthToken>;
 }
 
@@ -1093,7 +1092,6 @@ export interface RegistrationResult {
   __typename?: 'RegistrationResult';
   accessToken?: Maybe<AuthToken>;
   customer?: Maybe<Customer>;
-  errors: Array<Error>;
   refreshToken?: Maybe<AuthToken>;
 }
 
@@ -2421,7 +2419,6 @@ export type LoginResultResolvers<
     ParentType,
     ContextType
   >;
-  errors?: Resolver<Array<ResolversTypes['Error']>, ParentType, ContextType>;
   refreshToken?: Resolver<
     Maybe<ResolversTypes['AuthToken']>,
     ParentType,
@@ -3190,7 +3187,6 @@ export type RegistrationResultResolvers<
     ParentType,
     ContextType
   >;
-  errors?: Resolver<Array<ResolversTypes['Error']>, ParentType, ContextType>;
   refreshToken?: Resolver<
     Maybe<ResolversTypes['AuthToken']>,
     ParentType,
