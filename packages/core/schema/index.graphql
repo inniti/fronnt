@@ -60,6 +60,13 @@ enum AttributeType {
   BOOLEAN
 }
 
+enum FilterType {
+  NUMBER
+  COLOR
+  TEXT
+  BOOLEAN
+}
+
 enum PageStatus {
   DRAFT
   PUBLISHED
@@ -526,43 +533,22 @@ type Article {
 }
 
 """
-Value of a product list filter
+Value a (maybe) applied filter
 """
-type ProductListFilterValue {
-  type: AttributeType!
+type FilterValue {
   value: String!
   applied: Boolean!
   count: Int!
 }
 
 """
-Product list filter
+Generic filter returned from lists/search
 """
-type ProductListFilter {
+type Filter {
   id: ID!
   label: String
-  type: AttributeType!
-  values: [ProductListFilterValue!]!
-}
-
-"""
-Value of an article list filter
-"""
-type ArticleListFilterValue {
-  type: AttributeType!
-  value: String!
-  applied: Boolean!
-  count: Int!
-}
-
-"""
-Article list filter
-"""
-type ArticleListFilter {
-  id: ID!
-  label: String
-  type: AttributeType!
-  values: [ArticleListFilterValue!]!
+  type: FilterType!
+  values: [FilterValue!]!
 }
 
 """
@@ -596,7 +582,7 @@ type Category {
   slug: String!
   products(
     query: String
-    filters: [ProductsFiltersInput!]
+    filters: [FilterInput!]
     sort: [SortInput!]
     paging: PagingInput
   ): ProductsResult
@@ -618,7 +604,7 @@ type Brand {
   categories: [Category!]
   products(
     query: String
-    filters: [ProductsFiltersInput!]
+    filters: [FilterInput!]
     sort: [SortInput!]
     paging: PagingInput
   ): ProductsResult
@@ -643,13 +629,12 @@ union SearchResultItemReference = Product | Category | Brand
 A search result entry for product searches
 """
 type SearchResultItem {
-  title: String!
   type: SearchResultItemType!
   referenceId: ID
   reference: SearchResultItemReference
-  slug: String
-  price: Price
-  previewImage: String
+  title: String!
+  url: String
+  image: String
 }
 
 """
@@ -658,7 +643,7 @@ Paged search result
 type SearchResult implements PagedResult {
   paging: Paging!
   results: [SearchResultItem!]!
-  filters: [ProductListFilter!]!
+  filters: [Filter!]!
   sortings: [Sorting!]!
 }
 
@@ -668,7 +653,7 @@ Paged result of a product list
 type ProductsResult implements PagedResult {
   paging: Paging!
   results: [Product!]!
-  filters: [ProductListFilter!]!
+  filters: [Filter!]!
   sortings: [Sorting!]!
 }
 
@@ -1147,17 +1132,9 @@ input AddToCartItemInput {
 }
 
 """
-Product list filters
+Generic filter input for lists/search
 """
-input ProductsFiltersInput {
-  id: ID!
-  values: [String!]!
-}
-
-"""
-Search filters
-"""
-input SearchFiltersInput {
+input FilterInput {
   id: ID!
   values: [String!]!
 }
@@ -1165,9 +1142,10 @@ input SearchFiltersInput {
 """
 Order list filters
 """
-input OrdersFiltersInput {
+input OrdersFilterInput {
   from: String
   until: String
+  status: [OrderStatus!]
 }
 
 """
@@ -1265,14 +1243,14 @@ type Query {
 
   search(
     query: String
-    filters: [SearchFiltersInput!]
+    filters: [FilterInput!]
     sort: [SortInput!]
     paging: PagingInput
   ): SearchResult
 
   products(
     query: String
-    filters: [ProductsFiltersInput!]
+    filters: [FilterInput!]
     sort: [SortInput!]
     paging: PagingInput
   ): ProductsResult
@@ -1301,7 +1279,7 @@ type Query {
   orders(
     paging: PagingInput
     sort: [SortInput!]
-    filters: [OrdersFiltersInput!]
+    filters: [OrdersFilterInput!]
   ): OrdersResult
   order(id: ID!): Order
 
