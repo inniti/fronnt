@@ -533,10 +533,11 @@ type Article {
 }
 
 """
-Value a (maybe) applied filter
+Value of a (maybe) applied filter
 """
 type FilterValue {
-  value: String!
+  label: String!
+  id: ID!
   applied: Boolean!
   count: Int!
 }

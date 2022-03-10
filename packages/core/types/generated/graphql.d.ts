@@ -460,12 +460,13 @@ export interface FilterInput {
 
 export type FilterType = 'BOOLEAN' | 'COLOR' | 'NUMBER' | 'TEXT';
 
-/** Value a (maybe) applied filter */
+/** Value of a (maybe) applied filter */
 export interface FilterValue {
   __typename?: 'FilterValue';
   applied: Scalars['Boolean'];
   count: Scalars['Int'];
-  value: Scalars['String'];
+  id: Scalars['ID'];
+  label: Scalars['String'];
 }
 
 /** Locale */
@@ -2363,7 +2364,8 @@ export type FilterValueResolvers<
 > = {
   applied?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
