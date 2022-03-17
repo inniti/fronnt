@@ -443,6 +443,12 @@ export interface Expense {
   value: Scalars['Int'];
 }
 
+/** A map of features supported by the project */
+export interface Features {
+  __typename?: 'Features';
+  core: Scalars['Boolean'];
+}
+
 /** Generic filter returned from lists/search */
 export interface Filter {
   __typename?: 'Filter';
@@ -893,6 +899,7 @@ export interface Query {
   category?: Maybe<Category>;
   categoryByField?: Maybe<Category>;
   customer?: Maybe<Customer>;
+  features: Features;
   order?: Maybe<Order>;
   orders?: Maybe<OrdersResult>;
   page?: Maybe<Page>;
@@ -1517,6 +1524,7 @@ export type ResolversTypes = {
   Discount: ResolverTypeWrapper<Discount>;
   Error: ResolverTypeWrapper<Error>;
   Expense: ResolverTypeWrapper<Expense>;
+  Features: ResolverTypeWrapper<Features>;
   Filter: ResolverTypeWrapper<Filter>;
   FilterInput: FilterInput;
   FilterType: FilterType;
@@ -1689,6 +1697,7 @@ export type ResolversParentTypes = {
   Discount: Discount;
   Error: Error;
   Expense: Expense;
+  Features: Features;
   Filter: Filter;
   FilterInput: FilterInput;
   FilterValue: FilterValue;
@@ -2343,6 +2352,14 @@ export type ExpenseResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type FeaturesResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Features'] = ResolversParentTypes['Features']
+> = {
+  core?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type FilterResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Filter'] = ResolversParentTypes['Filter']
@@ -2976,6 +2993,7 @@ export type QueryResolvers<
     ParentType,
     ContextType
   >;
+  features?: Resolver<ResolversTypes['Features'], ParentType, ContextType>;
   order?: Resolver<
     Maybe<ResolversTypes['Order']>,
     ParentType,
@@ -3586,6 +3604,7 @@ export type Resolvers<ContextType = any> = {
   Discount?: DiscountResolvers<ContextType>;
   Error?: ErrorResolvers<ContextType>;
   Expense?: ExpenseResolvers<ContextType>;
+  Features?: FeaturesResolvers<ContextType>;
   Filter?: FilterResolvers<ContextType>;
   FilterValue?: FilterValueResolvers<ContextType>;
   Locale?: LocaleResolvers<ContextType>;

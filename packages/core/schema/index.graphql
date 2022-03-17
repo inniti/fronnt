@@ -196,6 +196,13 @@ scalar ScalarMap
 ####################################################################################
 
 """
+A map of features supported by the project
+"""
+type Features {
+  core: Boolean!
+}
+
+"""
 General purpose error object
 """
 type Error {
@@ -1240,6 +1247,8 @@ input LoginInput {
 ####################################################################################
 
 type Query {
+  features: Features!
+
   shop: Shop
 
   search(
