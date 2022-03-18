@@ -351,6 +351,32 @@ export interface CheckoutState {
   shippingMethod?: Maybe<ShippingMethod>;
 }
 
+/** A page can have multiple blocks, each of a specific type, which are optionally placed into slots */
+export interface ContentBlock {
+  __typename?: 'ContentBlock';
+  blockType: Scalars['String'];
+  createdAt?: Maybe<Scalars['String']>;
+  data: Scalars['ScalarMap'];
+  id: Scalars['ID'];
+  /** The content block key should be an alternative but still stable and unique key, with which a loose block (not attached to a Page) can be queried */
+  key?: Maybe<Scalars['String']>;
+  locale?: Maybe<Scalars['String']>;
+  /** Page blocks have a specific order within a page. The order field can be null if the page block is global (i.e. not associated with a page) */
+  order?: Maybe<Scalars['Int']>;
+  slot?: Maybe<Scalars['String']>;
+  status: ContentBlockStatus;
+  updatedAt?: Maybe<Scalars['String']>;
+}
+
+export type ContentBlockStatus = 'DRAFT' | 'PUBLISHED';
+
+/** Result of a contentBlocks query */
+export interface ContentBlocksResult extends PagedResult {
+  __typename?: 'ContentBlocksResult';
+  paging: Paging;
+  results: Array<ContentBlock>;
+}
+
 /** Country */
 export interface Country {
   __typename?: 'Country';
@@ -738,7 +764,7 @@ export interface OrdersResult extends PagedResult {
 /** A page represents a page in the storefront, typically provided by a CMS */
 export interface Page {
   __typename?: 'Page';
-  blocks: Array<PageBlock>;
+  blocks: Array<ContentBlock>;
   children?: Maybe<Array<Page>>;
   childrenIds: Array<Scalars['ID']>;
   createdAt?: Maybe<Scalars['String']>;
@@ -753,23 +779,6 @@ export interface Page {
   updatedAt?: Maybe<Scalars['String']>;
   url: Scalars['String'];
 }
-
-/** A page can have multiple blocks, each of a specific type, which are optionally placed into slots */
-export interface PageBlock {
-  __typename?: 'PageBlock';
-  blockType: Scalars['String'];
-  createdAt?: Maybe<Scalars['String']>;
-  data: Scalars['ScalarMap'];
-  id: Scalars['ID'];
-  locale?: Maybe<Scalars['String']>;
-  /** Page blocks have a specific order within a page. The order field can be null if the page block is global (i.e. not associated with a page) */
-  order?: Maybe<Scalars['Int']>;
-  slot?: Maybe<Scalars['String']>;
-  status: PageBlockStatus;
-  updatedAt?: Maybe<Scalars['String']>;
-}
-
-export type PageBlockStatus = 'DRAFT' | 'PUBLISHED';
 
 export type PageReference = Article | Brand | Category | Product;
 
@@ -898,6 +907,8 @@ export interface Query {
   categories?: Maybe<CategoriesResult>;
   category?: Maybe<Category>;
   categoryByField?: Maybe<Category>;
+  contentBlock?: Maybe<ContentBlock>;
+  contentBlocks?: Maybe<ContentBlocksResult>;
   customer?: Maybe<Customer>;
   features: Features;
   order?: Maybe<Order>;
@@ -961,6 +972,16 @@ export interface QueryCategoryArgs {
 export interface QueryCategoryByFieldArgs {
   field: Scalars['String'];
   value: Scalars['String'];
+}
+
+export interface QueryContentBlockArgs {
+  id?: InputMaybe<Scalars['ID']>;
+  key?: InputMaybe<Scalars['String']>;
+}
+
+export interface QueryContentBlocksArgs {
+  status?: InputMaybe<ContentBlockStatus>;
+  type?: InputMaybe<Scalars['String']>;
 }
 
 export interface QueryOrderArgs {
@@ -1514,6 +1535,9 @@ export type ResolversTypes = {
   Category: ResolverTypeWrapper<Category>;
   CategoryBreadcrumb: ResolverTypeWrapper<CategoryBreadcrumb>;
   CheckoutState: ResolverTypeWrapper<CheckoutState>;
+  ContentBlock: ResolverTypeWrapper<ContentBlock>;
+  ContentBlockStatus: ContentBlockStatus;
+  ContentBlocksResult: ResolverTypeWrapper<ContentBlocksResult>;
   Country: ResolverTypeWrapper<Country>;
   Coupon: ResolverTypeWrapper<Coupon>;
   Currency: ResolverTypeWrapper<Currency>;
@@ -1556,8 +1580,6 @@ export type ResolversTypes = {
       reference?: Maybe<ResolversTypes['PageReference']>;
     }
   >;
-  PageBlock: ResolverTypeWrapper<PageBlock>;
-  PageBlockStatus: PageBlockStatus;
   PageReference:
     | ResolversTypes['Article']
     | ResolversTypes['Brand']
@@ -1568,6 +1590,7 @@ export type ResolversTypes = {
     | ResolversTypes['BrandsResult']
     | ResolversTypes['CartsResult']
     | ResolversTypes['CategoriesResult']
+    | ResolversTypes['ContentBlocksResult']
     | ResolversTypes['OrdersResult']
     | ResolversTypes['PagesResult']
     | ResolversTypes['ProductsResult']
@@ -1687,6 +1710,8 @@ export type ResolversParentTypes = {
   Category: Category;
   CategoryBreadcrumb: CategoryBreadcrumb;
   CheckoutState: CheckoutState;
+  ContentBlock: ContentBlock;
+  ContentBlocksResult: ContentBlocksResult;
   Country: Country;
   Coupon: Coupon;
   Currency: Currency;
@@ -1722,7 +1747,6 @@ export type ResolversParentTypes = {
   Page: Omit<Page, 'reference'> & {
     reference?: Maybe<ResolversParentTypes['PageReference']>;
   };
-  PageBlock: PageBlock;
   PageReference:
     | ResolversParentTypes['Article']
     | ResolversParentTypes['Brand']
@@ -1732,6 +1756,7 @@ export type ResolversParentTypes = {
     | ResolversParentTypes['BrandsResult']
     | ResolversParentTypes['CartsResult']
     | ResolversParentTypes['CategoriesResult']
+    | ResolversParentTypes['ContentBlocksResult']
     | ResolversParentTypes['OrdersResult']
     | ResolversParentTypes['PagesResult']
     | ResolversParentTypes['ProductsResult']
@@ -2225,6 +2250,48 @@ export type CheckoutStateResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ContentBlockResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ContentBlock'] = ResolversParentTypes['ContentBlock']
+> = {
+  blockType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  data?: Resolver<ResolversTypes['ScalarMap'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  key?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  locale?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  order?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  slot?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  status?: Resolver<
+    ResolversTypes['ContentBlockStatus'],
+    ParentType,
+    ContextType
+  >;
+  updatedAt?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ContentBlocksResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ContentBlocksResult'] = ResolversParentTypes['ContentBlocksResult']
+> = {
+  paging?: Resolver<ResolversTypes['Paging'], ParentType, ContextType>;
+  results?: Resolver<
+    Array<ResolversTypes['ContentBlock']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type CountryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Country'] = ResolversParentTypes['Country']
@@ -2674,7 +2741,7 @@ export type PageResolvers<
   ParentType extends ResolversParentTypes['Page'] = ResolversParentTypes['Page']
 > = {
   blocks?: Resolver<
-    Array<ResolversTypes['PageBlock']>,
+    Array<ResolversTypes['ContentBlock']>,
     ParentType,
     ContextType
   >;
@@ -2710,30 +2777,6 @@ export type PageResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type PageBlockResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['PageBlock'] = ResolversParentTypes['PageBlock']
-> = {
-  blockType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  createdAt?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
-  data?: Resolver<ResolversTypes['ScalarMap'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  locale?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  order?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  slot?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  status?: Resolver<ResolversTypes['PageBlockStatus'], ParentType, ContextType>;
-  updatedAt?: Resolver<
-    Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type PageReferenceResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['PageReference'] = ResolversParentTypes['PageReference']
@@ -2753,6 +2796,7 @@ export type PagedResultResolvers<
     | 'BrandsResult'
     | 'CartsResult'
     | 'CategoriesResult'
+    | 'ContentBlocksResult'
     | 'OrdersResult'
     | 'PagesResult'
     | 'ProductsResult'
@@ -2987,6 +3031,18 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QueryCategoryByFieldArgs, 'field' | 'value'>
+  >;
+  contentBlock?: Resolver<
+    Maybe<ResolversTypes['ContentBlock']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryContentBlockArgs, never>
+  >;
+  contentBlocks?: Resolver<
+    Maybe<ResolversTypes['ContentBlocksResult']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryContentBlocksArgs, never>
   >;
   customer?: Resolver<
     Maybe<ResolversTypes['Customer']>,
@@ -3594,6 +3650,8 @@ export type Resolvers<ContextType = any> = {
   Category?: CategoryResolvers<ContextType>;
   CategoryBreadcrumb?: CategoryBreadcrumbResolvers<ContextType>;
   CheckoutState?: CheckoutStateResolvers<ContextType>;
+  ContentBlock?: ContentBlockResolvers<ContextType>;
+  ContentBlocksResult?: ContentBlocksResultResolvers<ContextType>;
   Country?: CountryResolvers<ContextType>;
   Coupon?: CouponResolvers<ContextType>;
   Currency?: CurrencyResolvers<ContextType>;
@@ -3619,7 +3677,6 @@ export type Resolvers<ContextType = any> = {
   OrderShippingInfo?: OrderShippingInfoResolvers<ContextType>;
   OrdersResult?: OrdersResultResolvers<ContextType>;
   Page?: PageResolvers<ContextType>;
-  PageBlock?: PageBlockResolvers<ContextType>;
   PageReference?: PageReferenceResolvers<ContextType>;
   PagedResult?: PagedResultResolvers<ContextType>;
   PagesResult?: PagesResultResolvers<ContextType>;

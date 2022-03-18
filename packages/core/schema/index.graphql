@@ -72,7 +72,7 @@ enum PageStatus {
   PUBLISHED
 }
 
-enum PageBlockStatus {
+enum ContentBlockStatus {
   DRAFT
   PUBLISHED
 }
@@ -980,7 +980,7 @@ type Page {
   meta: Meta!
   url: String!
   status: PageStatus!
-  blocks: [PageBlock!]!
+  blocks: [ContentBlock!]!
   locale: String
   createdAt: String
   updatedAt: String
@@ -994,11 +994,15 @@ type Page {
 """
 A page can have multiple blocks, each of a specific type, which are optionally placed into slots
 """
-type PageBlock {
+type ContentBlock {
   id: ID!
+  """
+  The content block key should be an alternative but still stable and unique key, with which a loose block (not attached to a Page) can be queried
+  """
+  key: String
   blockType: String!
   data: ScalarMap!
-  status: PageBlockStatus!
+  status: ContentBlockStatus!
   slot: String
   locale: String
   createdAt: String
@@ -1015,6 +1019,14 @@ Result of a pages query
 type PagesResult implements PagedResult {
   paging: Paging!
   results: [Page!]!
+}
+
+"""
+Result of a contentBlocks query
+"""
+type ContentBlocksResult implements PagedResult {
+  paging: Paging!
+  results: [ContentBlock!]!
 }
 
 """
@@ -1302,6 +1314,8 @@ type Query {
   ): PagesResult
   page(id: ID!): Page
   pageByField(field: String!, value: String!): Page
+  contentBlocks(type: String, status: ContentBlockStatus): ContentBlocksResult
+  contentBlock(id: ID, key: String): ContentBlock
 
   warehouses(aroundLocation: AroundLocationInput): WarehousesResult
   warehouse(id: ID!): Warehouse
