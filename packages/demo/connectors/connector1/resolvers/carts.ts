@@ -1,4 +1,4 @@
-import type { Resolvers } from '@inniti/middle-core';
+import type { Resolvers } from '@fronnt/core';
 import type { Context } from '../../../types';
 
 const cartsResolvers: Resolvers<Context> = {

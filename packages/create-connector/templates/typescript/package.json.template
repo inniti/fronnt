@@ -1,10 +1,10 @@
 {
 	"name": "",
 	"version": "0.1.0",
-	"description": "My @inniti/middle connector",
+	"description": "My @inniti/fronnt connector",
 	"keywords": [
-		"middle",
-		"inniti-middle"
+		"fronnt",
+		"inniti-fronnt"
 	],
 	"license": "MIT",
 	"author": "",
@@ -25,13 +25,13 @@
     "dev:cjs": "concurrently \"node build.js --watch\" \"nodemon ./dev/server.cjs --watch ./dist/index.cjs\""
 	},
 	"dependencies": {
-		"@inniti/middle-core": "latest",
+		"@fronnt/core": "latest",
     "graphql": "^16.3.0",
     "graphql-tag": "^2.12.6"
 	},
 	"devDependencies": {
 		"@envelop/core": "^1.7.1",
-    "@inniti/middle-server": "latest",
+    "@fronnt/server": "latest",
     "@types/node": "^16.11.21",
     "dotenv": "^16.0.0",
     "esbuild": "^0.14.18",

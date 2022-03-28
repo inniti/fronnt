@@ -1,4 +1,4 @@
-import type { Context as _Context } from '@inniti/middle-server';
+import type { Context as _Context } from '@fronnt/server';
 
 export declare interface Api {
   doSomething(): Promise<any>;

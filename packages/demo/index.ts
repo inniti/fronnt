@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-import { createServer } from '@inniti/middle-server';
+import { createServer } from '@fronnt/server';
 import { useTiming } from '@envelop/core';
 import Connector1 from './connectors/connector1';
 
@@ -16,9 +16,9 @@ createServer([new Connector1()], envelopPlugins).listen(
   port,
   (err: Error | null) => {
     if (err) {
-      console.error('An error occured while starting the middle server', err);
+      console.error('An error occured while starting the fronnt server', err);
     } else {
-      console.log(`🚀 middle server is running at http://localhost:${port}`);
+      console.log(`🚀 fronnt server is running at http://localhost:${port}`);
     }
   }
 );

@@ -1,5 +1,5 @@
-import type { MiddleConnector } from '@inniti/middle-core';
-import type { Context } from '@inniti/middle-server';
+import type { MiddleConnector } from '@fronnt/core';
+import type { Context } from '@fronnt/server';
 import shopResolvers from './resolvers/shop';
 import cartsResolvers from './resolvers/carts';
 

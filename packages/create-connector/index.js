@@ -34,7 +34,7 @@ const QUESTIONS = [
     {
         name: 'project-name',
         type: 'input',
-        default: 'my-middle-connector',
+        default: 'my-fronnt-connector',
         message: 'What\'s the project\'s name?',
         validate: function(input) {
             if (/^([A-Za-z\-_\d])+$/.test(input)) {

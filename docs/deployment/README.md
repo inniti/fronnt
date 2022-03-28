@@ -1,7 +1,7 @@
 # Deployment
 
 ## Deploy with PM2
-As middle is nothing but a Node.js app, you can control it with PM2
+As fronnt is nothing but a Node.js app, you can control it with PM2
 
 ```
 pm2 start index.js
@@ -43,10 +43,10 @@ CMD [ "node", "./index.js" ]
 
 ### Build image
 ```
-docker build . yourname/middle
+docker build . yourname/fronnt
 ```
 
 ### Run container
 ```
-docker run --name=my-middle -p 4000:4000 yourname/middle
+docker run --name=my-fronnt-app -p 4000:4000 yourname/fronnt
 ```

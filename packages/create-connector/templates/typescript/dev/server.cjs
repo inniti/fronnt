@@ -1,5 +1,5 @@
 const { config } = require('dotenv');
-const { createServer } = require('@inniti/middle-server');
+const { createServer } = require('@fronnt/server');
 const { useTiming } = require('@envelop/core');
 const Connector = require('../dist/index.cjs').default;
 
@@ -18,8 +18,8 @@ createServer(
 		envelopPlugins
 ).listen(port, ( err ) => {
 	if ( err ) {
-		console.error('An error occured while starting the middle server', err);
+		console.error('An error occured while starting the fronnt server', err);
 	} else {
-		console.log(`🚀 middle server is running at http://localhost:${port}`);
+		console.log(`🚀 fronnt server is running at http://localhost:${port}`);
 	}
 });

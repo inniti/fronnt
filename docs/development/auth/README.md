@@ -2,15 +2,15 @@
 
 The API uses a token based approach for authentication and authorization. Still, from our experience, these concerns are
 implemented differently in different projects. Some may use Cookie-based session management, others a Single-Sign-On
-solutions and again others something completely different. That's why middle only provides one `login` mutation in order
+solutions and again others something completely different. That's why fronnt only provides one `login` mutation in order
 to authenticate a user, which returns the active customer along with an optional access token and an optional refresh
 token. The mutation takes either a username/password combination or a refresh token as argument.
 
 The tokens should be stored in the session handling part of your storefront application and can be sent via a HTTP
-Header back to middle.
+Header back to fronnt.
 From there it can be extracted and passed to resolvers by extending the context.
 
-E.g. when using `@inniti/middle-server`:
+E.g. when using `@fronnt/server`:
 
 ```js
 const MyConnector = {

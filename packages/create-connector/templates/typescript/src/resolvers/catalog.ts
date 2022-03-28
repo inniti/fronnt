@@ -1,4 +1,4 @@
-import { Resolvers } from '@inniti/middle-core';
+import { Resolvers } from '@fronnt/core';
 import { Context } from '../../types';
 import { extractPaging } from '../utils';
 

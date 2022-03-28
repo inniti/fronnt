@@ -1,7 +1,4 @@
-import type {
-  Context as CoreContext,
-  MiddleConnector,
-} from '@inniti/middle-core';
+import type { Context as CoreContext, MiddleConnector } from '@fronnt/core';
 import type { Plugin } from '@envelop/core';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 

@@ -1,15 +1,15 @@
 {
-  "name": "@inniti/middle-demo",
+  "name": "@inniti/fronnt-demo",
   "version": "1.0.0",
-  "description": "@inniti/middle demo project",
+  "description": "@inniti/fronnt demo project",
   "scripts": {
     "start": "nodemon --watch .env --watch connectors index.ts"
   },
   "author": "inniti",
   "private": true,
   "dependencies": {
-    "@inniti/middle-server": "workspace:*",
-    "@inniti/middle-core": "workspace:*",
+    "@fronnt/server": "workspace:*",
+    "@fronnt/core": "workspace:*",
     "@envelop/core": "^1.7.1",
     "graphql": "^16.3.0"
   },

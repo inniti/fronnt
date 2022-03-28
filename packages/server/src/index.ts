@@ -1,5 +1,5 @@
-import type { MiddleConnector } from '@inniti/middle-core';
-import { createMiddleEnvelop } from '@inniti/middle-core';
+import type { MiddleConnector } from '@fronnt/core';
+import { createMiddleEnvelop } from '@fronnt/core';
 import type { Plugin } from '@envelop/core';
 import { envelop, useEnvelop } from '@envelop/core';
 import fastify, { FastifyReply } from 'fastify';

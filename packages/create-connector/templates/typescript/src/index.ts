@@ -1,4 +1,4 @@
-import type { MiddleConnector } from '@inniti/middle-core';
+import type { MiddleConnector } from '@fronnt/core';
 import resolvers from './resolvers';
 import Api from './api';
 import schemaExtensions from './schema/extensions';

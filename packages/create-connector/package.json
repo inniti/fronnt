@@ -1,16 +1,17 @@
 {
-  "name": "@inniti/create-middle-connector",
-  "description": "Generator for @inniti/middle connectors",
+  "name": "@fronnt/create-connector",
+  "description": "Generator for @inniti/fronnt connectors",
   "author": "inniti",
   "version": "2.1.3",
-  "homepage": "https://middle.inniti.de",
+  "homepage": "https://fronnt.io",
   "keywords": [
     "middleware",
     "graphql",
     "eCommerce",
     "api",
     "generator",
-    "middle"
+    "middle",
+    "fronnt"
   ],
   "bin": "./index.js",
   "license": "MIT",

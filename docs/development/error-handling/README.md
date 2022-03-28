@@ -5,7 +5,7 @@ Errors can be thrown by instantiating and throwing a `MiddleError` and passing a
 Additional conext information can be optionally passed as third argument.
 
 ```js
-const { MiddleError } = require('@inniti/middle-core');
+const { MiddleError } = require('@fronnt/core');
 
 throw new MiddleError('Something went wrong', 'SOME_ERROR_CODE', { optional: 'extensions' });
 ```

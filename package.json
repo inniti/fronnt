@@ -1,10 +1,10 @@
 {
-  "name": "@inniti/middle",
+  "name": "@inniti/fronnt",
   "version": "1.0.0",
   "description": "Scalable eCommerce GraphQL API middleware architecture",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/inniti/middle.git"
+    "url": "git+https://github.com/inniti/fronnt.git"
   },
   "keywords": [
     "middleware",
@@ -16,9 +16,9 @@
   "author": "inniti",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/inniti/middle/issues"
+    "url": "https://github.com/inniti/fronnt/issues"
   },
-  "homepage": "https://middle.inniti.de",
+  "homepage": "https://fronnt.io",
   "devDependencies": {
     "@types/node": "^16.11.13",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
