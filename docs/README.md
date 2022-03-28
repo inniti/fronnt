@@ -1,11 +1,11 @@
 # Documentation
 
-* [Development](development/README.md)
-  * [Building a connector](development/README.md#building-a-connector)
-  * [Authentication and Authorization](development/auth/README.md)
-  * [Error Handling](development/error-handling/README.md)
-  * [Schema Extensions](development/schema-extensions/README.md)
-* [Deployment](deployment/README.md)
+- [Development](development/README.md)
+  - [Building a connector](development/README.md#building-a-connector)
+  - [Authentication and Authorization](development/auth/README.md)
+  - [Error Handling](development/error-handling/README.md)
+  - [Schema Extensions](development/schema-extensions/README.md)
+- [Deployment](deployment/README.md)
 
 ## core
 
@@ -17,16 +17,16 @@ The @fronnt/core package provides two things:
 
 ```js
 import { envelop, useEnvelop } from '@envelop/core';
-import { createMiddleEnvelop } from '@fronnt/core';
+import { createFronntEnvelop } from '@fronnt/core';
 
-const connectors = [ /*...*/ ];
+const connectors = [
+  /*...*/
+];
 
-const middleEnvelop = createMiddleEnvelop(connectors);
+const fronntEnvelop = createFronntEnvelop(connectors);
 
-const myEnvelop = envelop({ 
-  plugins: [
-    useEnvelop(middleEnvelop)
-  ],
+const myEnvelop = envelop({
+  plugins: [useEnvelop(fronntEnvelop)],
 });
 ```
 
@@ -38,10 +38,14 @@ implementation based on [fastify](https://www.fastify.io/) and [graphql-helix](h
 ```js
 import { createServer } from '@fronnt/server';
 
-const otherEnvelopPlugins = [ /*...*/ ];
-const connectors = [ /*...*/ ];
+const otherEnvelopPlugins = [
+  /*...*/
+];
+const connectors = [
+  /*...*/
+];
 
-createServer(connectors,  otherEnvelopPlugins).listen(4000, err => {
+createServer(connectors, otherEnvelopPlugins).listen(4000, (err) => {
   if (err) {
     console.error('An error occured while starting the fronnt server', err);
   } else {

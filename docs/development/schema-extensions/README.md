@@ -7,10 +7,10 @@
 import { gql } from 'graphql-tag';
 
 export default gql`
-    extend type ProductInfo {
-        ean: String
-    }
-`
+  extend type ProductInfo {
+    ean: String
+  }
+`;
 ```
 
 ```ts
@@ -19,11 +19,9 @@ import schemaExtensions from './schema-extensions';
 
 const MyConnector = {
   getTypeDefs() {
-    return [
-      schemaExtensions
-    ]
-  }
-}
+    return [schemaExtensions];
+  },
+};
 ```
 
 ## Add custom query or mutation
@@ -33,15 +31,14 @@ const MyConnector = {
 import { gql } from 'graphql-tag';
 
 export default gql`
-  
-    input SayHelloInput {
-      name: String!
-    }
+  input SayHelloInput {
+    name: String!
+  }
 
-    extend type Query {
-        sayHello(to: SayHelloInput): String!
-    }
-`
+  extend type Query {
+    sayHello(to: SayHelloInput): String!
+  }
+`;
 ```
 
 ```ts
@@ -50,9 +47,7 @@ import schemaExtensions from './schema-extensions';
 
 const MyConnector = {
   getTypeDefs() {
-    return [
-      schemaExtensions
-    ]
-  }
-}
+    return [schemaExtensions];
+  },
+};
 ```

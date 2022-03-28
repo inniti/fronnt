@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 const { build } = require('esbuild');
-const graphqlLoaderPlugin = require('@luckycatfactory/esbuild-graphql-loader')
-  .default;
+const graphqlLoaderPlugin =
+  require('@luckycatfactory/esbuild-graphql-loader').default;
 
-const pkg = require('./package.json')
+const pkg = require('./package.json');
 
 const buildConfig = {
   entryPoints: ['./src/index.ts'],
@@ -23,10 +23,7 @@ const buildConfigEsm = {
   format: 'esm',
 };
 
-Promise.all([
-  build(buildConfig),
-  build(buildConfigEsm),
-]).catch((e) => {
+Promise.all([build(buildConfig), build(buildConfigEsm)]).catch((e) => {
   console.error(e);
   process.exit(1);
 });

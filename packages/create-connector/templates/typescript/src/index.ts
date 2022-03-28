@@ -1,10 +1,10 @@
-import type { MiddleConnector } from '@fronnt/core';
+import type { Connector } from '@fronnt/core';
 import resolvers from './resolvers';
 import Api from './api';
 import schemaExtensions from './schema/extensions';
 import type { Context } from '../types';
 
-export default class Connector implements MiddleConnector<Context> {
+export default class Connector1 implements Connector<Context> {
   public readonly api: Api;
 
   constructor(apiBaseUrl: string) {

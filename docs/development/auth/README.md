@@ -17,8 +17,7 @@ const MyConnector = {
   getTypeDefs() {
     return [
       // ...
-    ]
-
+    ];
   },
   getResolvers() {
     return [
@@ -28,7 +27,7 @@ const MyConnector = {
   extendContext(context) {
     return {
       // This will most probabily be the access token returned from the login mutation
-      token: context.req.headers['authorization']
+      token: context.req.headers['authorization'],
     };
   },
 };

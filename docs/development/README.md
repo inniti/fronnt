@@ -15,6 +15,6 @@ fronnt projects.
 
 ## Read next
 
-* [Authentication and Authorization](auth/README.md)
-* [Error Handling](error-handling/README.md)
-* [Schema Extensions](schema-extensions/README.md)
+- [Authentication and Authorization](auth/README.md)
+- [Error Handling](error-handling/README.md)
+- [Schema Extensions](schema-extensions/README.md)

@@ -1,5 +1,5 @@
-import type { MiddleConnector } from '@fronnt/core';
-import { createMiddleEnvelop } from '@fronnt/core';
+import type { Connector } from '@fronnt/core';
+import { createFronntEnvelop } from '@fronnt/core';
 import type { Plugin } from '@envelop/core';
 import { envelop, useEnvelop } from '@envelop/core';
 import fastify, { FastifyReply } from 'fastify';
@@ -28,12 +28,12 @@ function applyHeaders(
 }
 
 export const createServer = function (
-  connectors: MiddleConnector<Context>[],
+  connectors: Connector<Context>[],
   envelopPlugins: Plugin[] = [],
   cors?: CorsConfig
 ) {
   const getEnveloped = envelop({
-    plugins: [useEnvelop(createMiddleEnvelop(connectors)), ...envelopPlugins],
+    plugins: [useEnvelop(createFronntEnvelop(connectors)), ...envelopPlugins],
   });
 
   const corsConfig = getConfig(cors);

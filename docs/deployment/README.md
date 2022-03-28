@@ -1,6 +1,7 @@
 # Deployment
 
 ## Deploy with PM2
+
 As fronnt is nothing but a Node.js app, you can control it with PM2
 
 ```
@@ -12,6 +13,7 @@ See [PM2 docs](https://pm2.keymetrics.io/) for more information.
 ## Deploy with Docker
 
 ### Create a Dockerfile
+
 Create a Dockerfile with the following content
 
 ```
@@ -42,11 +44,13 @@ CMD [ "node", "./index.js" ]
 ```
 
 ### Build image
+
 ```
 docker build . yourname/fronnt
 ```
 
 ### Run container
+
 ```
 docker run --name=my-fronnt-app -p 4000:4000 yourname/fronnt
 ```

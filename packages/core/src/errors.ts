@@ -5,9 +5,9 @@ import type {
   Source,
   SourceLocation,
 } from 'graphql';
-import { MiddleError as _MiddleError } from '../types';
+import { FronntError as _Error } from '../types';
 
-export class MiddleError extends Error implements _MiddleError {
+export class FronntError extends Error implements _Error {
   readonly extensions: GraphQLErrorExtensions;
   readonly locations: ReadonlyArray<SourceLocation> | undefined;
   readonly nodes: ReadonlyArray<ASTNode> | undefined;
@@ -25,7 +25,7 @@ export class MiddleError extends Error implements _MiddleError {
 
     // if no name provided, use the default. defineProperty ensures that it stays non-enumerable
     if (!this.name) {
-      Object.defineProperty(this, 'name', { value: 'MiddleError' });
+      Object.defineProperty(this, 'name', { value: 'FronntError' });
     }
 
     const _extensions: GraphQLErrorExtensions = {
@@ -53,7 +53,7 @@ export class MiddleError extends Error implements _MiddleError {
   }
 }
 
-export class NotImplementedError extends MiddleError {
+export class NotImplementedError extends FronntError {
   constructor(extensions?: Record<string, any>) {
     super('The resolver is not implemented', 'NOT_IMPLEMENTED', extensions);
   }

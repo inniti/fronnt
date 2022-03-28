@@ -4,7 +4,7 @@ export type { Resolvers } from './generated/graphql';
 
 export * from './generated/graphql';
 
-export declare class MiddleError extends GraphQLError {
+export declare class FronntError extends GraphQLError {
   constructor(
     message: string,
     code?: string,
@@ -12,7 +12,7 @@ export declare class MiddleError extends GraphQLError {
   ) {}
 }
 
-export declare interface NotImplementedError extends MiddleError {
+export declare interface NotImplementedError extends FronntError {
   code: 'NOT_IMPLEMENTED';
 }
 
@@ -20,7 +20,7 @@ export declare interface Context {
   dataSources: Record<string, unknown>;
 }
 
-export declare interface MiddleConnector<ContextType extends Context> {
+export declare interface Connector<ContextType extends Context> {
   getTypeDefs(): Array<DocumentNode | string>;
 
   getResolvers(): Array<Resolvers<ContextType>>;
@@ -30,6 +30,6 @@ export declare interface MiddleConnector<ContextType extends Context> {
   getDataSources?(): Record<string, unknown>;
 }
 
-export declare function createMiddleEnvelop(
-  connectors: MiddleConnector[]
+export declare function createFronntEnvelop(
+  connectors: Connector[]
 ): GetEnvelopedFn<any>;

@@ -1,4 +1,4 @@
-import type { Context as CoreContext, MiddleConnector } from '@fronnt/core';
+import type { Context as CoreContext, Connector } from '@fronnt/core';
 import type { Plugin } from '@envelop/core';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 
@@ -18,7 +18,7 @@ export declare interface CorsConfig {
 }
 
 export declare function createServer(
-  connectors: MiddleConnector<Context>[],
+  connectors: Connector<Context>[],
   envelopPlugins: Plugin[] = [],
   cors?: CorsConfig
 ): {

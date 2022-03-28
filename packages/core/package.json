@@ -1,46 +1,46 @@
 {
-	"name": "@fronnt/core",
-	"version": "0.14.0",
-	"description": "Scalable eCommerce GraphQL API middleware architecture",
-	"main": "dist/index.js",
-	"module": "dist/index.mjs",
-	"exports": {
-		".": {
-			"require": "./dist/index.js",
-			"import": "./dist/index.mjs"
-		},
-		"./dist/graphql.schema.json": "./dist/graphql.schema.json"
-	},
-	"types": "types",
-	"author": "inniti",
-	"keywords": [
-		"middleware",
-		"graphql",
-		"eCommerce",
-		"api"
-	],
-	"license": "MIT",
-	"scripts": {
-		"build": "pnpm run codegen && node ./build.js",
-		"codegen": "rimraf types/generated && graphql-codegen --config codegen.yml && prettier --write types/generated"
-	},
-	"dependencies": {
-		"@envelop/core": "^1.7.1",
-		"graphql": "^16.3.0",
-		"@graphql-tools/schema": "^8.3.1"
-	},
-	"devDependencies": {
-		"@graphql-codegen/cli": "^2.3.0",
-		"@graphql-codegen/introspection": "^2.1.0",
-		"@graphql-codegen/typescript": "^2.4.1",
-		"@graphql-codegen/typescript-resolvers": "^2.4.2",
-		"@luckycatfactory/esbuild-graphql-loader": "^3.7.0",
-		"@types/node": "^16.11.13",
-		"@typescript-eslint/eslint-plugin": "^5.7.0",
-		"@typescript-eslint/parser": "^5.7.0",
-		"esbuild": "^0.14.5",
-		"graphql-tag": "^2.12.6",
-		"rimraf": "^3.0.2",
-		"typescript": "^4.5.4"
-	}
+  "name": "@fronnt/core",
+  "version": "0.14.0",
+  "description": "Scalable eCommerce GraphQL API middleware architecture",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    },
+    "./dist/graphql.schema.json": "./dist/graphql.schema.json"
+  },
+  "types": "types",
+  "author": "inniti",
+  "keywords": [
+    "middleware",
+    "graphql",
+    "eCommerce",
+    "api"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "pnpm run codegen && node ./build.js",
+    "codegen": "rimraf types/generated && graphql-codegen --config codegen.yml && prettier --write types/generated"
+  },
+  "dependencies": {
+    "@envelop/core": "^1.7.1",
+    "graphql": "^16.3.0",
+    "@graphql-tools/schema": "^8.3.1"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^2.3.0",
+    "@graphql-codegen/introspection": "^2.1.0",
+    "@graphql-codegen/typescript": "^2.4.1",
+    "@graphql-codegen/typescript-resolvers": "^2.4.2",
+    "@luckycatfactory/esbuild-graphql-loader": "^3.7.0",
+    "@types/node": "^16.11.13",
+    "@typescript-eslint/eslint-plugin": "^5.7.0",
+    "@typescript-eslint/parser": "^5.7.0",
+    "esbuild": "^0.14.5",
+    "graphql-tag": "^2.12.6",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.5.4"
+  }
 }

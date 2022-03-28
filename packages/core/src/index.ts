@@ -1,7 +1,7 @@
 import type { Plugin } from '@envelop/core';
 import { envelop, useSchema } from '@envelop/core';
 import { makeExecutableSchema } from '@graphql-tools/schema';
-import { createMiddleEnvelop as createEnvelopFn, Resolvers } from '../types';
+import { createFronntEnvelop as createEnvelopFn, Resolvers } from '../types';
 import baseTypeDefs from './typeDefs';
 import baseResolvers from './resolvers';
 import { DocumentNode } from 'graphql';
@@ -30,7 +30,7 @@ const useContextExtensions = function (functions: Function[]): Plugin {
   };
 };
 
-export const createMiddleEnvelop: typeof createEnvelopFn = function (
+export const createFronntEnvelop: typeof createEnvelopFn = function (
   connectors
 ) {
   const typeDefs = [baseTypeDefs];
