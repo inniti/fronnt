@@ -21,8 +21,7 @@
 	],
 	"scripts": {
 		"build": "tsc --noemit && node build.js",
-    "dev:mjs": "concurrently \"node build.js --watch\" \"nodemon ./dev/server.mjs --watch ./dist/index.mjs\"",
-    "dev:cjs": "concurrently \"node build.js --watch\" \"nodemon ./dev/server.cjs --watch ./dist/index.cjs\""
+    "dev": "concurrently \"node build.js --watch\" \"nodemon ./dev/server.mjs --watch ./dist/index.mjs\""
 	},
 	"dependencies": {
 		"@fronnt/core": "latest",

@@ -3,7 +3,7 @@ import type { Context } from '../../types';
 
 const resolvers: Resolvers<Context> = {
   Query: {
-    shop: (_, args, ctx) => {
+    shop(_, args, ctx) {
       return {
         pricePrecision: 1000,
         currencies: [
