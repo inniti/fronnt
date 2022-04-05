@@ -51,3 +51,7 @@ const MyConnector = {
   },
 };
 ```
+
+> Note that when extending the resolver tree, the generated TypeScript definitions included in the core package
+> won't automatically be extended.
+> In this case it's easiest to generate the final TypeScript definitions by yourself using [@graphlql-codegen](https://www.graphql-code-generator.com/)
