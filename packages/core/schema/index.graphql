@@ -178,6 +178,11 @@ enum SearchResultItemType {
   PRODUCT
 }
 
+enum ProductOptionType {
+  TEXT
+  COLOR
+}
+
 interface PagedResult {
   paging: Paging!
 }
@@ -407,6 +412,25 @@ type ProductInfo implements SellableInfo {
 }
 
 """
+Valud of a product option
+"""
+type ProductOptionValue {
+  value: String!
+  label: String
+}
+
+"""
+Product options make up variants. Each article must have all product options of the product defined as attributes.
+The value of an attribute matches the value of a ProductOptionValue
+"""
+type ProductOption {
+  id: ID!
+  label: String!
+  type: ProductOptionType!
+  values: [ProductOptionValue!]!
+}
+
+"""
 The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable.
 """
 type Product {
@@ -417,12 +441,16 @@ type Product {
   media(purpose: MediaPurpose, mediaType: MediaType): [Media!]!
   info: ProductInfo!
   brandId: ID!
+  productOptions: [ProductOption!]!
   brand: Brand
   labels: [String!]!
   """
   These are the attributes which make up variants. Each article must have these attributes defined.
   """
   variantAttributes: [AttributeDefinition!]!
+    @deprecated(
+      reason: "variantAttributes is deprecated. Use productOptions instead."
+    )
   attributes: [Attribute]!
   createdAt: String
   updatedAt: String

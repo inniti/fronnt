@@ -854,12 +854,16 @@ export interface Product {
   info: ProductInfo;
   labels: Array<Scalars['String']>;
   media: Array<Media>;
+  productOptions: Array<ProductOption>;
   relatedProducts?: Maybe<RelatedProductsResult>;
   slug: Scalars['String'];
   status: ProductStatus;
   title: Scalars['String'];
   updatedAt?: Maybe<Scalars['String']>;
-  /** These are the attributes which make up variants. Each article must have these attributes defined. */
+  /**
+   * These are the attributes which make up variants. Each article must have these attributes defined.
+   * @deprecated variantAttributes is deprecated. Use productOptions instead.
+   */
   variantAttributes: Array<AttributeDefinition>;
   vendor?: Maybe<Vendor>;
   vendorId?: Maybe<Scalars['ID']>;
@@ -881,6 +885,27 @@ export interface ProductRelatedProductsArgs {
 export interface ProductInfo extends SellableInfo {
   __typename?: 'ProductInfo';
   description: Scalars['String'];
+}
+
+/**
+ * Product options make up variants. Each article must have all product options of the product defined as attributes.
+ * The value of an attribute matches the value of a ProductOptionValue
+ */
+export interface ProductOption {
+  __typename?: 'ProductOption';
+  id: Scalars['ID'];
+  label: Scalars['String'];
+  type: ProductOptionType;
+  values: Array<ProductOptionValue>;
+}
+
+export type ProductOptionType = 'COLOR' | 'TEXT';
+
+/** Valud of a product option */
+export interface ProductOptionValue {
+  __typename?: 'ProductOptionValue';
+  label?: Maybe<Scalars['String']>;
+  value: Scalars['String'];
 }
 
 /** Status of a product */
@@ -1609,6 +1634,9 @@ export type ResolversTypes = {
   Price: ResolverTypeWrapper<Price>;
   Product: ResolverTypeWrapper<Product>;
   ProductInfo: ResolverTypeWrapper<ProductInfo>;
+  ProductOption: ResolverTypeWrapper<ProductOption>;
+  ProductOptionType: ProductOptionType;
+  ProductOptionValue: ResolverTypeWrapper<ProductOptionValue>;
   ProductStatus: ProductStatus;
   ProductsResult: ResolverTypeWrapper<ProductsResult>;
   Query: ResolverTypeWrapper<{}>;
@@ -1774,6 +1802,8 @@ export type ResolversParentTypes = {
   Price: Price;
   Product: Product;
   ProductInfo: ProductInfo;
+  ProductOption: ProductOption;
+  ProductOptionValue: ProductOptionValue;
   ProductsResult: ProductsResult;
   Query: {};
   ReferencePrice: ReferencePrice;
@@ -2922,6 +2952,11 @@ export type ProductResolvers<
     ContextType,
     RequireFields<ProductMediaArgs, never>
   >;
+  productOptions?: Resolver<
+    Array<ResolversTypes['ProductOption']>,
+    ParentType,
+    ContextType
+  >;
   relatedProducts?: Resolver<
     Maybe<ResolversTypes['RelatedProductsResult']>,
     ParentType,
@@ -2951,6 +2986,30 @@ export type ProductInfoResolvers<
   ParentType extends ResolversParentTypes['ProductInfo'] = ResolversParentTypes['ProductInfo']
 > = {
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProductOptionResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProductOption'] = ResolversParentTypes['ProductOption']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['ProductOptionType'], ParentType, ContextType>;
+  values?: Resolver<
+    Array<ResolversTypes['ProductOptionValue']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProductOptionValueResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProductOptionValue'] = ResolversParentTypes['ProductOptionValue']
+> = {
+  label?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3686,6 +3745,8 @@ export type Resolvers<ContextType = any> = {
   Price?: PriceResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
   ProductInfo?: ProductInfoResolvers<ContextType>;
+  ProductOption?: ProductOptionResolvers<ContextType>;
+  ProductOptionValue?: ProductOptionValueResolvers<ContextType>;
   ProductsResult?: ProductsResultResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   ReferencePrice?: ReferencePriceResolvers<ContextType>;

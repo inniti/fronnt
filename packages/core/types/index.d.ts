@@ -1,6 +1,5 @@
 import type { DocumentNode, GraphQLError } from 'graphql';
 import type { GetEnvelopedFn } from '@envelop/core';
-export type { Resolvers } from './generated/graphql';
 
 export * from './generated/graphql';
 
@@ -12,7 +11,7 @@ export declare class FronntError extends GraphQLError {
   ) {}
 }
 
-export declare interface NotImplementedError extends FronntError {
+export declare class NotImplementedError extends FronntError {
   code: 'NOT_IMPLEMENTED';
 }
 
