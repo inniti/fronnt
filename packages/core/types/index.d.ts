@@ -13,6 +13,8 @@ export declare class FronntError extends GraphQLError {
 
 export declare class NotImplementedError extends FronntError {
   code: 'NOT_IMPLEMENTED';
+
+  constructor(extensions?: Record<string, any>) {}
 }
 
 export declare interface Context {
