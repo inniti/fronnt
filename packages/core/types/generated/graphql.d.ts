@@ -614,7 +614,6 @@ export interface Mutation {
   removeFromCart?: Maybe<DeleteResult>;
   removeFromWishlist?: Maybe<DeleteResult>;
   startCheckout?: Maybe<CheckoutState>;
-  startSession?: Maybe<Session>;
   updateCartItem?: Maybe<CartItem>;
   updateCheckout?: Maybe<CheckoutState>;
   updateCustomer?: Maybe<Customer>;
@@ -948,6 +947,7 @@ export interface Query {
   reservationByField?: Maybe<Reservation>;
   reservations?: Maybe<ReservationsResult>;
   search?: Maybe<SearchResult>;
+  session?: Maybe<Session>;
   shop?: Maybe<Shop>;
   suggestions: Array<Suggestion>;
   vendor?: Maybe<Vendor>;
@@ -2640,11 +2640,6 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationStartCheckoutArgs, 'cartId' | 'data'>
   >;
-  startSession?: Resolver<
-    Maybe<ResolversTypes['Session']>,
-    ParentType,
-    ContextType
-  >;
   updateCartItem?: Resolver<
     Maybe<ResolversTypes['CartItem']>,
     ParentType,
@@ -3180,6 +3175,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QuerySearchArgs, never>
   >;
+  session?: Resolver<Maybe<ResolversTypes['Session']>, ParentType, ContextType>;
   shop?: Resolver<Maybe<ResolversTypes['Shop']>, ParentType, ContextType>;
   suggestions?: Resolver<
     Array<ResolversTypes['Suggestion']>,

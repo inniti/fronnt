@@ -1356,6 +1356,8 @@ type Query {
   vendors: VendorsResult
   vendor(id: ID!): Vendor
   vendorByField(field: String!, value: String!): Vendor
+
+  session: Session
 }
 
 type Mutation {
@@ -1393,6 +1395,4 @@ type Mutation {
   cancelReservation(reservationId: ID!): DeleteResult
 
   login(input: LoginInput!): LoginResult
-
-  startSession: Session
 }
