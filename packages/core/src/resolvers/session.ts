@@ -1,9 +1,15 @@
-import { Resolvers } from '../../types';
-import notImplemented from './NotImplemented';
+import type { Context, Resolvers } from '../../types';
 
-const baseSessionResolvers: Resolvers = {
+const baseSessionResolvers: Resolvers<Context> = {
   Query: {
-    session: notImplemented,
+    session(_, args, ctx) {
+      if (ctx.sessionId) {
+        return {
+          id: ctx.sessionId,
+        };
+      }
+      return null;
+    },
   },
 };
 

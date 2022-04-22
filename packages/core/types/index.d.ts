@@ -19,6 +19,7 @@ export declare class NotImplementedError extends FronntError {
 
 export declare interface Context {
   dataSources: Record<string, unknown>;
+  sessionId: string | null;
 }
 
 export declare interface Connector<ContextType extends Context> {

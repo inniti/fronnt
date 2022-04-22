@@ -30,6 +30,18 @@ const useContextExtensions = function (functions: Function[]): Plugin {
   };
 };
 
+const useSession = function (): Plugin<{
+  request?: { headers?: Record<string, string> };
+  sessionId?: string | null;
+}> {
+  return {
+    onContextBuilding({ context, extendContext }) {
+      const sessionId = context.request?.headers?.['x-fronnt-session'] || null;
+      extendContext({ sessionId });
+    },
+  };
+};
+
 export const createFronntEnvelop: typeof createEnvelopFn = function (
   connectors
 ) {
@@ -73,6 +85,7 @@ export const createFronntEnvelop: typeof createEnvelopFn = function (
       useSchema(executableSchema),
       useDataSources(dataSources),
       useContextExtensions(contextFunctions),
+      useSession(),
     ],
   });
 };
