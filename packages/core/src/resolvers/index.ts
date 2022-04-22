@@ -10,6 +10,7 @@ import shop from './shop';
 import reservations from './reservations';
 import warehouses from './warehouses';
 import features from './features';
+import session from './session';
 
 const ScalarMapType = new GraphQLScalarType({
   name: 'ScalarMap',
@@ -56,6 +57,7 @@ export default [
     },
     ScalarMap: ScalarMapType,
   },
+  session,
   features,
   pages,
   shop,
