@@ -31,7 +31,7 @@ export interface Scalars {
 
 /** One item to be added to the cart */
 export interface AddToCartItemInput {
-  customData?: InputMaybe<CartItemCustomDataInput>;
+  data?: InputMaybe<CartItemDataInput>;
   parentCartItemId?: InputMaybe<Scalars['ID']>;
   quantity: Scalars['Int'];
   salesUnitId?: InputMaybe<Scalars['ID']>;
@@ -106,7 +106,6 @@ export interface Article {
   isMaster: Scalars['Boolean'];
   labels: Array<Scalars['String']>;
   media: Array<Media>;
-  options: Array<ArticleOption>;
   prices: Array<Price>;
   product?: Maybe<Product>;
   productId: Scalars['ID'];
@@ -138,40 +137,6 @@ export interface ArticleInfo extends SellableInfo {
   __typename?: 'ArticleInfo';
   description?: Maybe<Scalars['String']>;
 }
-
-/** Options to be set before adding an article to the cart. This may include gift wrapping or customizations like engraving */
-export interface ArticleOption {
-  __typename?: 'ArticleOption';
-  constraints: Array<ArticleOptionConstraint>;
-  id: Scalars['ID'];
-  label: Scalars['String'];
-  mandatory: Scalars['Boolean'];
-  optionType: ArticleOptionType;
-  price?: Maybe<Price>;
-}
-
-/** Article options may have constraints, like "at most 10 characters are allowed for this text field" */
-export interface ArticleOptionConstraint {
-  __typename?: 'ArticleOptionConstraint';
-  /** The value to which the referenced field shall be compared */
-  comparisonValue: Scalars['String'];
-  operator: ArticleOptionConstraintOperator;
-  /** A reference to the field which shall be compared */
-  reference: Scalars['String'];
-}
-
-export type ArticleOptionConstraintOperator =
-  | 'EQUALS'
-  | 'GREATER_THAN'
-  | 'INCLUDES'
-  | 'LESS_THAN';
-
-export type ArticleOptionType =
-  | 'CHECKBOX'
-  | 'DATE'
-  | 'NUMBER'
-  | 'SELECT'
-  | 'TEXT';
 
 /** Status of an article */
 export type ArticleStatus = 'DISCONTINUED' | 'DRAFT' | 'PUBLISHED';
@@ -283,8 +248,9 @@ export interface CartItem {
   totals: Totals;
 }
 
-/** Custom cart item data */
-export interface CartItemCustomDataInput {
+/** Cart item data */
+export interface CartItemDataInput {
+  customization?: InputMaybe<Scalars['ScalarMap']>;
   positionText?: InputMaybe<Scalars['String']>;
 }
 
@@ -1350,7 +1316,7 @@ export interface Totals {
 
 /** Update cart item data */
 export interface UpdateCartItemInput {
-  customData?: InputMaybe<CartItemCustomDataInput>;
+  data?: InputMaybe<CartItemDataInput>;
   quantity?: InputMaybe<Scalars['Int']>;
   salesUnitId?: InputMaybe<Scalars['ID']>;
 }
@@ -1538,10 +1504,6 @@ export type ResolversTypes = {
   AroundLocationInput: AroundLocationInput;
   Article: ResolverTypeWrapper<Article>;
   ArticleInfo: ResolverTypeWrapper<ArticleInfo>;
-  ArticleOption: ResolverTypeWrapper<ArticleOption>;
-  ArticleOptionConstraint: ResolverTypeWrapper<ArticleOptionConstraint>;
-  ArticleOptionConstraintOperator: ArticleOptionConstraintOperator;
-  ArticleOptionType: ArticleOptionType;
   ArticleStatus: ArticleStatus;
   Attribute: ResolverTypeWrapper<Attribute>;
   AttributeDefinition: ResolverTypeWrapper<AttributeDefinition>;
@@ -1554,7 +1516,7 @@ export type ResolversTypes = {
   BrandsResult: ResolverTypeWrapper<BrandsResult>;
   Cart: ResolverTypeWrapper<Cart>;
   CartItem: ResolverTypeWrapper<CartItem>;
-  CartItemCustomDataInput: CartItemCustomDataInput;
+  CartItemDataInput: CartItemDataInput;
   CartsResult: ResolverTypeWrapper<CartsResult>;
   CategoriesResult: ResolverTypeWrapper<CategoriesResult>;
   Category: ResolverTypeWrapper<Category>;
@@ -1720,8 +1682,6 @@ export type ResolversParentTypes = {
   AroundLocationInput: AroundLocationInput;
   Article: Article;
   ArticleInfo: ArticleInfo;
-  ArticleOption: ArticleOption;
-  ArticleOptionConstraint: ArticleOptionConstraint;
   Attribute: Attribute;
   AttributeDefinition: AttributeDefinition;
   AuthToken: AuthToken;
@@ -1732,7 +1692,7 @@ export type ResolversParentTypes = {
   BrandsResult: BrandsResult;
   Cart: Cart;
   CartItem: CartItem;
-  CartItemCustomDataInput: CartItemCustomDataInput;
+  CartItemDataInput: CartItemDataInput;
   CartsResult: CartsResult;
   CategoriesResult: CategoriesResult;
   Category: Category;
@@ -1937,11 +1897,6 @@ export type ArticleResolvers<
     ContextType,
     RequireFields<ArticleMediaArgs, never>
   >;
-  options?: Resolver<
-    Array<ResolversTypes['ArticleOption']>,
-    ParentType,
-    ContextType
-  >;
   prices?: Resolver<
     Array<ResolversTypes['Price']>,
     ParentType,
@@ -1971,41 +1926,6 @@ export type ArticleInfoResolvers<
     ParentType,
     ContextType
   >;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ArticleOptionResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['ArticleOption'] = ResolversParentTypes['ArticleOption']
-> = {
-  constraints?: Resolver<
-    Array<ResolversTypes['ArticleOptionConstraint']>,
-    ParentType,
-    ContextType
-  >;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  mandatory?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  optionType?: Resolver<
-    ResolversTypes['ArticleOptionType'],
-    ParentType,
-    ContextType
-  >;
-  price?: Resolver<Maybe<ResolversTypes['Price']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ArticleOptionConstraintResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['ArticleOptionConstraint'] = ResolversParentTypes['ArticleOptionConstraint']
-> = {
-  comparisonValue?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  operator?: Resolver<
-    ResolversTypes['ArticleOptionConstraintOperator'],
-    ParentType,
-    ContextType
-  >;
-  reference?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3689,8 +3609,6 @@ export type Resolvers<ContextType = any> = {
   AddressFields?: AddressFieldsResolvers<ContextType>;
   Article?: ArticleResolvers<ContextType>;
   ArticleInfo?: ArticleInfoResolvers<ContextType>;
-  ArticleOption?: ArticleOptionResolvers<ContextType>;
-  ArticleOptionConstraint?: ArticleOptionConstraintResolvers<ContextType>;
   Attribute?: AttributeResolvers<ContextType>;
   AttributeDefinition?: AttributeDefinitionResolvers<ContextType>;
   AuthToken?: AuthTokenResolvers<ContextType>;

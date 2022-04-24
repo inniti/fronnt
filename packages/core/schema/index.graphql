@@ -90,21 +90,6 @@ enum RelatedProductType {
   SUCCESSOR
 }
 
-enum ArticleOptionType {
-  NUMBER
-  TEXT
-  CHECKBOX
-  SELECT
-  DATE
-}
-
-enum ArticleOptionConstraintOperator {
-  EQUALS
-  GREATER_THAN
-  LESS_THAN
-  INCLUDES
-}
-
 enum ShipmentStatus {
   PENDING
   SHIPPED
@@ -508,33 +493,6 @@ type Attribute {
 }
 
 """
-Article options may have constraints, like "at most 10 characters are allowed for this text field"
-"""
-type ArticleOptionConstraint {
-  operator: ArticleOptionConstraintOperator!
-  """
-  A reference to the field which shall be compared
-  """
-  reference: String!
-  """
-  The value to which the referenced field shall be compared
-  """
-  comparisonValue: String!
-}
-
-"""
-Options to be set before adding an article to the cart. This may include gift wrapping or customizations like engraving
-"""
-type ArticleOption {
-  id: ID!
-  label: String!
-  optionType: ArticleOptionType!
-  constraints: [ArticleOptionConstraint!]!
-  mandatory: Boolean!
-  price: Price
-}
-
-"""
 Article information
 """
 type ArticleInfo implements SellableInfo {
@@ -564,7 +522,6 @@ type Article {
   product: Product
   salesUnits: [SalesUnit!]!
   baseUnit: BaseUnit!
-  options: [ArticleOption!]!
 }
 
 """
@@ -1153,10 +1110,11 @@ input PagingInput {
 }
 
 """
-Custom cart item data
+Cart item data
 """
-input CartItemCustomDataInput {
+input CartItemDataInput {
   positionText: String
+  customization: ScalarMap
 }
 
 """
@@ -1165,7 +1123,7 @@ Update cart item data
 input UpdateCartItemInput {
   quantity: Int
   salesUnitId: ID
-  customData: CartItemCustomDataInput
+  data: CartItemDataInput
 }
 
 """
@@ -1176,7 +1134,7 @@ input AddToCartItemInput {
   quantity: Int!
   salesUnitId: ID
   parentCartItemId: ID
-  customData: CartItemCustomDataInput
+  data: CartItemDataInput
 }
 
 """
