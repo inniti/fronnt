@@ -441,30 +441,46 @@ type Product {
   updatedAt: String
   slug: String!
   status: ProductStatus!
-  articles: [Article!]
+  articles(filters: [FilterInput!]): [Article!]
   categories: [Category!]
   relatedProducts(
     type: RelatedProductType
     paging: PagingInput
   ): RelatedProductsResult
-  vendorId: ID
-  vendor: Vendor
+  manufacturerId: ID
+  manufacturer: Manufacturer
 }
 
 """
-Vendors sell products. In most cases there is only one vendor in the system, but there may be many for marketplaces
+Sellers sell articles. In most cases there is only one vendor in the system, but there may be many for marketplaces
 """
-type Vendor {
+type Seller {
   id: ID!
   name: String!
 }
 
 """
-Result of a vendors query
+Manufacturers build products. In most cases there is only one vendor in the system, but there may be many for marketplaces
 """
-type VendorsResult implements PagedResult {
+type Manufacturer {
+  id: ID!
+  name: String!
+}
+
+"""
+Result of a manufacturers query
+"""
+type ManufacturersResult implements PagedResult {
   paging: Paging!
-  results: [Vendor!]!
+  results: [Manufacturer!]!
+}
+
+"""
+Result of a sellers query
+"""
+type SellersResult implements PagedResult {
+  paging: Paging!
+  results: [Seller!]!
 }
 
 """
@@ -522,6 +538,11 @@ type Article {
   product: Product
   salesUnits: [SalesUnit!]!
   baseUnit: BaseUnit!
+  sellers(
+    filters: [FilterInput!]
+    sort: [SortInput!]
+    paging: PagingInput
+  ): SellersResult!
 }
 
 """
@@ -1311,9 +1332,17 @@ type Query {
   reservation(id: ID!): Reservation
   reservationByField(field: String!, value: String!): Reservation
 
-  vendors: VendorsResult
-  vendor(id: ID!): Vendor
-  vendorByField(field: String!, value: String!): Vendor
+  manufacturers: ManufacturersResult
+  manufacturer(id: ID!): Manufacturer
+  manufacturerByField(field: String!, value: String!): Manufacturer
+
+  sellers(
+    filters: [FilterInput!]
+    sort: [SortInput!]
+    paging: PagingInput
+  ): SellersResult
+  seller(id: ID!): Seller
+  sellerByField(field: String!, value: String!): Seller
 
   session: Session
 }

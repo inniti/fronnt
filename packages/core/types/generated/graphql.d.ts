@@ -110,6 +110,7 @@ export interface Article {
   product?: Maybe<Product>;
   productId: Scalars['ID'];
   salesUnits: Array<SalesUnit>;
+  sellers: SellersResult;
   sku: Scalars['String'];
   status: ArticleStatus;
   taxClass: TaxClass;
@@ -130,6 +131,13 @@ export interface ArticleMediaArgs {
 /** An article is a concrete shape of a product */
 export interface ArticlePricesArgs {
   quantity?: InputMaybe<Scalars['Int']>;
+}
+
+/** An article is a concrete shape of a product */
+export interface ArticleSellersArgs {
+  filters?: InputMaybe<Array<FilterInput>>;
+  paging?: InputMaybe<PagingInput>;
+  sort?: InputMaybe<Array<SortInput>>;
 }
 
 /** Article information */
@@ -489,6 +497,20 @@ export interface LoginResult {
   refreshToken?: Maybe<AuthToken>;
 }
 
+/** Manufacturers build products. In most cases there is only one vendor in the system, but there may be many for marketplaces */
+export interface Manufacturer {
+  __typename?: 'Manufacturer';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+}
+
+/** Result of a manufacturers query */
+export interface ManufacturersResult extends PagedResult {
+  __typename?: 'ManufacturersResult';
+  paging: Paging;
+  results: Array<Manufacturer>;
+}
+
 export type MeasurementUnit =
   | 'ACRE'
   | 'ARES'
@@ -818,6 +840,8 @@ export interface Product {
   id: Scalars['ID'];
   info: ProductInfo;
   labels: Array<Scalars['String']>;
+  manufacturer?: Maybe<Manufacturer>;
+  manufacturerId?: Maybe<Scalars['ID']>;
   media: Array<Media>;
   productOptions: Array<ProductOption>;
   relatedProducts?: Maybe<RelatedProductsResult>;
@@ -830,8 +854,11 @@ export interface Product {
    * @deprecated variantAttributes is deprecated. Use productOptions instead.
    */
   variantAttributes: Array<AttributeDefinition>;
-  vendor?: Maybe<Vendor>;
-  vendorId?: Maybe<Scalars['ID']>;
+}
+
+/** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
+export interface ProductArticlesArgs {
+  filters?: InputMaybe<Array<FilterInput>>;
 }
 
 /** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
@@ -901,6 +928,9 @@ export interface Query {
   contentBlocks?: Maybe<ContentBlocksResult>;
   customer?: Maybe<Customer>;
   features: Features;
+  manufacturer?: Maybe<Manufacturer>;
+  manufacturerByField?: Maybe<Manufacturer>;
+  manufacturers?: Maybe<ManufacturersResult>;
   order?: Maybe<Order>;
   orders?: Maybe<OrdersResult>;
   page?: Maybe<Page>;
@@ -913,12 +943,12 @@ export interface Query {
   reservationByField?: Maybe<Reservation>;
   reservations?: Maybe<ReservationsResult>;
   search?: Maybe<SearchResult>;
+  seller?: Maybe<Seller>;
+  sellerByField?: Maybe<Seller>;
+  sellers?: Maybe<SellersResult>;
   session?: Maybe<Session>;
   shop?: Maybe<Shop>;
   suggestions: Array<Suggestion>;
-  vendor?: Maybe<Vendor>;
-  vendorByField?: Maybe<Vendor>;
-  vendors?: Maybe<VendorsResult>;
   warehouse?: Maybe<Warehouse>;
   warehouseByField?: Maybe<Warehouse>;
   warehouses?: Maybe<WarehousesResult>;
@@ -973,6 +1003,15 @@ export interface QueryContentBlockArgs {
 export interface QueryContentBlocksArgs {
   status?: InputMaybe<ContentBlockStatus>;
   type?: InputMaybe<Scalars['String']>;
+}
+
+export interface QueryManufacturerArgs {
+  id: Scalars['ID'];
+}
+
+export interface QueryManufacturerByFieldArgs {
+  field: Scalars['String'];
+  value: Scalars['String'];
 }
 
 export interface QueryOrderArgs {
@@ -1032,17 +1071,23 @@ export interface QuerySearchArgs {
   sort?: InputMaybe<Array<SortInput>>;
 }
 
-export interface QuerySuggestionsArgs {
-  searchTerm: Scalars['String'];
-}
-
-export interface QueryVendorArgs {
+export interface QuerySellerArgs {
   id: Scalars['ID'];
 }
 
-export interface QueryVendorByFieldArgs {
+export interface QuerySellerByFieldArgs {
   field: Scalars['String'];
   value: Scalars['String'];
+}
+
+export interface QuerySellersArgs {
+  filters?: InputMaybe<Array<FilterInput>>;
+  paging?: InputMaybe<PagingInput>;
+  sort?: InputMaybe<Array<SortInput>>;
+}
+
+export interface QuerySuggestionsArgs {
+  searchTerm: Scalars['String'];
 }
 
 export interface QueryWarehouseArgs {
@@ -1213,6 +1258,20 @@ export interface SellableInfo {
   description?: Maybe<Scalars['String']>;
 }
 
+/** Sellers sell articles. In most cases there is only one vendor in the system, but there may be many for marketplaces */
+export interface Seller {
+  __typename?: 'Seller';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+}
+
+/** Result of a sellers query */
+export interface SellersResult extends PagedResult {
+  __typename?: 'SellersResult';
+  paging: Paging;
+  results: Array<Seller>;
+}
+
 /** Session */
 export interface Session {
   __typename?: 'Session';
@@ -1335,20 +1394,6 @@ export interface UpdateCustomerInput {
   email?: InputMaybe<Scalars['String']>;
   firstname?: InputMaybe<Scalars['String']>;
   lastname?: InputMaybe<Scalars['String']>;
-}
-
-/** Vendors sell products. In most cases there is only one vendor in the system, but there may be many for marketplaces */
-export interface Vendor {
-  __typename?: 'Vendor';
-  id: Scalars['ID'];
-  name: Scalars['String'];
-}
-
-/** Result of a vendors query */
-export interface VendorsResult extends PagedResult {
-  __typename?: 'VendorsResult';
-  paging: Paging;
-  results: Array<Vendor>;
 }
 
 /** A warehouse */
@@ -1546,6 +1591,8 @@ export type ResolversTypes = {
   Locale: ResolverTypeWrapper<Locale>;
   LoginInput: LoginInput;
   LoginResult: ResolverTypeWrapper<LoginResult>;
+  Manufacturer: ResolverTypeWrapper<Manufacturer>;
+  ManufacturersResult: ResolverTypeWrapper<ManufacturersResult>;
   MeasurementUnit: MeasurementUnit;
   Media: ResolverTypeWrapper<Media>;
   MediaPurpose: MediaPurpose;
@@ -1578,13 +1625,14 @@ export type ResolversTypes = {
     | ResolversTypes['CartsResult']
     | ResolversTypes['CategoriesResult']
     | ResolversTypes['ContentBlocksResult']
+    | ResolversTypes['ManufacturersResult']
     | ResolversTypes['OrdersResult']
     | ResolversTypes['PagesResult']
     | ResolversTypes['ProductsResult']
     | ResolversTypes['RelatedProductsResult']
     | ResolversTypes['ReservationsResult']
     | ResolversTypes['SearchResult']
-    | ResolversTypes['VendorsResult']
+    | ResolversTypes['SellersResult']
     | ResolversTypes['WarehousesResult']
     | ResolversTypes['WishlistsResult'];
   PagesResult: ResolverTypeWrapper<PagesResult>;
@@ -1630,6 +1678,8 @@ export type ResolversTypes = {
     | ResolversTypes['Product'];
   SearchResultItemType: SearchResultItemType;
   SellableInfo: ResolversTypes['ArticleInfo'] | ResolversTypes['ProductInfo'];
+  Seller: ResolverTypeWrapper<Seller>;
+  SellersResult: ResolverTypeWrapper<SellersResult>;
   Session: ResolverTypeWrapper<Session>;
   Shipment: ResolverTypeWrapper<Shipment>;
   ShipmentItem: ResolverTypeWrapper<ShipmentItem>;
@@ -1657,8 +1707,6 @@ export type ResolversTypes = {
   UpdateCartItemInput: UpdateCartItemInput;
   UpdateCheckoutInput: UpdateCheckoutInput;
   UpdateCustomerInput: UpdateCustomerInput;
-  Vendor: ResolverTypeWrapper<Vendor>;
-  VendorsResult: ResolverTypeWrapper<VendorsResult>;
   Warehouse: ResolverTypeWrapper<
     Omit<Warehouse, 'openingTimes'> & {
       openingTimes: Array<ResolversTypes['OpeningTime']>;
@@ -1720,6 +1768,8 @@ export type ResolversParentTypes = {
   Locale: Locale;
   LoginInput: LoginInput;
   LoginResult: LoginResult;
+  Manufacturer: Manufacturer;
+  ManufacturersResult: ManufacturersResult;
   Media: Media;
   Meta: Meta;
   Mutation: {};
@@ -1745,13 +1795,14 @@ export type ResolversParentTypes = {
     | ResolversParentTypes['CartsResult']
     | ResolversParentTypes['CategoriesResult']
     | ResolversParentTypes['ContentBlocksResult']
+    | ResolversParentTypes['ManufacturersResult']
     | ResolversParentTypes['OrdersResult']
     | ResolversParentTypes['PagesResult']
     | ResolversParentTypes['ProductsResult']
     | ResolversParentTypes['RelatedProductsResult']
     | ResolversParentTypes['ReservationsResult']
     | ResolversParentTypes['SearchResult']
-    | ResolversParentTypes['VendorsResult']
+    | ResolversParentTypes['SellersResult']
     | ResolversParentTypes['WarehousesResult']
     | ResolversParentTypes['WishlistsResult'];
   PagesResult: PagesResult;
@@ -1790,6 +1841,8 @@ export type ResolversParentTypes = {
   SellableInfo:
     | ResolversParentTypes['ArticleInfo']
     | ResolversParentTypes['ProductInfo'];
+  Seller: Seller;
+  SellersResult: SellersResult;
   Session: Session;
   Shipment: Shipment;
   ShipmentItem: ShipmentItem;
@@ -1812,8 +1865,6 @@ export type ResolversParentTypes = {
   UpdateCartItemInput: UpdateCartItemInput;
   UpdateCheckoutInput: UpdateCheckoutInput;
   UpdateCustomerInput: UpdateCustomerInput;
-  Vendor: Vendor;
-  VendorsResult: VendorsResult;
   Warehouse: Omit<Warehouse, 'openingTimes'> & {
     openingTimes: Array<ResolversParentTypes['OpeningTime']>;
   };
@@ -1909,6 +1960,12 @@ export type ArticleResolvers<
     Array<ResolversTypes['SalesUnit']>,
     ParentType,
     ContextType
+  >;
+  sellers?: Resolver<
+    ResolversTypes['SellersResult'],
+    ParentType,
+    ContextType,
+    RequireFields<ArticleSellersArgs, never>
   >;
   sku?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['ArticleStatus'], ParentType, ContextType>;
@@ -2434,6 +2491,28 @@ export type LoginResultResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ManufacturerResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Manufacturer'] = ResolversParentTypes['Manufacturer']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ManufacturersResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ManufacturersResult'] = ResolversParentTypes['ManufacturersResult']
+> = {
+  paging?: Resolver<ResolversTypes['Paging'], ParentType, ContextType>;
+  results?: Resolver<
+    Array<ResolversTypes['Manufacturer']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MediaResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Media'] = ResolversParentTypes['Media']
@@ -2742,13 +2821,14 @@ export type PagedResultResolvers<
     | 'CartsResult'
     | 'CategoriesResult'
     | 'ContentBlocksResult'
+    | 'ManufacturersResult'
     | 'OrdersResult'
     | 'PagesResult'
     | 'ProductsResult'
     | 'RelatedProductsResult'
     | 'ReservationsResult'
     | 'SearchResult'
-    | 'VendorsResult'
+    | 'SellersResult'
     | 'WarehousesResult'
     | 'WishlistsResult',
     ParentType,
@@ -2838,7 +2918,8 @@ export type ProductResolvers<
   articles?: Resolver<
     Maybe<Array<ResolversTypes['Article']>>,
     ParentType,
-    ContextType
+    ContextType,
+    RequireFields<ProductArticlesArgs, never>
   >;
   attributes?: Resolver<
     Array<Maybe<ResolversTypes['Attribute']>>,
@@ -2861,6 +2942,16 @@ export type ProductResolvers<
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   info?: Resolver<ResolversTypes['ProductInfo'], ParentType, ContextType>;
   labels?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  manufacturer?: Resolver<
+    Maybe<ResolversTypes['Manufacturer']>,
+    ParentType,
+    ContextType
+  >;
+  manufacturerId?: Resolver<
+    Maybe<ResolversTypes['ID']>,
+    ParentType,
+    ContextType
+  >;
   media?: Resolver<
     Array<ResolversTypes['Media']>,
     ParentType,
@@ -2891,8 +2982,6 @@ export type ProductResolvers<
     ParentType,
     ContextType
   >;
-  vendor?: Resolver<Maybe<ResolversTypes['Vendor']>, ParentType, ContextType>;
-  vendorId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3024,6 +3113,23 @@ export type QueryResolvers<
     ContextType
   >;
   features?: Resolver<ResolversTypes['Features'], ParentType, ContextType>;
+  manufacturer?: Resolver<
+    Maybe<ResolversTypes['Manufacturer']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryManufacturerArgs, 'id'>
+  >;
+  manufacturerByField?: Resolver<
+    Maybe<ResolversTypes['Manufacturer']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryManufacturerByFieldArgs, 'field' | 'value'>
+  >;
+  manufacturers?: Resolver<
+    Maybe<ResolversTypes['ManufacturersResult']>,
+    ParentType,
+    ContextType
+  >;
   order?: Resolver<
     Maybe<ResolversTypes['Order']>,
     ParentType,
@@ -3095,6 +3201,24 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QuerySearchArgs, never>
   >;
+  seller?: Resolver<
+    Maybe<ResolversTypes['Seller']>,
+    ParentType,
+    ContextType,
+    RequireFields<QuerySellerArgs, 'id'>
+  >;
+  sellerByField?: Resolver<
+    Maybe<ResolversTypes['Seller']>,
+    ParentType,
+    ContextType,
+    RequireFields<QuerySellerByFieldArgs, 'field' | 'value'>
+  >;
+  sellers?: Resolver<
+    Maybe<ResolversTypes['SellersResult']>,
+    ParentType,
+    ContextType,
+    RequireFields<QuerySellersArgs, never>
+  >;
   session?: Resolver<Maybe<ResolversTypes['Session']>, ParentType, ContextType>;
   shop?: Resolver<Maybe<ResolversTypes['Shop']>, ParentType, ContextType>;
   suggestions?: Resolver<
@@ -3102,23 +3226,6 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     RequireFields<QuerySuggestionsArgs, 'searchTerm'>
-  >;
-  vendor?: Resolver<
-    Maybe<ResolversTypes['Vendor']>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryVendorArgs, 'id'>
-  >;
-  vendorByField?: Resolver<
-    Maybe<ResolversTypes['Vendor']>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryVendorByFieldArgs, 'field' | 'value'>
-  >;
-  vendors?: Resolver<
-    Maybe<ResolversTypes['VendorsResult']>,
-    ParentType,
-    ContextType
   >;
   warehouse?: Resolver<
     Maybe<ResolversTypes['Warehouse']>,
@@ -3369,6 +3476,24 @@ export type SellableInfoResolvers<
   >;
 };
 
+export type SellerResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Seller'] = ResolversParentTypes['Seller']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SellersResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['SellersResult'] = ResolversParentTypes['SellersResult']
+> = {
+  paging?: Resolver<ResolversTypes['Paging'], ParentType, ContextType>;
+  results?: Resolver<Array<ResolversTypes['Seller']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type SessionResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Session'] = ResolversParentTypes['Session']
@@ -3521,24 +3646,6 @@ export type TotalsResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type VendorResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Vendor'] = ResolversParentTypes['Vendor']
-> = {
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type VendorsResultResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['VendorsResult'] = ResolversParentTypes['VendorsResult']
-> = {
-  paging?: Resolver<ResolversTypes['Paging'], ParentType, ContextType>;
-  results?: Resolver<Array<ResolversTypes['Vendor']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type WarehouseResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Warehouse'] = ResolversParentTypes['Warehouse']
@@ -3640,6 +3747,8 @@ export type Resolvers<ContextType = any> = {
   FilterValue?: FilterValueResolvers<ContextType>;
   Locale?: LocaleResolvers<ContextType>;
   LoginResult?: LoginResultResolvers<ContextType>;
+  Manufacturer?: ManufacturerResolvers<ContextType>;
+  ManufacturersResult?: ManufacturersResultResolvers<ContextType>;
   Media?: MediaResolvers<ContextType>;
   Meta?: MetaResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
@@ -3677,6 +3786,8 @@ export type Resolvers<ContextType = any> = {
   SearchResultItem?: SearchResultItemResolvers<ContextType>;
   SearchResultItemReference?: SearchResultItemReferenceResolvers<ContextType>;
   SellableInfo?: SellableInfoResolvers<ContextType>;
+  Seller?: SellerResolvers<ContextType>;
+  SellersResult?: SellersResultResolvers<ContextType>;
   Session?: SessionResolvers<ContextType>;
   Shipment?: ShipmentResolvers<ContextType>;
   ShipmentItem?: ShipmentItemResolvers<ContextType>;
@@ -3688,8 +3799,6 @@ export type Resolvers<ContextType = any> = {
   TaxClass?: TaxClassResolvers<ContextType>;
   TaxValue?: TaxValueResolvers<ContextType>;
   Totals?: TotalsResolvers<ContextType>;
-  Vendor?: VendorResolvers<ContextType>;
-  VendorsResult?: VendorsResultResolvers<ContextType>;
   Warehouse?: WarehouseResolvers<ContextType>;
   WarehousesResult?: WarehousesResultResolvers<ContextType>;
   Wishlist?: WishlistResolvers<ContextType>;
