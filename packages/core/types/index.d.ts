@@ -1,5 +1,6 @@
 import type { DocumentNode, GraphQLError } from 'graphql';
 import type { GetEnvelopedFn } from '@envelop/core';
+import type { Resolvers } from './generated/graphql';
 
 export * from './generated/graphql';
 
