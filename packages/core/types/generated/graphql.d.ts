@@ -84,6 +84,15 @@ export interface AddressInput {
   zipCode: Scalars['String'];
 }
 
+/** Generic filter returned from lists/search */
+export interface AppliedFilter {
+  __typename?: 'AppliedFilter';
+  id: Scalars['ID'];
+  label?: Maybe<Scalars['String']>;
+  type: FilterType;
+  values: Array<FilterValue>;
+}
+
 /** Fields to narrow down search results for warehouses around a location */
 export interface AroundLocationInput {
   latitude?: InputMaybe<Scalars['Float']>;
@@ -110,7 +119,7 @@ export interface Article {
   product?: Maybe<Product>;
   productId: Scalars['ID'];
   salesUnits: Array<SalesUnit>;
-  sellers: SellersResult;
+  sellers: Array<Seller>;
   sku: Scalars['String'];
   status: ArticleStatus;
   taxClass: TaxClass;
@@ -136,7 +145,6 @@ export interface ArticlePricesArgs {
 /** An article is a concrete shape of a product */
 export interface ArticleSellersArgs {
   filters?: InputMaybe<Array<FilterInput>>;
-  paging?: InputMaybe<PagingInput>;
   sort?: InputMaybe<Array<SortInput>>;
 }
 
@@ -449,15 +457,6 @@ export interface Features {
   core: Scalars['Boolean'];
 }
 
-/** Generic filter returned from lists/search */
-export interface Filter {
-  __typename?: 'Filter';
-  id: Scalars['ID'];
-  label?: Maybe<Scalars['String']>;
-  type: FilterType;
-  values: Array<FilterValue>;
-}
-
 /** Generic filter input for lists/search */
 export interface FilterInput {
   id: Scalars['ID'];
@@ -469,7 +468,6 @@ export type FilterType = 'BOOLEAN' | 'COLOR' | 'NUMBER' | 'TEXT';
 /** Value of a (maybe) applied filter */
 export interface FilterValue {
   __typename?: 'FilterValue';
-  applied: Scalars['Boolean'];
   count: Scalars['Int'];
   id: Scalars['ID'];
   label: Scalars['String'];
@@ -843,17 +841,12 @@ export interface Product {
   manufacturer?: Maybe<Manufacturer>;
   manufacturerId?: Maybe<Scalars['ID']>;
   media: Array<Media>;
-  productOptions: Array<ProductOption>;
+  options: Array<ProductOption>;
   relatedProducts?: Maybe<RelatedProductsResult>;
   slug: Scalars['String'];
   status: ProductStatus;
   title: Scalars['String'];
   updatedAt?: Maybe<Scalars['String']>;
-  /**
-   * These are the attributes which make up variants. Each article must have these attributes defined.
-   * @deprecated variantAttributes is deprecated. Use productOptions instead.
-   */
-  variantAttributes: Array<AttributeDefinition>;
 }
 
 /** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
@@ -906,10 +899,8 @@ export type ProductStatus = 'DISCONTINUED' | 'DRAFT' | 'PUBLISHED';
 /** Paged result of a product list */
 export interface ProductsResult extends PagedResult {
   __typename?: 'ProductsResult';
-  filters: Array<Filter>;
   paging: Paging;
   results: Array<Product>;
-  sortings: Array<Sorting>;
 }
 
 export interface Query {
@@ -1233,10 +1224,9 @@ export interface SalesUnit {
 /** Paged search result */
 export interface SearchResult extends PagedResult {
   __typename?: 'SearchResult';
-  filters: Array<Filter>;
+  filters: Array<AppliedFilter>;
   paging: Paging;
   results: Array<SearchResultItem>;
-  sortings: Array<Sorting>;
 }
 
 /** A search result entry for product searches */
@@ -1322,14 +1312,6 @@ export interface SortInput {
 }
 
 export type SortValue = 'ASC' | 'DESC';
-
-/** Sorting option */
-export interface Sorting {
-  __typename?: 'Sorting';
-  applied: Scalars['Boolean'];
-  id: Scalars['String'];
-  label: Scalars['String'];
-}
 
 /** Search Suggestion */
 export interface Suggestion {
@@ -1546,6 +1528,7 @@ export type ResolversTypes = {
   Address: ResolverTypeWrapper<Address>;
   AddressFields: ResolversTypes['Address'] | ResolversTypes['CustomerAddress'];
   AddressInput: AddressInput;
+  AppliedFilter: ResolverTypeWrapper<AppliedFilter>;
   AroundLocationInput: AroundLocationInput;
   Article: ResolverTypeWrapper<Article>;
   ArticleInfo: ResolverTypeWrapper<ArticleInfo>;
@@ -1581,7 +1564,6 @@ export type ResolversTypes = {
   Error: ResolverTypeWrapper<Error>;
   Expense: ResolverTypeWrapper<Expense>;
   Features: ResolverTypeWrapper<Features>;
-  Filter: ResolverTypeWrapper<Filter>;
   FilterInput: FilterInput;
   FilterType: FilterType;
   FilterValue: ResolverTypeWrapper<FilterValue>;
@@ -1688,7 +1670,6 @@ export type ResolversTypes = {
   Shop: ResolverTypeWrapper<Shop>;
   SortInput: SortInput;
   SortValue: SortValue;
-  Sorting: ResolverTypeWrapper<Sorting>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Suggestion: ResolverTypeWrapper<
     Omit<Suggestion, 'result'> & {
@@ -1727,6 +1708,7 @@ export type ResolversParentTypes = {
     | ResolversParentTypes['Address']
     | ResolversParentTypes['CustomerAddress'];
   AddressInput: AddressInput;
+  AppliedFilter: AppliedFilter;
   AroundLocationInput: AroundLocationInput;
   Article: Article;
   ArticleInfo: ArticleInfo;
@@ -1759,7 +1741,6 @@ export type ResolversParentTypes = {
   Error: Error;
   Expense: Expense;
   Features: Features;
-  Filter: Filter;
   FilterInput: FilterInput;
   FilterValue: FilterValue;
   Float: Scalars['Float'];
@@ -1849,7 +1830,6 @@ export type ResolversParentTypes = {
   ShippingMethod: ShippingMethod;
   Shop: Shop;
   SortInput: SortInput;
-  Sorting: Sorting;
   String: Scalars['String'];
   Suggestion: Omit<Suggestion, 'result'> & {
     result?: Maybe<ResolversParentTypes['SuggestionResult']>;
@@ -1919,6 +1899,21 @@ export type AddressFieldsResolvers<
   zipCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };
 
+export type AppliedFilterResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['AppliedFilter'] = ResolversParentTypes['AppliedFilter']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  label?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['FilterType'], ParentType, ContextType>;
+  values?: Resolver<
+    Array<ResolversTypes['FilterValue']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ArticleResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Article'] = ResolversParentTypes['Article']
@@ -1962,7 +1957,7 @@ export type ArticleResolvers<
     ContextType
   >;
   sellers?: Resolver<
-    ResolversTypes['SellersResult'],
+    Array<ResolversTypes['Seller']>,
     ParentType,
     ContextType,
     RequireFields<ArticleSellersArgs, never>
@@ -2434,26 +2429,10 @@ export type FeaturesResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type FilterResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Filter'] = ResolversParentTypes['Filter']
-> = {
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  label?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['FilterType'], ParentType, ContextType>;
-  values?: Resolver<
-    Array<ResolversTypes['FilterValue']>,
-    ParentType,
-    ContextType
-  >;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type FilterValueResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['FilterValue'] = ResolversParentTypes['FilterValue']
 > = {
-  applied?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -2958,7 +2937,7 @@ export type ProductResolvers<
     ContextType,
     RequireFields<ProductMediaArgs, never>
   >;
-  productOptions?: Resolver<
+  options?: Resolver<
     Array<ResolversTypes['ProductOption']>,
     ParentType,
     ContextType
@@ -2974,11 +2953,6 @@ export type ProductResolvers<
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<
     Maybe<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
-  variantAttributes?: Resolver<
-    Array<ResolversTypes['AttributeDefinition']>,
     ParentType,
     ContextType
   >;
@@ -3021,14 +2995,8 @@ export type ProductsResultResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['ProductsResult'] = ResolversParentTypes['ProductsResult']
 > = {
-  filters?: Resolver<Array<ResolversTypes['Filter']>, ParentType, ContextType>;
   paging?: Resolver<ResolversTypes['Paging'], ParentType, ContextType>;
   results?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>;
-  sortings?: Resolver<
-    Array<ResolversTypes['Sorting']>,
-    ParentType,
-    ContextType
-  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3413,15 +3381,14 @@ export type SearchResultResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['SearchResult'] = ResolversParentTypes['SearchResult']
 > = {
-  filters?: Resolver<Array<ResolversTypes['Filter']>, ParentType, ContextType>;
-  paging?: Resolver<ResolversTypes['Paging'], ParentType, ContextType>;
-  results?: Resolver<
-    Array<ResolversTypes['SearchResultItem']>,
+  filters?: Resolver<
+    Array<ResolversTypes['AppliedFilter']>,
     ParentType,
     ContextType
   >;
-  sortings?: Resolver<
-    Array<ResolversTypes['Sorting']>,
+  paging?: Resolver<ResolversTypes['Paging'], ParentType, ContextType>;
+  results?: Resolver<
+    Array<ResolversTypes['SearchResultItem']>,
     ParentType,
     ContextType
   >;
@@ -3565,16 +3532,6 @@ export type ShopResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SortingResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Sorting'] = ResolversParentTypes['Sorting']
-> = {
-  applied?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type SuggestionResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Suggestion'] = ResolversParentTypes['Suggestion']
@@ -3714,6 +3671,7 @@ export type Resolvers<ContextType = any> = {
   AddToCartResult?: AddToCartResultResolvers<ContextType>;
   Address?: AddressResolvers<ContextType>;
   AddressFields?: AddressFieldsResolvers<ContextType>;
+  AppliedFilter?: AppliedFilterResolvers<ContextType>;
   Article?: ArticleResolvers<ContextType>;
   ArticleInfo?: ArticleInfoResolvers<ContextType>;
   Attribute?: AttributeResolvers<ContextType>;
@@ -3743,7 +3701,6 @@ export type Resolvers<ContextType = any> = {
   Error?: ErrorResolvers<ContextType>;
   Expense?: ExpenseResolvers<ContextType>;
   Features?: FeaturesResolvers<ContextType>;
-  Filter?: FilterResolvers<ContextType>;
   FilterValue?: FilterValueResolvers<ContextType>;
   Locale?: LocaleResolvers<ContextType>;
   LoginResult?: LoginResultResolvers<ContextType>;
@@ -3793,7 +3750,6 @@ export type Resolvers<ContextType = any> = {
   ShipmentItem?: ShipmentItemResolvers<ContextType>;
   ShippingMethod?: ShippingMethodResolvers<ContextType>;
   Shop?: ShopResolvers<ContextType>;
-  Sorting?: SortingResolvers<ContextType>;
   Suggestion?: SuggestionResolvers<ContextType>;
   SuggestionResult?: SuggestionResultResolvers<ContextType>;
   TaxClass?: TaxClassResolvers<ContextType>;

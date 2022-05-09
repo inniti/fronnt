@@ -426,16 +426,9 @@ type Product {
   media(purpose: MediaPurpose, mediaType: MediaType): [Media!]!
   info: ProductInfo!
   brandId: ID!
-  productOptions: [ProductOption!]!
+  options: [ProductOption!]!
   brand: Brand
   labels: [String!]!
-  """
-  These are the attributes which make up variants. Each article must have these attributes defined.
-  """
-  variantAttributes: [AttributeDefinition!]!
-    @deprecated(
-      reason: "variantAttributes is deprecated. Use productOptions instead."
-    )
   attributes: [Attribute]!
   createdAt: String
   updatedAt: String
@@ -538,11 +531,7 @@ type Article {
   product: Product
   salesUnits: [SalesUnit!]!
   baseUnit: BaseUnit!
-  sellers(
-    filters: [FilterInput!]
-    sort: [SortInput!]
-    paging: PagingInput
-  ): SellersResult!
+  sellers(filters: [FilterInput!], sort: [SortInput!]): [Seller!]!
 }
 
 """
@@ -551,27 +540,17 @@ Value of a (maybe) applied filter
 type FilterValue {
   label: String!
   id: ID!
-  applied: Boolean!
   count: Int!
 }
 
 """
 Generic filter returned from lists/search
 """
-type Filter {
+type AppliedFilter {
   id: ID!
   label: String
   type: FilterType!
   values: [FilterValue!]!
-}
-
-"""
-Sorting option
-"""
-type Sorting {
-  id: String!
-  label: String!
-  applied: Boolean!
 }
 
 """
@@ -657,8 +636,7 @@ Paged search result
 type SearchResult implements PagedResult {
   paging: Paging!
   results: [SearchResultItem!]!
-  filters: [Filter!]!
-  sortings: [Sorting!]!
+  filters: [AppliedFilter!]!
 }
 
 """
@@ -667,8 +645,6 @@ Paged result of a product list
 type ProductsResult implements PagedResult {
   paging: Paging!
   results: [Product!]!
-  filters: [Filter!]!
-  sortings: [Sorting!]!
 }
 
 """
