@@ -1,13 +1,35 @@
 import { config } from 'dotenv';
 import { createServer } from '@fronnt/server';
-import { useTiming } from '@envelop/core';
+import { useTiming, type Plugin } from '@envelop/core';
+import {
+  simpleEstimator,
+  createComplexityRule,
+} from 'graphql-query-complexity';
+
 import Connector1 from './connectors/connector1';
 
 config();
 
 const port = process.env.PORT || 4000;
 
-const envelopPlugins = [];
+const useComplexity = function (): Plugin<{ req?: { body: any } }> {
+  return {
+    onValidate(api) {
+      const complexityRule = createComplexityRule({
+        estimators: [simpleEstimator({ defaultComplexity: 1 })],
+        maximumComplexity: 100,
+        variables: api.context.req?.body?.variables || {},
+        onComplete: (complexity: number) => {
+          console.log('Query Complexity:', complexity);
+        },
+      });
+
+      api.addValidationRule(complexityRule);
+    },
+  };
+};
+
+const envelopPlugins: Plugin[] = [useComplexity()];
 if (process.env.NODE_ENV === 'development') {
   envelopPlugins.push(useTiming());
 }

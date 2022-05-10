@@ -8,14 +8,16 @@
   "author": "inniti",
   "private": true,
   "dependencies": {
-    "@fronnt/server": "workspace:*",
-    "@fronnt/core": "workspace:*",
     "@envelop/core": "^1.7.1",
-    "graphql": "^16.3.0"
+    "@envelop/extended-validation": "^1.6.1",
+    "@fronnt/core": "workspace:*",
+    "@fronnt/server": "workspace:*",
+    "graphql": "^16.3.0",
+    "graphql-query-complexity": "^0.11.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15",
     "dotenv": "^14.3.2",
+    "nodemon": "^2.0.15",
     "ts-node": "^10.4.0"
   }
 }
