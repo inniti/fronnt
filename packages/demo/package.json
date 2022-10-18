@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "@inniti/fronnt demo project",
   "scripts": {
-    "start": "nodemon --watch .env --watch connectors index.ts"
+    "start": "tsx watch index.ts"
   },
   "author": "inniti",
   "private": true,
@@ -17,7 +17,6 @@
   },
   "devDependencies": {
     "dotenv": "^14.3.2",
-    "nodemon": "^2.0.15",
-    "ts-node": "^10.4.0"
+    "tsx": "^3.10.3"
   }
 }
