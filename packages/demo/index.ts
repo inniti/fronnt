@@ -40,7 +40,7 @@ createServer([new Connector1()], envelopPlugins).listen(
     if (err) {
       console.error('An error occured while starting the fronnt server', err);
     } else {
-      console.log(`🚀 fronnt server is running at http://localhost:${port}`);
+      console.log(`🚀 fronnt server is running on port ${port}`);
     }
   }
 );

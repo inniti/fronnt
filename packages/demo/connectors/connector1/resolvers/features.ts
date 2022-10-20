@@ -1,14 +1,18 @@
-import type { Resolvers } from '@fronnt/core';
+import type { Resolvers, FeaturesResolvers } from '@fronnt/core';
 import type { Context } from '../../../types';
 
-const featuresResolvers: Resolvers<Context> = {
+const resolvers: Resolvers<Context> = {
   Query: {
-    features(_, args, ctx) {
+    features() {
       return {
         core: true,
+        openingTimes: false,
+        reservations: false,
+        sellers: false,
+        warehouses: false,
       };
     },
   },
 };
 
-export default featuresResolvers;
+export default resolvers;
