@@ -36,13 +36,14 @@ const envelopPlugins: Plugin[] = [
   useComplexity(),
 ];
 
-createServer([new Connector1()], envelopPlugins).listen(
-  port,
-  (err: Error | null) => {
-    if (err) {
-      console.error('An error occured while starting the fronnt server', err);
-    } else {
-      console.log(`🚀 fronnt server is running on http://localhost:${port}`);
-    }
+createServer([new Connector1()], envelopPlugins, {
+  enable: true,
+  origin: 'http://localhost:3000',
+  allowedHeaders: ['Authorization', 'Content-Type'],
+}).listen(port, (err: Error | null) => {
+  if (err) {
+    console.error('An error occured while starting the fronnt server', err);
+  } else {
+    console.log(`🚀 fronnt server is running on http://localhost:${port}`);
   }
-);
+});
