@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "@inniti/fronnt demo project",
   "scripts": {
-    "start": "tsx watch index.ts"
+    "start": "tsx watch index.ts",
+    "codegen": "rimraf types/generated && graphql-codegen --config codegen.yml && prettier --write types/generated"
   },
   "author": "inniti",
   "private": true,
@@ -17,6 +18,11 @@
   },
   "devDependencies": {
     "dotenv": "^14.3.2",
-    "tsx": "^3.10.3"
+    "tsx": "^3.10.3",
+    "@graphql-codegen/cli": "^2.3.0",
+    "@graphql-codegen/introspection": "^2.1.0",
+    "@graphql-codegen/typescript": "^2.4.1",
+    "@graphql-codegen/typescript-resolvers": "^2.4.2",
+    "rimraf": "^3.0.2"
   }
 }

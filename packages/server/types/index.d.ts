@@ -17,8 +17,8 @@ export declare interface CorsConfig {
   allowCredentials?: boolean;
 }
 
-export declare function createServer(
-  connectors: Connector<Context>[],
+export declare function createServer<TContext extends Context>(
+  connectors: Connector<TContext>[],
   envelopPlugins: Plugin[] = [],
   cors?: CorsConfig
 ): {

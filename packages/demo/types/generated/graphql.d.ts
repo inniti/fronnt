@@ -3,10 +3,1418 @@ import {
   GraphQLScalarType,
   GraphQLScalarTypeConfig,
 } from 'graphql';
+export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = {
   [X in Exclude<keyof T, K>]?: T[X];
 } & { [P in K]-?: NonNullable<T[P]> };
+/** All built-in and custom scalars, mapped to their actual values */
+export interface Scalars {
+  ID: string;
+  String: string;
+  Boolean: boolean;
+  Int: number;
+  Float: number;
+  /** A map of scalars */
+  ScalarMap: any;
+}
+
+/** One item to be added to the cart */
+export interface AddToCartItemInput {
+  data?: InputMaybe<CartItemDataInput>;
+  parentCartItemId?: InputMaybe<Scalars['ID']>;
+  quantity: Scalars['Int'];
+  salesUnitId?: InputMaybe<Scalars['ID']>;
+  sku: Scalars['ID'];
+}
+
+/** Result of adding one or many articles to the cart */
+export interface AddToCartResult {
+  __typename?: 'AddToCartResult';
+  cart?: Maybe<Cart>;
+  errors: Array<Error>;
+}
+
+/** An address */
+export interface Address extends AddressFields {
+  __typename?: 'Address';
+  city: Scalars['String'];
+  company?: Maybe<Scalars['String']>;
+  country: Scalars['String'];
+  name: Scalars['String'];
+  phone?: Maybe<Scalars['String']>;
+  province?: Maybe<Scalars['String']>;
+  street: Scalars['String'];
+  street2?: Maybe<Scalars['String']>;
+  zipCode: Scalars['String'];
+}
+
+export interface AddressFields {
+  city: Scalars['String'];
+  company?: Maybe<Scalars['String']>;
+  country: Scalars['String'];
+  name: Scalars['String'];
+  phone?: Maybe<Scalars['String']>;
+  province?: Maybe<Scalars['String']>;
+  street: Scalars['String'];
+  street2?: Maybe<Scalars['String']>;
+  zipCode: Scalars['String'];
+}
+
+/** Address data */
+export interface AddressInput {
+  city: Scalars['String'];
+  company?: InputMaybe<Scalars['String']>;
+  country: Scalars['String'];
+  name: Scalars['String'];
+  phone?: InputMaybe<Scalars['String']>;
+  province?: InputMaybe<Scalars['String']>;
+  street: Scalars['String'];
+  street2?: InputMaybe<Scalars['String']>;
+  zipCode: Scalars['String'];
+}
+
+/** Generic filter returned from lists/search */
+export interface AppliedFilter {
+  __typename?: 'AppliedFilter';
+  id: Scalars['ID'];
+  label?: Maybe<Scalars['String']>;
+  type: FilterType;
+  values: Array<FilterValue>;
+}
+
+/** Fields to narrow down search results for warehouses around a location */
+export interface AroundLocationInput {
+  latitude?: InputMaybe<Scalars['Float']>;
+  longitude?: InputMaybe<Scalars['Float']>;
+  radius?: InputMaybe<Scalars['Int']>;
+  searchQuery?: InputMaybe<Scalars['String']>;
+}
+
+/** An article is a concrete shape of a product */
+export interface Article {
+  __typename?: 'Article';
+  attributes: Array<Attribute>;
+  availabilities: Array<Availability>;
+  baseUnit: BaseUnit;
+  brand?: Maybe<Brand>;
+  brandId: Scalars['ID'];
+  id: Scalars['ID'];
+  info: ArticleInfo;
+  isBuyable: Scalars['Boolean'];
+  isMaster: Scalars['Boolean'];
+  labels: Array<Scalars['String']>;
+  media: Array<Media>;
+  prices: Array<Price>;
+  product?: Maybe<Product>;
+  productId: Scalars['ID'];
+  salesUnits: Array<SalesUnit>;
+  sellers: Array<Seller>;
+  sku: Scalars['String'];
+  status: ArticleStatus;
+  taxClass: TaxClass;
+  title: Scalars['String'];
+}
+
+/** An article is a concrete shape of a product */
+export interface ArticleAvailabilitiesArgs {
+  warehouseId?: InputMaybe<Scalars['ID']>;
+}
+
+/** An article is a concrete shape of a product */
+export interface ArticleMediaArgs {
+  mediaType?: InputMaybe<MediaType>;
+  purpose?: InputMaybe<MediaPurpose>;
+}
+
+/** An article is a concrete shape of a product */
+export interface ArticlePricesArgs {
+  quantity?: InputMaybe<Scalars['Int']>;
+}
+
+/** An article is a concrete shape of a product */
+export interface ArticleSellersArgs {
+  filters?: InputMaybe<Array<FilterInput>>;
+  sort?: InputMaybe<Array<SortInput>>;
+}
+
+/** Article information */
+export interface ArticleInfo extends SellableInfo {
+  __typename?: 'ArticleInfo';
+  description?: Maybe<Scalars['String']>;
+}
+
+/** Status of an article */
+export type ArticleStatus = 'DISCONTINUED' | 'DRAFT' | 'PUBLISHED';
+
+/** A concrete product attribute (value) */
+export interface Attribute {
+  __typename?: 'Attribute';
+  definition: AttributeDefinition;
+  value: Scalars['String'];
+}
+
+/** Definition of a product attribute */
+export interface AttributeDefinition {
+  __typename?: 'AttributeDefinition';
+  attributeType: AttributeType;
+  id: Scalars['ID'];
+  label?: Maybe<Scalars['String']>;
+}
+
+export type AttributeType = 'BOOLEAN' | 'COLOR' | 'NUMBER' | 'TEXT';
+
+export interface AuthToken {
+  __typename?: 'AuthToken';
+  expiresIn?: Maybe<Scalars['Int']>;
+  value: Scalars['String'];
+}
+
+/** Tells how many items of an article are available. Refers to the BaseUnit of the article. */
+export interface Availability {
+  __typename?: 'Availability';
+  value: Scalars['Int'];
+  warehouse?: Maybe<Warehouse>;
+  warehouseId: Scalars['ID'];
+}
+
+/** The base unit is used for all internal calculations */
+export interface BaseUnit {
+  __typename?: 'BaseUnit';
+  id: Scalars['ID'];
+  interval?: Maybe<Scalars['Int']>;
+  maxQuantity?: Maybe<Scalars['Int']>;
+  minQuantity?: Maybe<Scalars['Int']>;
+  name: MeasurementUnit;
+  standardQuantity?: Maybe<Scalars['Int']>;
+}
+
+/** Brand */
+export interface Brand {
+  __typename?: 'Brand';
+  categories?: Maybe<Array<Category>>;
+  categoryIds: Array<Scalars['String']>;
+  description: Scalars['String'];
+  id: Scalars['ID'];
+  media: Array<Media>;
+  products?: Maybe<ProductsResult>;
+  slug: Scalars['String'];
+  title: Scalars['String'];
+}
+
+/** Brand */
+export interface BrandMediaArgs {
+  mediaType?: InputMaybe<MediaType>;
+  purpose?: InputMaybe<MediaPurpose>;
+}
+
+/** Brand */
+export interface BrandProductsArgs {
+  filters?: InputMaybe<Array<FilterInput>>;
+  paging?: InputMaybe<PagingInput>;
+  query?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<SortInput>>;
+}
+
+/** Paged result of a brand list */
+export interface BrandsResult extends PagedResult {
+  __typename?: 'BrandsResult';
+  paging: Paging;
+  results: Array<Brand>;
+}
+
+/** An instance of a shopping cart */
+export interface Cart {
+  __typename?: 'Cart';
+  coupons: Array<Coupon>;
+  createdAt?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  items: Array<CartItem>;
+  /** List of available payment methods for this cart */
+  paymentMethods: Array<PaymentMethod>;
+  /** List of available shipping methods for this cart */
+  shippingMethods: Array<ShippingMethod>;
+  totals: Totals;
+  updatedAt?: Maybe<Scalars['String']>;
+}
+
+/** A cart line item */
+export interface CartItem {
+  __typename?: 'CartItem';
+  article?: Maybe<Article>;
+  articleId: Scalars['ID'];
+  cartId: Scalars['ID'];
+  children: Array<CartItem>;
+  createdAt?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  parent?: Maybe<CartItem>;
+  parentItemId?: Maybe<Scalars['ID']>;
+  quantity: Scalars['Int'];
+  salesUnit: SalesUnit;
+  totals: Totals;
+}
+
+/** Cart item data */
+export interface CartItemDataInput {
+  customization?: InputMaybe<Scalars['ScalarMap']>;
+  positionText?: InputMaybe<Scalars['String']>;
+}
+
+/** Result of a carts query */
+export interface CartsResult extends PagedResult {
+  __typename?: 'CartsResult';
+  paging: Paging;
+  results: Array<Cart>;
+}
+
+/** Paged result of a category list */
+export interface CategoriesResult extends PagedResult {
+  __typename?: 'CategoriesResult';
+  paging: Paging;
+  results: Array<Category>;
+}
+
+/** Categories are hierarchical containers for products */
+export interface Category {
+  __typename?: 'Category';
+  breadcrumbs: Array<Maybe<CategoryBreadcrumb>>;
+  children?: Maybe<Array<Category>>;
+  childrenIds: Array<Maybe<Scalars['String']>>;
+  description?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  media: Array<Media>;
+  parent?: Maybe<Category>;
+  parentId?: Maybe<Scalars['ID']>;
+  products?: Maybe<ProductsResult>;
+  slug: Scalars['String'];
+  title: Scalars['String'];
+}
+
+/** Categories are hierarchical containers for products */
+export interface CategoryMediaArgs {
+  mediaType?: InputMaybe<MediaType>;
+  purpose?: InputMaybe<MediaPurpose>;
+}
+
+/** Categories are hierarchical containers for products */
+export interface CategoryProductsArgs {
+  filters?: InputMaybe<Array<FilterInput>>;
+  paging?: InputMaybe<PagingInput>;
+  query?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<SortInput>>;
+}
+
+/** Breadcrumbs for hierarchical categories */
+export interface CategoryBreadcrumb {
+  __typename?: 'CategoryBreadcrumb';
+  id: Scalars['ID'];
+  slug: Scalars['String'];
+  title: Scalars['String'];
+}
+
+/** Checkout state */
+export interface CheckoutState {
+  __typename?: 'CheckoutState';
+  billingAddress?: Maybe<Address>;
+  email?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  paymentMethod?: Maybe<PaymentMethod>;
+  shippingAddress?: Maybe<Address>;
+  shippingMethod?: Maybe<ShippingMethod>;
+}
+
+/** A page can have multiple blocks, each of a specific type, which are optionally placed into slots */
+export interface ContentBlock {
+  __typename?: 'ContentBlock';
+  blockType: Scalars['String'];
+  createdAt?: Maybe<Scalars['String']>;
+  data: Scalars['ScalarMap'];
+  id: Scalars['ID'];
+  /** The content block key should be an alternative but still stable and unique key, with which a loose block (not attached to a Page) can be queried */
+  key?: Maybe<Scalars['String']>;
+  locale?: Maybe<Scalars['String']>;
+  /** Page blocks have a specific order within a page. The order field can be null if the page block is global (i.e. not associated with a page) */
+  order?: Maybe<Scalars['Int']>;
+  slot?: Maybe<Scalars['String']>;
+  status: ContentBlockStatus;
+  updatedAt?: Maybe<Scalars['String']>;
+}
+
+export type ContentBlockStatus = 'DRAFT' | 'PUBLISHED';
+
+/** Result of a contentBlocks query */
+export interface ContentBlocksResult extends PagedResult {
+  __typename?: 'ContentBlocksResult';
+  paging: Paging;
+  results: Array<ContentBlock>;
+}
+
+/** Country */
+export interface Country {
+  __typename?: 'Country';
+  /** ISO 3166-1 code */
+  isoCode: Scalars['String'];
+  name: Scalars['String'];
+}
+
+/** Users can apply coupons to a cart */
+export interface Coupon {
+  __typename?: 'Coupon';
+  key: Scalars['String'];
+  label?: Maybe<Scalars['String']>;
+  value: Scalars['Int'];
+}
+
+/** Currency */
+export interface Currency {
+  __typename?: 'Currency';
+  name: Scalars['String'];
+  symbol: Scalars['String'];
+}
+
+/** Saved Customer */
+export interface Customer {
+  __typename?: 'Customer';
+  addresses: Array<CustomerAddress>;
+  blocked: Scalars['Boolean'];
+  customerNumber: Scalars['String'];
+  email: Scalars['String'];
+  firstname?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  lastname?: Maybe<Scalars['String']>;
+}
+
+/** A saved address of a customer */
+export interface CustomerAddress extends AddressFields {
+  __typename?: 'CustomerAddress';
+  city: Scalars['String'];
+  company?: Maybe<Scalars['String']>;
+  country: Scalars['String'];
+  id: Scalars['ID'];
+  isDefaultBillingAddress: Scalars['Boolean'];
+  isDefaultShippingAddress: Scalars['Boolean'];
+  name: Scalars['String'];
+  phone?: Maybe<Scalars['String']>;
+  province?: Maybe<Scalars['String']>;
+  street: Scalars['String'];
+  street2?: Maybe<Scalars['String']>;
+  zipCode: Scalars['String'];
+}
+
+/** Result of a mutation which deletes objects */
+export interface DeleteResult {
+  __typename?: 'DeleteResult';
+  error?: Maybe<Error>;
+  success: Scalars['Boolean'];
+}
+
+/** Opening hours can deviate from regular times in order to be able to reflect public holidays, for example. */
+export interface DeviatingOpeningTime {
+  __typename?: 'DeviatingOpeningTime';
+  closed: Scalars['Boolean'];
+  date: Scalars['String'];
+  from?: Maybe<Scalars['String']>;
+  until?: Maybe<Scalars['String']>;
+}
+
+/** Discounts can be applied by the system to either CartItems or the Cart as a whole */
+export interface Discount {
+  __typename?: 'Discount';
+  id: Scalars['ID'];
+  label?: Maybe<Scalars['String']>;
+  value: Scalars['Int'];
+}
+
+/** General purpose error object */
+export interface Error {
+  __typename?: 'Error';
+  code: Scalars['String'];
+  message?: Maybe<Scalars['String']>;
+  ref?: Maybe<Scalars['String']>;
+}
+
+/** Expenses are additional costs that will be charged to the customer */
+export interface Expense {
+  __typename?: 'Expense';
+  id: Scalars['ID'];
+  label: Scalars['String'];
+  value: Scalars['Int'];
+}
+
+/** A map of features supported by the project */
+export interface Features {
+  __typename?: 'Features';
+  core: Scalars['Boolean'];
+}
+
+/** Generic filter input for lists/search */
+export interface FilterInput {
+  id: Scalars['ID'];
+  values: Array<Scalars['String']>;
+}
+
+export type FilterType = 'BOOLEAN' | 'COLOR' | 'NUMBER' | 'TEXT';
+
+/** Value of a (maybe) applied filter */
+export interface FilterValue {
+  __typename?: 'FilterValue';
+  count: Scalars['Int'];
+  id: Scalars['ID'];
+  label: Scalars['String'];
+}
+
+/** Locale */
+export interface Locale {
+  __typename?: 'Locale';
+  isoCode: Scalars['String'];
+  label?: Maybe<Scalars['String']>;
+}
+
+/** Login data may either be a combination of username and password or a token */
+export interface LoginInput {
+  password?: InputMaybe<Scalars['String']>;
+  refreshToken?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+}
+
+/** LoginResult */
+export interface LoginResult {
+  __typename?: 'LoginResult';
+  accessToken?: Maybe<AuthToken>;
+  customer?: Maybe<Customer>;
+  refreshToken?: Maybe<AuthToken>;
+}
+
+/** Manufacturers build products. In most cases there is only one vendor in the system, but there may be many for marketplaces */
+export interface Manufacturer {
+  __typename?: 'Manufacturer';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+}
+
+/** Result of a manufacturers query */
+export interface ManufacturersResult extends PagedResult {
+  __typename?: 'ManufacturersResult';
+  paging: Paging;
+  results: Array<Manufacturer>;
+}
+
+export type MeasurementUnit =
+  | 'ACRE'
+  | 'ARES'
+  | 'BARL'
+  | 'BCUF'
+  | 'BDFT'
+  | 'BUSL'
+  | 'CBME'
+  | 'CELI'
+  | 'CMET'
+  | 'DGEU'
+  | 'FOOT'
+  | 'GBGA'
+  | 'GBOU'
+  | 'GBPI'
+  | 'GBQA'
+  | 'GBTN'
+  | 'GGEU'
+  | 'GRAM'
+  | 'HECT'
+  | 'HUWG'
+  | 'INCH'
+  | 'ITEM'
+  | 'KILO'
+  | 'KMET'
+  | 'LITR'
+  | 'METR'
+  | 'MIBA'
+  | 'MILE'
+  | 'MILI'
+  | 'MMET'
+  | 'OZTR'
+  | 'PUND'
+  | 'SCMT'
+  | 'SMET'
+  | 'SMIL'
+  | 'SQFO'
+  | 'SQIN'
+  | 'SQKI'
+  | 'SQMI'
+  | 'SQYA'
+  | 'TONE'
+  | 'UCWT'
+  | 'USGA'
+  | 'USOU'
+  | 'USPI'
+  | 'USQA'
+  | 'USTN'
+  | 'YARD';
+
+/** A media object */
+export interface Media {
+  __typename?: 'Media';
+  mediaType: MediaType;
+  purpose?: Maybe<MediaPurpose>;
+  url: Scalars['String'];
+}
+
+/** Purpose of a Media object */
+export type MediaPurpose = 'COVER';
+
+/** Type of a media object */
+export type MediaType = 'IMAGE' | 'VIDEO';
+
+/** Meta data for SEO */
+export interface Meta {
+  __typename?: 'Meta';
+  description: Scalars['String'];
+  robots?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+}
+
+export interface Mutation {
+  __typename?: 'Mutation';
+  addCustomerAddress?: Maybe<CustomerAddress>;
+  addToCart?: Maybe<AddToCartResult>;
+  addToWishlist?: Maybe<Wishlist>;
+  applyCoupon?: Maybe<Cart>;
+  cancelReservation?: Maybe<DeleteResult>;
+  createCart?: Maybe<Cart>;
+  createReservation?: Maybe<Reservation>;
+  createWishlist?: Maybe<Wishlist>;
+  deleteCart?: Maybe<DeleteResult>;
+  deleteCustomerAddress?: Maybe<DeleteResult>;
+  deleteWishlist?: Maybe<DeleteResult>;
+  finishCheckout?: Maybe<Order>;
+  login?: Maybe<LoginResult>;
+  register?: Maybe<RegistrationResult>;
+  removeFromCart?: Maybe<DeleteResult>;
+  removeFromWishlist?: Maybe<DeleteResult>;
+  startCheckout?: Maybe<CheckoutState>;
+  updateCartItem?: Maybe<CartItem>;
+  updateCheckout?: Maybe<CheckoutState>;
+  updateCustomer?: Maybe<Customer>;
+  updateCustomerAddress?: Maybe<CustomerAddress>;
+}
+
+export interface MutationAddCustomerAddressArgs {
+  data: AddressInput;
+}
+
+export interface MutationAddToCartArgs {
+  cartId: Scalars['ID'];
+  items: Array<AddToCartItemInput>;
+}
+
+export interface MutationAddToWishlistArgs {
+  wishlistId: Scalars['ID'];
+}
+
+export interface MutationApplyCouponArgs {
+  cartId: Scalars['ID'];
+  coupon: Scalars['String'];
+}
+
+export interface MutationCancelReservationArgs {
+  reservationId: Scalars['ID'];
+}
+
+export interface MutationCreateReservationArgs {
+  articleId: Scalars['ID'];
+  quantity: Scalars['Int'];
+  reservationData: ReservationInput;
+}
+
+export interface MutationDeleteCartArgs {
+  id: Scalars['ID'];
+}
+
+export interface MutationDeleteCustomerAddressArgs {
+  id: Scalars['ID'];
+}
+
+export interface MutationFinishCheckoutArgs {
+  cartId: Scalars['ID'];
+}
+
+export interface MutationLoginArgs {
+  input: LoginInput;
+}
+
+export interface MutationRegisterArgs {
+  data: RegistrationInput;
+}
+
+export interface MutationRemoveFromCartArgs {
+  cartItemId: Scalars['ID'];
+}
+
+export interface MutationRemoveFromWishlistArgs {
+  wishlistItemId: Scalars['ID'];
+}
+
+export interface MutationStartCheckoutArgs {
+  cartId: Scalars['ID'];
+  data: UpdateCheckoutInput;
+}
+
+export interface MutationUpdateCartItemArgs {
+  data?: InputMaybe<UpdateCartItemInput>;
+  id: Scalars['ID'];
+}
+
+export interface MutationUpdateCheckoutArgs {
+  cartId: Scalars['ID'];
+  data: UpdateCheckoutInput;
+}
+
+export interface MutationUpdateCustomerArgs {
+  data: UpdateCustomerInput;
+  id: Scalars['ID'];
+}
+
+export interface MutationUpdateCustomerAddressArgs {
+  data?: InputMaybe<AddressInput>;
+  setDefaultBilling?: InputMaybe<Scalars['Boolean']>;
+  setDefaultShipping?: InputMaybe<Scalars['Boolean']>;
+}
+
+/** Opening times of a warehouse/store */
+export type OpeningTime = DeviatingOpeningTime | RegularOpeningTime;
+
+/** Order */
+export interface Order {
+  __typename?: 'Order';
+  billingAddress: Address;
+  createdAt: Scalars['String'];
+  id: Scalars['ID'];
+  items?: Maybe<Array<OrderItem>>;
+  paymentInfo: OrderPaymentInfo;
+  shippingAddress: Address;
+  shippingInfo: OrderShippingInfo;
+  status: OrderStatus;
+}
+
+/** Order item */
+export interface OrderItem {
+  __typename?: 'OrderItem';
+  article?: Maybe<Article>;
+  id: Scalars['ID'];
+  orderId: Scalars['ID'];
+  price: Scalars['Int'];
+  quantity: Scalars['Int'];
+  sku: Scalars['ID'];
+  title: Scalars['String'];
+}
+
+/** Container for payment information of an order */
+export interface OrderPaymentInfo {
+  __typename?: 'OrderPaymentInfo';
+  method: PaymentMethod;
+  payments: Array<Payment>;
+}
+
+/** Container for shipping information */
+export interface OrderShippingInfo {
+  __typename?: 'OrderShippingInfo';
+  method: ShippingMethod;
+  shipments: Array<Shipment>;
+}
+
+export type OrderStatus = 'CANCELED' | 'CLOSED' | 'NEW' | 'SHIPPED';
+
+/** Order list filters */
+export interface OrdersFilterInput {
+  from?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Array<OrderStatus>>;
+  until?: InputMaybe<Scalars['String']>;
+}
+
+/** Paged result of an order list */
+export interface OrdersResult extends PagedResult {
+  __typename?: 'OrdersResult';
+  paging: Paging;
+  results?: Maybe<Array<Order>>;
+}
+
+/** A page represents a page in the storefront, typically provided by a CMS */
+export interface Page {
+  __typename?: 'Page';
+  blocks: Array<ContentBlock>;
+  children?: Maybe<Array<Page>>;
+  childrenIds: Array<Scalars['ID']>;
+  createdAt?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  locale?: Maybe<Scalars['String']>;
+  meta: Meta;
+  reference?: Maybe<PageReference>;
+  referenceId?: Maybe<Scalars['ID']>;
+  status: PageStatus;
+  template?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  updatedAt?: Maybe<Scalars['String']>;
+  url: Scalars['String'];
+}
+
+export type PageReference = Article | Brand | Category | Product;
+
+export type PageStatus = 'DRAFT' | 'PUBLISHED';
+
+export interface PagedResult {
+  paging: Paging;
+}
+
+/** Result of a pages query */
+export interface PagesResult extends PagedResult {
+  __typename?: 'PagesResult';
+  paging: Paging;
+  results: Array<Page>;
+}
+
+/** Paging information */
+export interface Paging {
+  __typename?: 'Paging';
+  total: Scalars['Int'];
+}
+
+/** Paging specifier */
+export interface PagingInput {
+  limit: Scalars['Int'];
+  page: Scalars['Int'];
+}
+
+/** Payment */
+export interface Payment {
+  __typename?: 'Payment';
+  status: PaymentStatus;
+}
+
+/** Payment Method */
+export interface PaymentMethod {
+  __typename?: 'PaymentMethod';
+  description?: Maybe<Scalars['String']>;
+  expense?: Maybe<Expense>;
+  id: Scalars['ID'];
+  label?: Maybe<Scalars['String']>;
+}
+
+export type PaymentStatus = 'COMPLETE' | 'PENDING';
+
+/** Prices (and their related quantities) always refer to the BaseUnit of an article */
+export interface Price {
+  __typename?: 'Price';
+  currency: Currency;
+  discount?: Maybe<Scalars['Int']>;
+  grossValue: Scalars['Int'];
+  netValue: Scalars['Int'];
+  original?: Maybe<Scalars['Int']>;
+  quantity: Scalars['Int'];
+  referencePrice?: Maybe<ReferencePrice>;
+  taxValue: TaxValue;
+  validFrom?: Maybe<Scalars['String']>;
+  validUntil?: Maybe<Scalars['String']>;
+}
+
+/** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
+export interface Product {
+  __typename?: 'Product';
+  articleIds: Array<Scalars['String']>;
+  articles?: Maybe<Array<Article>>;
+  attributes: Array<Maybe<Attribute>>;
+  brand?: Maybe<Brand>;
+  brandId: Scalars['ID'];
+  categories?: Maybe<Array<Category>>;
+  categoryIds: Array<Scalars['ID']>;
+  createdAt?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  info: ProductInfo;
+  labels: Array<Scalars['String']>;
+  manufacturer?: Maybe<Manufacturer>;
+  manufacturerId?: Maybe<Scalars['ID']>;
+  media: Array<Media>;
+  options: Array<ProductOption>;
+  relatedProducts?: Maybe<RelatedProductsResult>;
+  slug: Scalars['String'];
+  status: ProductStatus;
+  title: Scalars['String'];
+  updatedAt?: Maybe<Scalars['String']>;
+}
+
+/** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
+export interface ProductArticlesArgs {
+  filters?: InputMaybe<Array<FilterInput>>;
+}
+
+/** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
+export interface ProductMediaArgs {
+  mediaType?: InputMaybe<MediaType>;
+  purpose?: InputMaybe<MediaPurpose>;
+}
+
+/** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
+export interface ProductRelatedProductsArgs {
+  paging?: InputMaybe<PagingInput>;
+  type?: InputMaybe<RelatedProductType>;
+}
+
+/** Product information */
+export interface ProductInfo extends SellableInfo {
+  __typename?: 'ProductInfo';
+  description: Scalars['String'];
+}
+
+/**
+ * Product options make up variants. Each article must have all product options of the product defined as attributes.
+ * The value of an attribute matches the value of a ProductOptionValue
+ */
+export interface ProductOption {
+  __typename?: 'ProductOption';
+  id: Scalars['ID'];
+  label: Scalars['String'];
+  type: ProductOptionType;
+  values: Array<ProductOptionValue>;
+}
+
+export type ProductOptionType = 'COLOR' | 'TEXT';
+
+/** Valud of a product option */
+export interface ProductOptionValue {
+  __typename?: 'ProductOptionValue';
+  label?: Maybe<Scalars['String']>;
+  value: Scalars['String'];
+}
+
+/** Status of a product */
+export type ProductStatus = 'DISCONTINUED' | 'DRAFT' | 'PUBLISHED';
+
+/** Paged result of a product list */
+export interface ProductsResult extends PagedResult {
+  __typename?: 'ProductsResult';
+  paging: Paging;
+  results: Array<Product>;
+}
+
+export interface Query {
+  __typename?: 'Query';
+  article?: Maybe<Article>;
+  articleByField?: Maybe<Article>;
+  brand?: Maybe<Brand>;
+  brandByField?: Maybe<Brand>;
+  brands?: Maybe<BrandsResult>;
+  cart?: Maybe<Cart>;
+  carts?: Maybe<CartsResult>;
+  categories?: Maybe<CategoriesResult>;
+  category?: Maybe<Category>;
+  categoryByField?: Maybe<Category>;
+  contentBlock?: Maybe<ContentBlock>;
+  contentBlocks?: Maybe<ContentBlocksResult>;
+  customer?: Maybe<Customer>;
+  features: Features;
+  manufacturer?: Maybe<Manufacturer>;
+  manufacturerByField?: Maybe<Manufacturer>;
+  manufacturers?: Maybe<ManufacturersResult>;
+  order?: Maybe<Order>;
+  orders?: Maybe<OrdersResult>;
+  page?: Maybe<Page>;
+  pageByField?: Maybe<Page>;
+  pages?: Maybe<PagesResult>;
+  product?: Maybe<Product>;
+  productByField?: Maybe<Product>;
+  products?: Maybe<ProductsResult>;
+  reservation?: Maybe<Reservation>;
+  reservationByField?: Maybe<Reservation>;
+  reservations?: Maybe<ReservationsResult>;
+  search?: Maybe<SearchResult>;
+  seller?: Maybe<Seller>;
+  sellerByField?: Maybe<Seller>;
+  sellers?: Maybe<SellersResult>;
+  session?: Maybe<Session>;
+  shop?: Maybe<Shop>;
+  suggestions: Array<Suggestion>;
+  warehouse?: Maybe<Warehouse>;
+  warehouseByField?: Maybe<Warehouse>;
+  warehouses?: Maybe<WarehousesResult>;
+  wishlist?: Maybe<Wishlist>;
+  wishlists?: Maybe<WishlistsResult>;
+}
+
+export interface QueryArticleArgs {
+  id: Scalars['ID'];
+}
+
+export interface QueryArticleByFieldArgs {
+  field: Scalars['String'];
+  value: Scalars['String'];
+}
+
+export interface QueryBrandArgs {
+  id: Scalars['ID'];
+}
+
+export interface QueryBrandByFieldArgs {
+  field: Scalars['String'];
+  value: Scalars['String'];
+}
+
+export interface QueryBrandsArgs {
+  paging?: InputMaybe<PagingInput>;
+}
+
+export interface QueryCartArgs {
+  id: Scalars['ID'];
+}
+
+export interface QueryCategoriesArgs {
+  paging?: InputMaybe<PagingInput>;
+}
+
+export interface QueryCategoryArgs {
+  id: Scalars['ID'];
+}
+
+export interface QueryCategoryByFieldArgs {
+  field: Scalars['String'];
+  value: Scalars['String'];
+}
+
+export interface QueryContentBlockArgs {
+  id?: InputMaybe<Scalars['ID']>;
+  key?: InputMaybe<Scalars['String']>;
+}
+
+export interface QueryContentBlocksArgs {
+  status?: InputMaybe<ContentBlockStatus>;
+  type?: InputMaybe<Scalars['String']>;
+}
+
+export interface QueryManufacturerArgs {
+  id: Scalars['ID'];
+}
+
+export interface QueryManufacturerByFieldArgs {
+  field: Scalars['String'];
+  value: Scalars['String'];
+}
+
+export interface QueryOrderArgs {
+  id: Scalars['ID'];
+}
+
+export interface QueryOrdersArgs {
+  filters?: InputMaybe<Array<OrdersFilterInput>>;
+  paging?: InputMaybe<PagingInput>;
+  sort?: InputMaybe<Array<SortInput>>;
+}
+
+export interface QueryPageArgs {
+  id: Scalars['ID'];
+}
+
+export interface QueryPageByFieldArgs {
+  field: Scalars['String'];
+  value: Scalars['String'];
+}
+
+export interface QueryPagesArgs {
+  paging?: InputMaybe<PagingInput>;
+  sort?: InputMaybe<Array<SortInput>>;
+  status?: InputMaybe<Array<PageStatus>>;
+}
+
+export interface QueryProductArgs {
+  id: Scalars['ID'];
+}
+
+export interface QueryProductByFieldArgs {
+  field: Scalars['String'];
+  value: Scalars['String'];
+}
+
+export interface QueryProductsArgs {
+  filters?: InputMaybe<Array<FilterInput>>;
+  paging?: InputMaybe<PagingInput>;
+  query?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<SortInput>>;
+}
+
+export interface QueryReservationArgs {
+  id: Scalars['ID'];
+}
+
+export interface QueryReservationByFieldArgs {
+  field: Scalars['String'];
+  value: Scalars['String'];
+}
+
+export interface QuerySearchArgs {
+  filters?: InputMaybe<Array<FilterInput>>;
+  paging?: InputMaybe<PagingInput>;
+  query?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<SortInput>>;
+}
+
+export interface QuerySellerArgs {
+  id: Scalars['ID'];
+}
+
+export interface QuerySellerByFieldArgs {
+  field: Scalars['String'];
+  value: Scalars['String'];
+}
+
+export interface QuerySellersArgs {
+  filters?: InputMaybe<Array<FilterInput>>;
+  paging?: InputMaybe<PagingInput>;
+  sort?: InputMaybe<Array<SortInput>>;
+}
+
+export interface QuerySuggestionsArgs {
+  searchTerm: Scalars['String'];
+}
+
+export interface QueryWarehouseArgs {
+  id: Scalars['ID'];
+}
+
+export interface QueryWarehouseByFieldArgs {
+  field: Scalars['String'];
+  value: Scalars['String'];
+}
+
+export interface QueryWarehousesArgs {
+  aroundLocation?: InputMaybe<AroundLocationInput>;
+}
+
+export interface QueryWishlistArgs {
+  id: Scalars['ID'];
+}
+
+export interface QueryWishlistsArgs {
+  sort?: InputMaybe<Array<SortInput>>;
+}
+
+/**
+ * A reference price provides a baseline with which prices of different articles can be compared, even though these
+ * articles might be sond in different SalesUnits.
+ */
+export interface ReferencePrice {
+  __typename?: 'ReferencePrice';
+  currency: Currency;
+  grossValue: Scalars['Int'];
+  netValue: Scalars['Int'];
+  quantity: Scalars['Int'];
+  salesUnit: SalesUnit;
+  taxValue: TaxValue;
+}
+
+/** Customer data for registration */
+export interface RegistrationInput {
+  addresses: Array<AddressInput>;
+  company?: InputMaybe<Scalars['String']>;
+  email: Scalars['String'];
+  firstname?: InputMaybe<Scalars['String']>;
+  lastname?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  salutation?: InputMaybe<Scalars['String']>;
+}
+
+/** RegistrationResult */
+export interface RegistrationResult {
+  __typename?: 'RegistrationResult';
+  accessToken?: Maybe<AuthToken>;
+  customer?: Maybe<Customer>;
+  refreshToken?: Maybe<AuthToken>;
+}
+
+/** Regular (recurring) opening times of a warehouse/store */
+export interface RegularOpeningTime {
+  __typename?: 'RegularOpeningTime';
+  dayOfWeek: Scalars['String'];
+  from: Scalars['String'];
+  until: Scalars['String'];
+}
+
+/** A product which related to an other product */
+export interface RelatedProduct {
+  __typename?: 'RelatedProduct';
+  product: Product;
+  type: RelatedProductType;
+}
+
+export type RelatedProductType = 'ACCESSORY' | 'ALTERNATIVE' | 'SUCCESSOR';
+
+/** Paged result of a related-product list */
+export interface RelatedProductsResult extends PagedResult {
+  __typename?: 'RelatedProductsResult';
+  paging: Paging;
+  results: Array<RelatedProduct>;
+}
+
+/** A reservation of articles in specified quantites in a warehouse */
+export interface Reservation {
+  __typename?: 'Reservation';
+  articles: Array<ReservedArticle>;
+  customer?: Maybe<Customer>;
+  customerId?: Maybe<Scalars['ID']>;
+  email: Scalars['String'];
+  firstname: Scalars['String'];
+  id: Scalars['ID'];
+  lastname: Scalars['String'];
+  phone?: Maybe<Scalars['String']>;
+  reservationNumber: Scalars['String'];
+  status: ReservationStatus;
+  validUntil: Scalars['String'];
+  warehouse?: Maybe<Warehouse>;
+  warehouseId: Scalars['ID'];
+}
+
+/** Contact data required to create a reservation */
+export interface ReservationContactDataInput {
+  email: Scalars['String'];
+  firstname: Scalars['String'];
+  lastname: Scalars['String'];
+  phone?: InputMaybe<Scalars['String']>;
+}
+
+/** Data required to create a new reservation */
+export interface ReservationInput {
+  articleId: Scalars['ID'];
+  contactData: ReservationContactDataInput;
+  quantity: Scalars['Int'];
+}
+
+export type ReservationStatus = 'CANCELLED' | 'CLOSED' | 'NEW' | 'READY';
+
+/** Result of a reservations query */
+export interface ReservationsResult extends PagedResult {
+  __typename?: 'ReservationsResult';
+  paging: Paging;
+  results: Array<Reservation>;
+}
+
+/** A reserved article references an article in a specified quantity which is part of a reservation */
+export interface ReservedArticle {
+  __typename?: 'ReservedArticle';
+  article?: Maybe<Article>;
+  articleID: Scalars['ID'];
+  id: Scalars['ID'];
+  quantity: Scalars['Int'];
+}
+
+export type ResolveUrlResultType = 'ARTICLE' | 'BRAND' | 'CATEGORY' | 'PRODUCT';
+
+/** A sales unit is the unit in which an article is sold. Every article has to have at least SalesUnit, usually "piece" */
+export interface SalesUnit {
+  __typename?: 'SalesUnit';
+  /** Factor which defines how to convert its BaseUnit to this SalesUnit */
+  conversion: Scalars['Int'];
+  id: Scalars['ID'];
+  name: MeasurementUnit;
+}
+
+/** Paged search result */
+export interface SearchResult extends PagedResult {
+  __typename?: 'SearchResult';
+  filters: Array<AppliedFilter>;
+  paging: Paging;
+  results: Array<SearchResultItem>;
+}
+
+/** A search result entry for product searches */
+export interface SearchResultItem {
+  __typename?: 'SearchResultItem';
+  image?: Maybe<Scalars['String']>;
+  reference?: Maybe<SearchResultItemReference>;
+  referenceId?: Maybe<Scalars['ID']>;
+  title: Scalars['String'];
+  type: SearchResultItemType;
+  url?: Maybe<Scalars['String']>;
+}
+
+export type SearchResultItemReference = Brand | Category | Product;
+
+export type SearchResultItemType = 'PRODUCT';
+
+export interface SellableInfo {
+  description?: Maybe<Scalars['String']>;
+}
+
+/** Sellers sell articles. In most cases there is only one vendor in the system, but there may be many for marketplaces */
+export interface Seller {
+  __typename?: 'Seller';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+}
+
+/** Result of a sellers query */
+export interface SellersResult extends PagedResult {
+  __typename?: 'SellersResult';
+  paging: Paging;
+  results: Array<Seller>;
+}
+
+/** Session */
+export interface Session {
+  __typename?: 'Session';
+  id: Scalars['String'];
+}
+
+/** Shipment */
+export interface Shipment {
+  __typename?: 'Shipment';
+  carrier?: Maybe<Scalars['String']>;
+  items: Array<ShipmentItem>;
+  status: ShipmentStatus;
+  trackingNumber?: Maybe<Scalars['String']>;
+}
+
+/** A Shipment Item describes which articles have been shipped in which quantity */
+export interface ShipmentItem {
+  __typename?: 'ShipmentItem';
+  article?: Maybe<Article>;
+  id: Scalars['ID'];
+  quantity: Scalars['Int'];
+}
+
+export type ShipmentStatus = 'DELIVERED' | 'PENDING' | 'SHIPPED';
+
+/** Shipping Method */
+export interface ShippingMethod {
+  __typename?: 'ShippingMethod';
+  description?: Maybe<Scalars['String']>;
+  expense?: Maybe<Expense>;
+  id: Scalars['ID'];
+  label?: Maybe<Scalars['String']>;
+}
+
+/** Shop specific settings and configuration */
+export interface Shop {
+  __typename?: 'Shop';
+  currencies: Array<Currency>;
+  defaultLocale?: Maybe<Locale>;
+  locales: Array<Locale>;
+  pricePrecision: Scalars['Int'];
+}
+
+/** Sort specifier */
+export interface SortInput {
+  field: Scalars['String'];
+  value: SortValue;
+}
+
+export type SortValue = 'ASC' | 'DESC';
+
+/** Search Suggestion */
+export interface Suggestion {
+  __typename?: 'Suggestion';
+  result?: Maybe<SuggestionResult>;
+  resultId: Scalars['ID'];
+  slug?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  type: SuggestionType;
+}
+
+export type SuggestionResult = Article | Brand | Category | Product;
+
+/** Type of a suggestion entry */
+export type SuggestionType = 'ARTICLE' | 'BRAND' | 'CATEGORY' | 'PRODUCT';
+
+/** Tax class */
+export interface TaxClass {
+  __typename?: 'TaxClass';
+  country: Country;
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  /** Fractional value in percent applied to the net amount, e.g. 19 */
+  value: Scalars['Int'];
+}
+
+/** An actual tax value, referring to a TaxClass */
+export interface TaxValue {
+  __typename?: 'TaxValue';
+  taxClass: TaxClass;
+  value: Scalars['Int'];
+}
+
+/** Total amounts of a Cart or a CartItem */
+export interface Totals {
+  __typename?: 'Totals';
+  discounts: Array<Discount>;
+  expenses: Array<Expense>;
+  gross: Scalars['Int'];
+  net: Scalars['Int'];
+  taxes: Array<Maybe<TaxValue>>;
+}
+
+/** Update cart item data */
+export interface UpdateCartItemInput {
+  data?: InputMaybe<CartItemDataInput>;
+  quantity?: InputMaybe<Scalars['Int']>;
+  salesUnitId?: InputMaybe<Scalars['ID']>;
+}
+
+/** Checkout data to be updated */
+export interface UpdateCheckoutInput {
+  billingAddress?: InputMaybe<AddressInput>;
+  email?: InputMaybe<Scalars['String']>;
+  paymentMethod?: InputMaybe<Scalars['ID']>;
+  shippingAddress?: InputMaybe<AddressInput>;
+  shippingMethod?: InputMaybe<Scalars['ID']>;
+}
+
+/** Customer data to be updated */
+export interface UpdateCustomerInput {
+  email?: InputMaybe<Scalars['String']>;
+  firstname?: InputMaybe<Scalars['String']>;
+  lastname?: InputMaybe<Scalars['String']>;
+}
+
+/** A warehouse */
+export interface Warehouse {
+  __typename?: 'Warehouse';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  openingTimes: Array<OpeningTime>;
+}
+
+/** Result of a warehouses query */
+export interface WarehousesResult extends PagedResult {
+  __typename?: 'WarehousesResult';
+  paging: Paging;
+  results: Array<Warehouse>;
+}
+
+/** Wishlist */
+export interface Wishlist {
+  __typename?: 'Wishlist';
+  id: Scalars['ID'];
+  items: Array<WishlistItem>;
+}
+
+/** Wishlist item */
+export interface WishlistItem {
+  __typename?: 'WishlistItem';
+  article?: Maybe<Article>;
+  articleId: Scalars['ID'];
+  id: Scalars['ID'];
+  quantity: Scalars['Int'];
+}
+
+/** Paged result of a wishlist list */
+export interface WishlistsResult extends PagedResult {
+  __typename?: 'WishlistsResult';
+  paging: Paging;
+  results?: Maybe<Array<Wishlist>>;
+}
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
@@ -128,6 +1536,7 @@ export type ResolversTypes = {
   Attribute: ResolverTypeWrapper<Attribute>;
   AttributeDefinition: ResolverTypeWrapper<AttributeDefinition>;
   AttributeType: AttributeType;
+  AuthToken: ResolverTypeWrapper<AuthToken>;
   Availability: ResolverTypeWrapper<Availability>;
   BaseUnit: ResolverTypeWrapper<BaseUnit>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
@@ -162,6 +1571,8 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Locale: ResolverTypeWrapper<Locale>;
+  LoginInput: LoginInput;
+  LoginResult: ResolverTypeWrapper<LoginResult>;
   Manufacturer: ResolverTypeWrapper<Manufacturer>;
   ManufacturersResult: ResolverTypeWrapper<ManufacturersResult>;
   MeasurementUnit: MeasurementUnit;
@@ -303,6 +1714,7 @@ export type ResolversParentTypes = {
   ArticleInfo: ArticleInfo;
   Attribute: Attribute;
   AttributeDefinition: AttributeDefinition;
+  AuthToken: AuthToken;
   Availability: Availability;
   BaseUnit: BaseUnit;
   Boolean: Scalars['Boolean'];
@@ -335,6 +1747,8 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'];
   Int: Scalars['Int'];
   Locale: Locale;
+  LoginInput: LoginInput;
+  LoginResult: LoginResult;
   Manufacturer: Manufacturer;
   ManufacturersResult: ManufacturersResult;
   Media: Media;
@@ -591,6 +2005,15 @@ export type AttributeDefinitionResolvers<
   >;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   label?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AuthTokenResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['AuthToken'] = ResolversParentTypes['AuthToken']
+> = {
+  expiresIn?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1003,10 +2426,6 @@ export type FeaturesResolvers<
   ParentType extends ResolversParentTypes['Features'] = ResolversParentTypes['Features']
 > = {
   core?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  openingTimes?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  reservations?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  sellers?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  warehouses?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1026,6 +2445,28 @@ export type LocaleResolvers<
 > = {
   isoCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   label?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LoginResultResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['LoginResult'] = ResolversParentTypes['LoginResult']
+> = {
+  accessToken?: Resolver<
+    Maybe<ResolversTypes['AuthToken']>,
+    ParentType,
+    ContextType
+  >;
+  customer?: Resolver<
+    Maybe<ResolversTypes['Customer']>,
+    ParentType,
+    ContextType
+  >;
+  refreshToken?: Resolver<
+    Maybe<ResolversTypes['AuthToken']>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1146,6 +2587,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationFinishCheckoutArgs, 'cartId'>
+  >;
+  login?: Resolver<
+    Maybe<ResolversTypes['LoginResult']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationLoginArgs, 'input'>
   >;
   register?: Resolver<
     Maybe<ResolversTypes['RegistrationResult']>,
@@ -1797,8 +3244,18 @@ export type RegistrationResultResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['RegistrationResult'] = ResolversParentTypes['RegistrationResult']
 > = {
+  accessToken?: Resolver<
+    Maybe<ResolversTypes['AuthToken']>,
+    ParentType,
+    ContextType
+  >;
   customer?: Resolver<
     Maybe<ResolversTypes['Customer']>,
+    ParentType,
+    ContextType
+  >;
+  refreshToken?: Resolver<
+    Maybe<ResolversTypes['AuthToken']>,
     ParentType,
     ContextType
   >;
@@ -2219,6 +3676,7 @@ export type Resolvers<ContextType = any> = {
   ArticleInfo?: ArticleInfoResolvers<ContextType>;
   Attribute?: AttributeResolvers<ContextType>;
   AttributeDefinition?: AttributeDefinitionResolvers<ContextType>;
+  AuthToken?: AuthTokenResolvers<ContextType>;
   Availability?: AvailabilityResolvers<ContextType>;
   BaseUnit?: BaseUnitResolvers<ContextType>;
   Brand?: BrandResolvers<ContextType>;
@@ -2245,6 +3703,7 @@ export type Resolvers<ContextType = any> = {
   Features?: FeaturesResolvers<ContextType>;
   FilterValue?: FilterValueResolvers<ContextType>;
   Locale?: LocaleResolvers<ContextType>;
+  LoginResult?: LoginResultResolvers<ContextType>;
   Manufacturer?: ManufacturerResolvers<ContextType>;
   ManufacturersResult?: ManufacturersResultResolvers<ContextType>;
   Media?: MediaResolvers<ContextType>;

@@ -27,8 +27,8 @@ function applyHeaders(
   });
 }
 
-export const createServer = function (
-  connectors: Connector<Context>[],
+export const createServer = function <TContext extends Context>(
+  connectors: Connector<TContext>[],
   envelopPlugins: Plugin[] = [],
   cors?: CorsConfig
 ) {

@@ -1,9 +1,10 @@
 overwrite: true
-schema: 'schema/index.graphql'
+schema: 'node_modules/@fronnt/core/dist/graphql.schema.json'
 # config:
 generates:
   types/generated/graphql.d.ts:
     plugins:
+      - 'typescript'
       - 'typescript-resolvers'
     config:
       declarationKind: 'interface'

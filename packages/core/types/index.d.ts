@@ -23,12 +23,12 @@ export declare interface Context {
   sessionId: string | null;
 }
 
-export declare interface Connector<ContextType extends Context> {
+export declare interface Connector<TContext extends Context> {
   getTypeDefs(): Array<DocumentNode | string>;
 
-  getResolvers(): Array<Resolvers<ContextType>>;
+  getResolvers(): Array<Resolvers<TContext>>;
 
-  extendContext?(context: Readonly<ContextType>): Record<string, unknown>;
+  extendContext?(context: Readonly<TContext>): Record<string, unknown>;
 
   getDataSources?(): Record<string, unknown>;
 }

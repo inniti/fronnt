@@ -190,6 +190,10 @@ A map of features supported by the project
 """
 type Features {
   core: Boolean!
+  reservations: Boolean!
+  warehouses: Boolean!
+  openingTimes: Boolean!
+  sellers: Boolean!
 }
 
 """
@@ -397,7 +401,7 @@ type ProductInfo implements SellableInfo {
 }
 
 """
-Valud of a product option
+Value of a product option
 """
 type ProductOptionValue {
   value: String!
@@ -696,7 +700,7 @@ interface AddressFields {
 }
 
 """
-An address
+An address in general
 """
 type Address implements AddressFields {
   name: String!
@@ -900,6 +904,9 @@ type Price {
   validFrom: String
   validUntil: String
   original: Int
+  """
+  In percent
+  """
   discount: Int
   referencePrice: ReferencePrice
 }
@@ -1056,27 +1063,11 @@ type WarehousesResult implements PagedResult {
   results: [Warehouse!]!
 }
 
-type AuthToken {
-  expiresIn: Int
-  value: String!
-}
-
-"""
-LoginResult
-"""
-type LoginResult {
-  customer: Customer
-  accessToken: AuthToken
-  refreshToken: AuthToken
-}
-
 """
 RegistrationResult
 """
 type RegistrationResult {
   customer: Customer
-  accessToken: AuthToken
-  refreshToken: AuthToken
 }
 
 """
@@ -1228,15 +1219,6 @@ input AroundLocationInput {
   radius: Int
 }
 
-"""
-Login data may either be a combination of username and password or a token
-"""
-input LoginInput {
-  username: String
-  password: String
-  refreshToken: String
-}
-
 ####################################################################################
 # Root
 ####################################################################################
@@ -1356,6 +1338,4 @@ type Mutation {
     reservationData: ReservationInput!
   ): Reservation
   cancelReservation(reservationId: ID!): DeleteResult
-
-  login(input: LoginInput!): LoginResult
 }
