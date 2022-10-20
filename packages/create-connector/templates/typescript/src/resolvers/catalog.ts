@@ -1,5 +1,5 @@
-import { Resolvers } from '@fronnt/core';
-import { Context } from '../../types';
+import type { Resolvers } from '@fronnt/core';
+import type { Context } from '../../types';
 import { extractPaging } from '../utils';
 
 const resolvers: Resolvers<Context> = {

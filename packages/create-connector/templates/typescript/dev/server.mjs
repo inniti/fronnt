@@ -1,6 +1,6 @@
 import { config } from 'dotenv';
 import { createServer } from '@fronnt/server';
-import { useTiming } from '@envelop/core';
+// import { useLogger } from '@envelop/core';
 import Connector from '../dist/index.mjs';
 
 config();
@@ -9,7 +9,6 @@ const port = process.env.PORT || 4000;
 
 const envelopPlugins = [];
 if ( process.env.NODE_ENV === 'development' ) {
-	envelopPlugins.push(useTiming());
 	// envelopPlugins.push(useLogger());
 }
 

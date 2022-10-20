@@ -5,23 +5,16 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 
-function fill(count, character) {
-  let str = '';
-  for (let i = 0; i < count; i++) {
-    str += character || ' ';
-  }
-  return str;
-}
-
 function printSuccess(projectName) {
   console.log(
     '✅ ' + chalk.green('Successfully generated project: ') + projectName
   );
-  console.log(` _____${fill(projectName.length, '_')}__`);
-  console.log(`|  cd ${projectName}  |`);
-  console.log(`|  npm install${fill(projectName.length - 8)}  |`);
-  console.log(`|  npm run dev${fill(projectName.length - 8)}  |`);
-  console.log(`|_____${fill(projectName.length, '_')}__|`);
+  console.log(` __________________________________________`);
+  console.log(`|  cd ${projectName}`);
+  console.log(`|  <your package manager> install`);
+  console.log(`|  <your package manager> run dev`);
+  console.log(` __________________________________________`);
+
 }
 
 const templates = fs.readdirSync(`${__dirname}/templates`);

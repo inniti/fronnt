@@ -1,4 +1,4 @@
-import { PagingInput } from '@fronnt/core';
+import type { PagingInput } from '@fronnt/core';
 
 export function extractPaging(paging: PagingInput) {
   let page = 1;

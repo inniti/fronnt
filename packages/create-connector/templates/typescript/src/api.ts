@@ -1,4 +1,4 @@
-import { Api as _Api } from '../types';
+import type { Api as _Api } from '../types';
 
 export default class Api implements _Api {
   private readonly baseUrl;

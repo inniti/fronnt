@@ -6,6 +6,10 @@ const resolvers: Resolvers<Context> = {
     features() {
       return {
         core: true,
+        openingTimes: false,
+        reservations: false,
+        sellers: false,
+        warehouses: false,
       };
     },
   },

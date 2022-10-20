@@ -24,20 +24,20 @@
     "dev": "concurrently \"node build.js --watch\" \"nodemon ./dev/server.mjs --watch ./dist/index.mjs\""
 	},
 	"dependencies": {
-		"@fronnt/core": "latest",
-    "graphql": "^16.3.0",
-    "graphql-tag": "^2.12.6"
+    "graphql": "^16.5.0",
+    "graphql-tag": "^2.12.0"
 	},
 	"devDependencies": {
-		"@envelop/core": "^1.7.1",
+		"@fronnt/core": "latest",
+		"@envelop/core": "^3.0.0",
     "@fronnt/server": "latest",
-    "@types/node": "^16.11.21",
-    "dotenv": "^16.0.0",
-    "esbuild": "^0.14.18",
-    "minimist": "^1.2.5",
-    "nodemon": "^2.0.15",
-    "ts-node": "^10.4.0",
-    "concurrently": "^7.0.0",
-    "typescript": "^4.5.5"
+    "@types/node": "^16.11.0",
+		"dotenv": "^16.0.0",
+    "esbuild": "^0.15.0",
+    "minimist": "^1.2.0",
+    "nodemon": "^2.0.0",
+    "ts-node": "^10.9.0",
+    "concurrently": "^7.4.0",
+    "typescript": "^4.8.0"
 	}
 }
