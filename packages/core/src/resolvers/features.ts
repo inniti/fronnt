@@ -5,12 +5,28 @@ const baseFeaturesResolvers: Resolvers = {
     features() {
       return {
         core: true,
+        openingTimes: false,
+        reservations: false,
+        sellers: false,
+        warehouses: false,
       };
     },
   },
   Features: {
     core() {
       return true;
+    },
+    openingTimes() {
+      return false;
+    },
+    reservations() {
+      return false;
+    },
+    sellers() {
+      return false;
+    },
+    warehouses() {
+      return false;
     },
   },
 };

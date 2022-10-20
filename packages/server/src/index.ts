@@ -78,6 +78,8 @@ export const createServer = function <TContext extends Context>(
         reply.send(
           renderGraphiQL({
             endpoint: '/',
+            defaultQuery:
+              'query SupportedFronntFeatures {\n  features {\n    core\n  }\n}',
           })
         );
       } else {

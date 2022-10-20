@@ -4,9 +4,9 @@ import {
   GraphQLScalarTypeConfig,
 } from 'graphql';
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-export type RequireFields<T, K extends keyof T> = {
-  [X in Exclude<keyof T, K>]?: T[X];
-} & { [P in K]-?: NonNullable<T[P]> };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
+  [P in K]-?: NonNullable<T[P]>;
+};
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
@@ -513,7 +513,7 @@ export type ArticleResolvers<
     Array<ResolversTypes['Availability']>,
     ParentType,
     ContextType,
-    RequireFields<ArticleAvailabilitiesArgs, never>
+    Partial<ArticleAvailabilitiesArgs>
   >;
   baseUnit?: Resolver<ResolversTypes['BaseUnit'], ParentType, ContextType>;
   brand?: Resolver<Maybe<ResolversTypes['Brand']>, ParentType, ContextType>;
@@ -527,13 +527,13 @@ export type ArticleResolvers<
     Array<ResolversTypes['Media']>,
     ParentType,
     ContextType,
-    RequireFields<ArticleMediaArgs, never>
+    Partial<ArticleMediaArgs>
   >;
   prices?: Resolver<
     Array<ResolversTypes['Price']>,
     ParentType,
     ContextType,
-    RequireFields<ArticlePricesArgs, never>
+    Partial<ArticlePricesArgs>
   >;
   product?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType>;
   productId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -546,7 +546,7 @@ export type ArticleResolvers<
     Array<ResolversTypes['Seller']>,
     ParentType,
     ContextType,
-    RequireFields<ArticleSellersArgs, never>
+    Partial<ArticleSellersArgs>
   >;
   sku?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['ArticleStatus'], ParentType, ContextType>;
@@ -645,13 +645,13 @@ export type BrandResolvers<
     Array<ResolversTypes['Media']>,
     ParentType,
     ContextType,
-    RequireFields<BrandMediaArgs, never>
+    Partial<BrandMediaArgs>
   >;
   products?: Resolver<
     Maybe<ResolversTypes['ProductsResult']>,
     ParentType,
     ContextType,
-    RequireFields<BrandProductsArgs, never>
+    Partial<BrandProductsArgs>
   >;
   slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -775,7 +775,7 @@ export type CategoryResolvers<
     Array<ResolversTypes['Media']>,
     ParentType,
     ContextType,
-    RequireFields<CategoryMediaArgs, never>
+    Partial<CategoryMediaArgs>
   >;
   parent?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType>;
   parentId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
@@ -783,7 +783,7 @@ export type CategoryResolvers<
     Maybe<ResolversTypes['ProductsResult']>,
     ParentType,
     ContextType,
-    RequireFields<CategoryProductsArgs, never>
+    Partial<CategoryProductsArgs>
   >;
   slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1193,7 +1193,7 @@ export type MutationResolvers<
     Maybe<ResolversTypes['CustomerAddress']>,
     ParentType,
     ContextType,
-    RequireFields<MutationUpdateCustomerAddressArgs, never>
+    Partial<MutationUpdateCustomerAddressArgs>
   >;
 };
 
@@ -1451,7 +1451,7 @@ export type ProductResolvers<
     Maybe<Array<ResolversTypes['Article']>>,
     ParentType,
     ContextType,
-    RequireFields<ProductArticlesArgs, never>
+    Partial<ProductArticlesArgs>
   >;
   attributes?: Resolver<
     Array<Maybe<ResolversTypes['Attribute']>>,
@@ -1488,7 +1488,7 @@ export type ProductResolvers<
     Array<ResolversTypes['Media']>,
     ParentType,
     ContextType,
-    RequireFields<ProductMediaArgs, never>
+    Partial<ProductMediaArgs>
   >;
   options?: Resolver<
     Array<ResolversTypes['ProductOption']>,
@@ -1499,7 +1499,7 @@ export type ProductResolvers<
     Maybe<ResolversTypes['RelatedProductsResult']>,
     ParentType,
     ContextType,
-    RequireFields<ProductRelatedProductsArgs, never>
+    Partial<ProductRelatedProductsArgs>
   >;
   slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['ProductStatus'], ParentType, ContextType>;
@@ -1585,7 +1585,7 @@ export type QueryResolvers<
     Maybe<ResolversTypes['BrandsResult']>,
     ParentType,
     ContextType,
-    RequireFields<QueryBrandsArgs, never>
+    Partial<QueryBrandsArgs>
   >;
   cart?: Resolver<
     Maybe<ResolversTypes['Cart']>,
@@ -1602,7 +1602,7 @@ export type QueryResolvers<
     Maybe<ResolversTypes['CategoriesResult']>,
     ParentType,
     ContextType,
-    RequireFields<QueryCategoriesArgs, never>
+    Partial<QueryCategoriesArgs>
   >;
   category?: Resolver<
     Maybe<ResolversTypes['Category']>,
@@ -1620,13 +1620,13 @@ export type QueryResolvers<
     Maybe<ResolversTypes['ContentBlock']>,
     ParentType,
     ContextType,
-    RequireFields<QueryContentBlockArgs, never>
+    Partial<QueryContentBlockArgs>
   >;
   contentBlocks?: Resolver<
     Maybe<ResolversTypes['ContentBlocksResult']>,
     ParentType,
     ContextType,
-    RequireFields<QueryContentBlocksArgs, never>
+    Partial<QueryContentBlocksArgs>
   >;
   customer?: Resolver<
     Maybe<ResolversTypes['Customer']>,
@@ -1661,7 +1661,7 @@ export type QueryResolvers<
     Maybe<ResolversTypes['OrdersResult']>,
     ParentType,
     ContextType,
-    RequireFields<QueryOrdersArgs, never>
+    Partial<QueryOrdersArgs>
   >;
   page?: Resolver<
     Maybe<ResolversTypes['Page']>,
@@ -1679,7 +1679,7 @@ export type QueryResolvers<
     Maybe<ResolversTypes['PagesResult']>,
     ParentType,
     ContextType,
-    RequireFields<QueryPagesArgs, never>
+    Partial<QueryPagesArgs>
   >;
   product?: Resolver<
     Maybe<ResolversTypes['Product']>,
@@ -1697,7 +1697,7 @@ export type QueryResolvers<
     Maybe<ResolversTypes['ProductsResult']>,
     ParentType,
     ContextType,
-    RequireFields<QueryProductsArgs, never>
+    Partial<QueryProductsArgs>
   >;
   reservation?: Resolver<
     Maybe<ResolversTypes['Reservation']>,
@@ -1720,7 +1720,7 @@ export type QueryResolvers<
     Maybe<ResolversTypes['SearchResult']>,
     ParentType,
     ContextType,
-    RequireFields<QuerySearchArgs, never>
+    Partial<QuerySearchArgs>
   >;
   seller?: Resolver<
     Maybe<ResolversTypes['Seller']>,
@@ -1738,7 +1738,7 @@ export type QueryResolvers<
     Maybe<ResolversTypes['SellersResult']>,
     ParentType,
     ContextType,
-    RequireFields<QuerySellersArgs, never>
+    Partial<QuerySellersArgs>
   >;
   session?: Resolver<Maybe<ResolversTypes['Session']>, ParentType, ContextType>;
   shop?: Resolver<Maybe<ResolversTypes['Shop']>, ParentType, ContextType>;
@@ -1764,7 +1764,7 @@ export type QueryResolvers<
     Maybe<ResolversTypes['WarehousesResult']>,
     ParentType,
     ContextType,
-    RequireFields<QueryWarehousesArgs, never>
+    Partial<QueryWarehousesArgs>
   >;
   wishlist?: Resolver<
     Maybe<ResolversTypes['Wishlist']>,
@@ -1776,7 +1776,7 @@ export type QueryResolvers<
     Maybe<ResolversTypes['WishlistsResult']>,
     ParentType,
     ContextType,
-    RequireFields<QueryWishlistsArgs, never>
+    Partial<QueryWishlistsArgs>
   >;
 };
 

@@ -1,6 +1,6 @@
 import { config } from 'dotenv';
 import { createServer } from '@fronnt/server';
-import { useTiming, type Plugin } from '@envelop/core';
+import { useErrorHandler, type Plugin } from '@envelop/core';
 import {
   simpleEstimator,
   createComplexityRule,
@@ -29,10 +29,12 @@ const useComplexity = function (): Plugin<{ req?: { body: any } }> {
   };
 };
 
-const envelopPlugins: Plugin[] = [useComplexity()];
-if (process.env.NODE_ENV === 'development') {
-  envelopPlugins.push(useTiming());
-}
+const envelopPlugins: Plugin[] = [
+  useErrorHandler((error) => {
+    console.error('ERROR:', error);
+  }),
+  useComplexity(),
+];
 
 createServer([new Connector1()], envelopPlugins).listen(
   port,
@@ -40,7 +42,7 @@ createServer([new Connector1()], envelopPlugins).listen(
     if (err) {
       console.error('An error occured while starting the fronnt server', err);
     } else {
-      console.log(`🚀 fronnt server is running on port ${port}`);
+      console.log(`🚀 fronnt server is running on http://localhost:${port}`);
     }
   }
 );

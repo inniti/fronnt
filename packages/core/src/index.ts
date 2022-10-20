@@ -1,26 +1,24 @@
-import type { Plugin } from '@envelop/core';
+import { Plugin, useEngine } from '@envelop/core';
 import { envelop, useSchema } from '@envelop/core';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { createFronntEnvelop as createEnvelopFn, Resolvers } from '../types';
 import baseTypeDefs from './typeDefs';
 import baseResolvers from './resolvers';
-import { DocumentNode } from 'graphql';
+import * as GraphQLJS from 'graphql';
 
 export * from './errors';
 
 const useDataSources = function (dataSources: Record<string, unknown>): Plugin {
   return {
-    onContextBuilding({ extendContext }) {
-      extendContext({
-        dataSources,
-      });
+    onParse({ extendContext }) {
+      extendContext({ dataSources });
     },
   };
 };
 
 const useContextExtensions = function (functions: Function[]): Plugin {
   return {
-    onContextBuilding({ context, extendContext }) {
+    onParse({ context, extendContext }) {
       const extensions = {};
       for (let i = 0; i < functions.length; i++) {
         Object.assign(extensions, functions[i](context));
@@ -35,7 +33,7 @@ const useSession = function (): Plugin<{
   sessionId?: string | null;
 }> {
   return {
-    onContextBuilding({ context, extendContext }) {
+    onParse({ context, extendContext }) {
       const sessionId = context.request?.headers?.['x-fronnt-session'] || null;
       extendContext({ sessionId });
     },
@@ -60,7 +58,7 @@ export const createFronntEnvelop: typeof createEnvelopFn = function (
       throw new Error('Connectors must implement a `getResolvers` function!');
     }
 
-    c.getTypeDefs().forEach((typeDef: DocumentNode | string) =>
+    c.getTypeDefs().forEach((typeDef: GraphQLJS.DocumentNode | string) =>
       typeDefs.push(typeDef)
     );
     c.getResolvers().forEach((resolverTree: Resolvers) =>
@@ -82,6 +80,7 @@ export const createFronntEnvelop: typeof createEnvelopFn = function (
 
   return envelop({
     plugins: [
+      useEngine(GraphQLJS),
       useSchema(executableSchema),
       useDataSources(dataSources),
       useContextExtensions(contextFunctions),
