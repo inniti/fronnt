@@ -4,6 +4,7 @@ import sessionResolvers from './resolvers/session';
 import featuresResolvers from './resolvers/features';
 import shopResolvers from './resolvers/shop';
 import contentResolvers from './resolvers/content';
+import catalogResolvers from './resolvers/catalog';
 import cartsResolvers from './resolvers/carts';
 
 export default class Connector1 implements Connector<Context> {
@@ -17,6 +18,7 @@ export default class Connector1 implements Connector<Context> {
       featuresResolvers,
       shopResolvers,
       contentResolvers,
+      catalogResolvers,
       cartsResolvers,
     ];
   }

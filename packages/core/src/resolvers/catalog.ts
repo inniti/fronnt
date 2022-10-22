@@ -3,7 +3,7 @@ import { Resolvers } from '../../types';
 
 const baseCatalogResolvers: Resolvers = {
   Query: {
-    products: notImplemented,
+    search: notImplemented,
     product: notImplemented,
     productByField: notImplemented,
     article: notImplemented,
@@ -11,21 +11,21 @@ const baseCatalogResolvers: Resolvers = {
     brands: notImplemented,
     brand: notImplemented,
     brandByField: notImplemented,
-    categories: notImplemented,
-    category: notImplemented,
-    categoryByField: notImplemented,
+    collections: notImplemented,
+    collection: notImplemented,
+    collectionByField: notImplemented,
     suggestions: notImplemented,
   },
   Product: {
     articles: notImplemented,
     brand: notImplemented,
-    categories: notImplemented,
+    collections: notImplemented,
   },
   Article: {
     product: notImplemented,
     brand: notImplemented,
   },
-  Category: {
+  Collection: {
     children: notImplemented,
     parent: notImplemented,
     products: notImplemented,

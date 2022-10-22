@@ -1,6 +1,6 @@
 import type { DocumentNode, GraphQLError } from 'graphql';
 import type { GetEnvelopedFn } from '@envelop/core';
-import type { Resolvers } from './generated/graphql';
+import type { PagingInput, Resolvers } from './generated/graphql';
 
 export * from './generated/graphql';
 
@@ -36,3 +36,10 @@ export declare interface Connector<TContext extends Context> {
 export declare function createFronntEnvelop(
   connectors: Connector[]
 ): GetEnvelopedFn<any>;
+
+export declare function extractPaging(paging: PagingInput | null): {
+  limit: number;
+  page: number;
+  start: number;
+  end: number;
+};

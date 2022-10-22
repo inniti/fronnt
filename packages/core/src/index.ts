@@ -7,6 +7,7 @@ import baseResolvers from './resolvers';
 import * as GraphQLJS from 'graphql';
 
 export * from './errors';
+export * from './utils';
 
 const useDataSources = function (dataSources: Record<string, unknown>): Plugin {
   return {
