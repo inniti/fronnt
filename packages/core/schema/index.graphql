@@ -46,13 +46,6 @@ enum SortValue {
   DESC
 }
 
-enum ResolveUrlResultType {
-  CATEGORY
-  PRODUCT
-  ARTICLE
-  BRAND
-}
-
 enum AttributeType {
   NUMBER
   COLOR
@@ -1003,22 +996,6 @@ type ContentBlock {
 }
 
 """
-Result of a pages query
-"""
-type PagesResult implements PagedResult {
-  paging: Paging!
-  results: [Page!]!
-}
-
-"""
-Result of a contentBlocks query
-"""
-type ContentBlocksResult implements PagedResult {
-  paging: Paging!
-  results: [ContentBlock!]!
-}
-
-"""
 A reservation of articles in specified quantites in a warehouse
 """
 type Reservation {
@@ -1272,14 +1249,9 @@ type Query {
 
   customer: Customer
 
-  pages(
-    paging: PagingInput
-    sort: [SortInput!]
-    status: [PageStatus!]
-  ): PagesResult
   page(id: ID!): Page
   pageByField(field: String!, value: String!): Page
-  contentBlocks(type: String, status: ContentBlockStatus): ContentBlocksResult
+  looseContentBlocks(type: String, status: ContentBlockStatus): [ContentBlock!]!
   contentBlock(id: ID, key: String): ContentBlock
 
   warehouses(aroundLocation: AroundLocationInput): WarehousesResult

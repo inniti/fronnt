@@ -1,5 +1,5 @@
 import { GraphQLScalarType, Kind, ValueNode } from 'graphql';
-import pages from './pages';
+import content from './content';
 import catalog from './catalog';
 import carts from './carts';
 import orders from './orders';
@@ -59,7 +59,7 @@ export default [
   },
   session,
   features,
-  pages,
+  content,
   shop,
   catalog,
   carts,

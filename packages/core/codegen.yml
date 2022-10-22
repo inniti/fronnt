@@ -4,6 +4,7 @@ schema: 'schema/index.graphql'
 generates:
   types/generated/graphql.d.ts:
     plugins:
+      - 'typescript'
       - 'typescript-resolvers'
     config:
       declarationKind: 'interface'
