@@ -81,17 +81,21 @@ importers:
       '@envelop/extended-validation': ^2.0.2
       '@fronnt/core': workspace:*
       '@fronnt/server': workspace:*
+      casual: ^1.6.2
       dotenv: ^16.0.3
       graphql: ^16.6.0
       graphql-query-complexity: ^0.12.0
+      nanoid: ^4.0.0
       tsx: ^3.10.3
     dependencies:
       '@envelop/core': 3.0.2
       '@envelop/extended-validation': 2.0.2_axa7s2mrdkjmrnvlx7f5pwyen4
       '@fronnt/core': link:../core
       '@fronnt/server': link:../server
+      casual: 1.6.2
       graphql: 16.6.0
       graphql-query-complexity: 0.12.0_graphql@16.6.0
+      nanoid: 4.0.0
     devDependencies:
       dotenv: 16.0.3
       tsx: 3.10.3
@@ -2130,6 +2134,13 @@ packages:
       upper-case-first: 2.0.2
     dev: true
 
+  /casual/1.6.2:
+    resolution: {integrity: sha512-NQObL800rg32KZ9bBajHbyDjxLXxxuShChQg7A4tbSeG3n1t7VYGOSkzFSI9gkSgOHp+xilEJ7G0L5l6M30KYA==}
+    dependencies:
+      mersenne-twister: 1.1.0
+      moment: 2.29.4
+    dev: false
+
   /chalk/2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
     engines: {node: '>=4'}
@@ -4135,6 +4146,10 @@ packages:
       '@types/node': 16.11.21
     dev: true
 
+  /mersenne-twister/1.1.0:
+    resolution: {integrity: sha512-mUYWsMKNrm4lfygPkL3OfGzOPTR2DBlTkBNHM//F6hGp8cLThY897crAlk3/Jo17LEOOjQUrNAx6DvgO77QJkA==}
+    dev: false
+
   /micromatch/4.0.4:
     resolution: {integrity: sha512-pRmzw/XUcwXGpD9aI9q/0XOwLNygjETJ8y0ao0wdqprrzDa4YnxLcz7fQRZr8voh8V10kGhABbNcHVk5wHgWwg==}
     engines: {node: '>=8.6'}
@@ -4188,6 +4203,10 @@ packages:
     hasBin: true
     dev: true
 
+  /moment/2.29.4:
+    resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
+    dev: false
+
   /ms/2.0.0:
     resolution: {integrity: sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==}
     dev: true
@@ -4201,6 +4220,12 @@ packages:
 
   /mute-stream/0.0.8:
     resolution: {integrity: sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==}
+
+  /nanoid/4.0.0:
+    resolution: {integrity: sha512-IgBP8piMxe/gf73RTQx7hmnhwz0aaEXYakvqZyE302IXW3HyVNhdNGC+O2MwMAVhLEnvXlvKtGbtJf6wvHihCg==}
+    engines: {node: ^14 || ^16 || >=18}
+    hasBin: true
+    dev: false
 
   /natural-compare/1.4.0:
     resolution: {integrity: sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=}

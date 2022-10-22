@@ -3,6 +3,7 @@ import type { Context } from '../../types';
 import shopResolvers from './resolvers/shop';
 import cartsResolvers from './resolvers/carts';
 import featuresResolvers from './resolvers/features';
+import sessionResolvers from './resolvers/session';
 
 export default class Connector1 implements Connector<Context> {
   getTypeDefs() {
@@ -10,7 +11,7 @@ export default class Connector1 implements Connector<Context> {
   }
 
   getResolvers() {
-    return [featuresResolvers, shopResolvers, cartsResolvers];
+    return [sessionResolvers, featuresResolvers, shopResolvers, cartsResolvers];
   }
 
   getDataSources() {
