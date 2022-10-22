@@ -1338,4 +1338,6 @@ type Mutation {
     reservationData: ReservationInput!
   ): Reservation
   cancelReservation(reservationId: ID!): DeleteResult
+
+  startSession: Session
 }

@@ -1171,6 +1171,11 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationStartCheckoutArgs, 'cartId' | 'data'>
   >;
+  startSession?: Resolver<
+    Maybe<ResolversTypes['Session']>,
+    ParentType,
+    ContextType
+  >;
   updateCartItem?: Resolver<
     Maybe<ResolversTypes['CartItem']>,
     ParentType,
