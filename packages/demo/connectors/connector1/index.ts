@@ -1,9 +1,10 @@
 import type { Connector } from '@fronnt/core';
 import type { Context } from '../../types';
-import shopResolvers from './resolvers/shop';
-import cartsResolvers from './resolvers/carts';
-import featuresResolvers from './resolvers/features';
 import sessionResolvers from './resolvers/session';
+import featuresResolvers from './resolvers/features';
+import shopResolvers from './resolvers/shop';
+import contentResolvers from './resolvers/content';
+import cartsResolvers from './resolvers/carts';
 
 export default class Connector1 implements Connector<Context> {
   getTypeDefs() {
@@ -11,7 +12,13 @@ export default class Connector1 implements Connector<Context> {
   }
 
   getResolvers() {
-    return [sessionResolvers, featuresResolvers, shopResolvers, cartsResolvers];
+    return [
+      sessionResolvers,
+      featuresResolvers,
+      shopResolvers,
+      contentResolvers,
+      cartsResolvers,
+    ];
   }
 
   getDataSources() {
