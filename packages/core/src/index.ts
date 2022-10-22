@@ -29,12 +29,12 @@ const useContextExtensions = function (functions: Function[]): Plugin {
 };
 
 const useSession = function (): Plugin<{
-  request?: { headers?: Record<string, string> };
+  req?: { headers?: Record<string, string> };
   sessionId?: string | null;
 }> {
   return {
     onParse({ context, extendContext }) {
-      const sessionId = context.request?.headers?.['x-fronnt-session'] || null;
+      const sessionId = context.req?.headers?.['x-fronnt-session'] || null;
       extendContext({ sessionId });
     },
   };
