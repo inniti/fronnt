@@ -1,8 +1,8 @@
 import type { DocumentNode, GraphQLError } from 'graphql';
 import type { GetEnvelopedFn } from '@envelop/core';
-import type { PagingInput, Resolvers } from './generated/graphql';
+import type { PagingInput } from './generated/graphql.d';
 
-export * from './generated/graphql';
+export * from './generated/graphql.d';
 
 export declare class FronntError extends GraphQLError {
   constructor(

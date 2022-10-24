@@ -31,11 +31,11 @@ export interface Scalars {
 
 /** One item to be added to the cart */
 export interface AddToCartItemInput {
-  data?: InputMaybe<CartItemDataInput>;
+  extensions?: InputMaybe<CartItemExtensionsInput>;
   parentCartItemId?: InputMaybe<Scalars['ID']>;
   quantity: Scalars['Int'];
-  salesUnitId?: InputMaybe<Scalars['ID']>;
-  sku: Scalars['ID'];
+  salesUnitId: Scalars['ID'];
+  sku: Scalars['String'];
 }
 
 /** Result of adding one or many articles to the cart */
@@ -109,7 +109,6 @@ export interface Article {
   baseUnit: BaseUnit;
   brand?: Maybe<Brand>;
   brandId: Scalars['ID'];
-  id: Scalars['ID'];
   info: ArticleInfo;
   isBuyable: Scalars['Boolean'];
   isMaster: Scalars['Boolean'];
@@ -235,20 +234,28 @@ export interface Cart {
 export interface CartItem {
   __typename?: 'CartItem';
   article?: Maybe<Article>;
-  articleId: Scalars['ID'];
   cartId: Scalars['ID'];
   children: Array<CartItem>;
   createdAt?: Maybe<Scalars['String']>;
+  extensions?: Maybe<CartItemExtensions>;
   id: Scalars['ID'];
   parent?: Maybe<CartItem>;
   parentItemId?: Maybe<Scalars['ID']>;
   quantity: Scalars['Int'];
   salesUnit: SalesUnit;
+  sku: Scalars['String'];
   totals: Totals;
+  updatedAt?: Maybe<Scalars['String']>;
 }
 
-/** Cart item data */
-export interface CartItemDataInput {
+/** Cart item extensions */
+export interface CartItemExtensions {
+  __typename?: 'CartItemExtensions';
+  positionText?: Maybe<Scalars['String']>;
+}
+
+/** Cart item extensions data */
+export interface CartItemExtensionsInput {
   customization?: InputMaybe<Scalars['ScalarMap']>;
   positionText?: InputMaybe<Scalars['String']>;
 }
@@ -378,13 +385,6 @@ export interface CustomerAddress extends AddressFields {
   zipCode: Scalars['String'];
 }
 
-/** Result of a mutation which deletes objects */
-export interface DeleteResult {
-  __typename?: 'DeleteResult';
-  error?: Maybe<Error>;
-  success: Scalars['Boolean'];
-}
-
 /** Opening hours can deviate from regular times in order to be able to reflect public holidays, for example. */
 export interface DeviatingOpeningTime {
   __typename?: 'DeviatingOpeningTime';
@@ -493,17 +493,17 @@ export interface Mutation {
   addToCart?: Maybe<AddToCartResult>;
   addToWishlist?: Maybe<Wishlist>;
   applyCoupon?: Maybe<Cart>;
-  cancelReservation?: Maybe<DeleteResult>;
+  cancelReservation?: Maybe<Scalars['Boolean']>;
   createCart?: Maybe<Cart>;
   createReservation?: Maybe<Reservation>;
   createWishlist?: Maybe<Wishlist>;
-  deleteCart?: Maybe<DeleteResult>;
-  deleteCustomerAddress?: Maybe<DeleteResult>;
-  deleteWishlist?: Maybe<DeleteResult>;
+  deleteCart?: Maybe<Scalars['Boolean']>;
+  deleteCustomerAddress?: Maybe<Scalars['Boolean']>;
+  deleteWishlist?: Maybe<Scalars['Boolean']>;
   finishCheckout?: Maybe<Order>;
   register?: Maybe<RegistrationResult>;
-  removeFromCart?: Maybe<DeleteResult>;
-  removeFromWishlist?: Maybe<DeleteResult>;
+  removeFromCart?: Maybe<Scalars['Boolean']>;
+  removeFromWishlist?: Maybe<Scalars['Boolean']>;
   startCheckout?: Maybe<CheckoutState>;
   startSession?: Maybe<Session>;
   updateCartItem?: Maybe<CartItem>;
@@ -535,9 +535,9 @@ export interface MutationCancelReservationArgs {
 }
 
 export interface MutationCreateReservationArgs {
-  articleId: Scalars['ID'];
   quantity: Scalars['Int'];
   reservationData: ReservationInput;
+  sku: Scalars['String'];
 }
 
 export interface MutationDeleteCartArgs {
@@ -614,7 +614,7 @@ export interface OrderItem {
   orderId: Scalars['ID'];
   price: Scalars['Int'];
   quantity: Scalars['Int'];
-  sku: Scalars['ID'];
+  sku: Scalars['String'];
   title: Scalars['String'];
 }
 
@@ -723,7 +723,6 @@ export interface Price {
 /** The product catalog consists of products. Products are made up of one or many articles. Products by their own are not buyable. */
 export interface Product {
   __typename?: 'Product';
-  articleIds: Array<Scalars['String']>;
   articles?: Maybe<Array<Article>>;
   attributes: Array<Maybe<Attribute>>;
   brand?: Maybe<Brand>;
@@ -739,6 +738,7 @@ export interface Product {
   media: Array<Media>;
   options: Array<ProductOption>;
   relatedProducts?: Maybe<RelatedProductsResult>;
+  skus: Array<Scalars['String']>;
   slug: Scalars['String'];
   status: ProductStatus;
   title: Scalars['String'];
@@ -865,6 +865,10 @@ export interface QueryBrandsArgs {
 
 export interface QueryCartArgs {
   id: Scalars['ID'];
+}
+
+export interface QueryCartsArgs {
+  paging?: InputMaybe<PagingInput>;
 }
 
 export interface QueryCollectionArgs {
@@ -1066,9 +1070,9 @@ export interface ReservationContactDataInput {
 
 /** Data required to create a new reservation */
 export interface ReservationInput {
-  articleId: Scalars['ID'];
   contactData: ReservationContactDataInput;
   quantity: Scalars['Int'];
+  sku: Scalars['String'];
 }
 
 export type ReservationStatus = 'CANCELLED' | 'CLOSED' | 'NEW' | 'READY';
@@ -1084,9 +1088,9 @@ export interface ReservationsResult extends PagedResult {
 export interface ReservedArticle {
   __typename?: 'ReservedArticle';
   article?: Maybe<Article>;
-  articleID: Scalars['ID'];
   id: Scalars['ID'];
   quantity: Scalars['Int'];
+  sku: Scalars['String'];
 }
 
 /** A sales unit is the unit in which an article is sold. Every article has to have at least SalesUnit, usually "piece" */
@@ -1233,12 +1237,12 @@ export interface Totals {
   expenses: Array<Expense>;
   gross: Scalars['Int'];
   net: Scalars['Int'];
-  taxes: Array<Maybe<TaxValue>>;
+  taxes: Array<TaxValue>;
 }
 
 /** Update cart item data */
 export interface UpdateCartItemInput {
-  data?: InputMaybe<CartItemDataInput>;
+  extensions?: InputMaybe<CartItemExtensionsInput>;
   quantity?: InputMaybe<Scalars['Int']>;
   salesUnitId?: InputMaybe<Scalars['ID']>;
 }
@@ -1285,9 +1289,9 @@ export interface Wishlist {
 export interface WishlistItem {
   __typename?: 'WishlistItem';
   article?: Maybe<Article>;
-  articleId: Scalars['ID'];
   id: Scalars['ID'];
   quantity: Scalars['Int'];
+  sku: Scalars['String'];
 }
 
 /** Paged result of a wishlist list */
@@ -1424,7 +1428,8 @@ export type ResolversTypes = {
   BrandsResult: ResolverTypeWrapper<BrandsResult>;
   Cart: ResolverTypeWrapper<Cart>;
   CartItem: ResolverTypeWrapper<CartItem>;
-  CartItemDataInput: CartItemDataInput;
+  CartItemExtensions: ResolverTypeWrapper<CartItemExtensions>;
+  CartItemExtensionsInput: CartItemExtensionsInput;
   CartsResult: ResolverTypeWrapper<CartsResult>;
   CheckoutState: ResolverTypeWrapper<CheckoutState>;
   Collection: ResolverTypeWrapper<Collection>;
@@ -1436,7 +1441,6 @@ export type ResolversTypes = {
   Currency: ResolverTypeWrapper<Currency>;
   Customer: ResolverTypeWrapper<Customer>;
   CustomerAddress: ResolverTypeWrapper<CustomerAddress>;
-  DeleteResult: ResolverTypeWrapper<DeleteResult>;
   DeviatingOpeningTime: ResolverTypeWrapper<DeviatingOpeningTime>;
   Discount: ResolverTypeWrapper<Discount>;
   Error: ResolverTypeWrapper<Error>;
@@ -1593,7 +1597,8 @@ export type ResolversParentTypes = {
   BrandsResult: BrandsResult;
   Cart: Cart;
   CartItem: CartItem;
-  CartItemDataInput: CartItemDataInput;
+  CartItemExtensions: CartItemExtensions;
+  CartItemExtensionsInput: CartItemExtensionsInput;
   CartsResult: CartsResult;
   CheckoutState: CheckoutState;
   Collection: Collection;
@@ -1604,7 +1609,6 @@ export type ResolversParentTypes = {
   Currency: Currency;
   Customer: Customer;
   CustomerAddress: CustomerAddress;
-  DeleteResult: DeleteResult;
   DeviatingOpeningTime: DeviatingOpeningTime;
   Discount: Discount;
   Error: Error;
@@ -1797,7 +1801,6 @@ export type ArticleResolvers<
   baseUnit?: Resolver<ResolversTypes['BaseUnit'], ParentType, ContextType>;
   brand?: Resolver<Maybe<ResolversTypes['Brand']>, ParentType, ContextType>;
   brandId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   info?: Resolver<ResolversTypes['ArticleInfo'], ParentType, ContextType>;
   isBuyable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isMaster?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -1968,7 +1971,6 @@ export type CartItemResolvers<
   ParentType extends ResolversParentTypes['CartItem'] = ResolversParentTypes['CartItem']
 > = {
   article?: Resolver<Maybe<ResolversTypes['Article']>, ParentType, ContextType>;
-  articleId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   cartId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   children?: Resolver<
     Array<ResolversTypes['CartItem']>,
@@ -1980,12 +1982,35 @@ export type CartItemResolvers<
     ParentType,
     ContextType
   >;
+  extensions?: Resolver<
+    Maybe<ResolversTypes['CartItemExtensions']>,
+    ParentType,
+    ContextType
+  >;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   parent?: Resolver<Maybe<ResolversTypes['CartItem']>, ParentType, ContextType>;
   parentItemId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   salesUnit?: Resolver<ResolversTypes['SalesUnit'], ParentType, ContextType>;
+  sku?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   totals?: Resolver<ResolversTypes['Totals'], ParentType, ContextType>;
+  updatedAt?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CartItemExtensionsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['CartItemExtensions'] = ResolversParentTypes['CartItemExtensions']
+> = {
+  positionText?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2189,15 +2214,6 @@ export type CustomerAddressResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type DeleteResultResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['DeleteResult'] = ResolversParentTypes['DeleteResult']
-> = {
-  error?: Resolver<Maybe<ResolversTypes['Error']>, ParentType, ContextType>;
-  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type DeviatingOpeningTimeResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['DeviatingOpeningTime'] = ResolversParentTypes['DeviatingOpeningTime']
@@ -2345,7 +2361,7 @@ export type MutationResolvers<
     RequireFields<MutationApplyCouponArgs, 'cartId' | 'coupon'>
   >;
   cancelReservation?: Resolver<
-    Maybe<ResolversTypes['DeleteResult']>,
+    Maybe<ResolversTypes['Boolean']>,
     ParentType,
     ContextType,
     RequireFields<MutationCancelReservationArgs, 'reservationId'>
@@ -2357,7 +2373,7 @@ export type MutationResolvers<
     ContextType,
     RequireFields<
       MutationCreateReservationArgs,
-      'articleId' | 'quantity' | 'reservationData'
+      'quantity' | 'reservationData' | 'sku'
     >
   >;
   createWishlist?: Resolver<
@@ -2366,19 +2382,19 @@ export type MutationResolvers<
     ContextType
   >;
   deleteCart?: Resolver<
-    Maybe<ResolversTypes['DeleteResult']>,
+    Maybe<ResolversTypes['Boolean']>,
     ParentType,
     ContextType,
     RequireFields<MutationDeleteCartArgs, 'id'>
   >;
   deleteCustomerAddress?: Resolver<
-    Maybe<ResolversTypes['DeleteResult']>,
+    Maybe<ResolversTypes['Boolean']>,
     ParentType,
     ContextType,
     RequireFields<MutationDeleteCustomerAddressArgs, 'id'>
   >;
   deleteWishlist?: Resolver<
-    Maybe<ResolversTypes['DeleteResult']>,
+    Maybe<ResolversTypes['Boolean']>,
     ParentType,
     ContextType
   >;
@@ -2395,13 +2411,13 @@ export type MutationResolvers<
     RequireFields<MutationRegisterArgs, 'data'>
   >;
   removeFromCart?: Resolver<
-    Maybe<ResolversTypes['DeleteResult']>,
+    Maybe<ResolversTypes['Boolean']>,
     ParentType,
     ContextType,
     RequireFields<MutationRemoveFromCartArgs, 'cartItemId'>
   >;
   removeFromWishlist?: Resolver<
-    Maybe<ResolversTypes['DeleteResult']>,
+    Maybe<ResolversTypes['Boolean']>,
     ParentType,
     ContextType,
     RequireFields<MutationRemoveFromWishlistArgs, 'wishlistItemId'>
@@ -2494,7 +2510,7 @@ export type OrderItemResolvers<
   orderId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   price?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  sku?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  sku?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -2677,11 +2693,6 @@ export type ProductResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']
 > = {
-  articleIds?: Resolver<
-    Array<ResolversTypes['String']>,
-    ParentType,
-    ContextType
-  >;
   articles?: Resolver<
     Maybe<Array<ResolversTypes['Article']>>,
     ParentType,
@@ -2740,6 +2751,7 @@ export type ProductResolvers<
     ContextType,
     Partial<ProductRelatedProductsArgs>
   >;
+  skus?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['ProductStatus'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -2835,7 +2847,8 @@ export type QueryResolvers<
   carts?: Resolver<
     Maybe<ResolversTypes['CartsResult']>,
     ParentType,
-    ContextType
+    ContextType,
+    Partial<QueryCartsArgs>
   >;
   collection?: Resolver<
     Maybe<ResolversTypes['Collection']>,
@@ -3126,9 +3139,9 @@ export type ReservedArticleResolvers<
   ParentType extends ResolversParentTypes['ReservedArticle'] = ResolversParentTypes['ReservedArticle']
 > = {
   article?: Resolver<Maybe<ResolversTypes['Article']>, ParentType, ContextType>;
-  articleID?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  sku?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3373,11 +3386,7 @@ export type TotalsResolvers<
   >;
   gross?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   net?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  taxes?: Resolver<
-    Array<Maybe<ResolversTypes['TaxValue']>>,
-    ParentType,
-    ContextType
-  >;
+  taxes?: Resolver<Array<ResolversTypes['TaxValue']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3426,9 +3435,9 @@ export type WishlistItemResolvers<
   ParentType extends ResolversParentTypes['WishlistItem'] = ResolversParentTypes['WishlistItem']
 > = {
   article?: Resolver<Maybe<ResolversTypes['Article']>, ParentType, ContextType>;
-  articleId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  sku?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3460,6 +3469,7 @@ export type Resolvers<ContextType = any> = {
   BrandsResult?: BrandsResultResolvers<ContextType>;
   Cart?: CartResolvers<ContextType>;
   CartItem?: CartItemResolvers<ContextType>;
+  CartItemExtensions?: CartItemExtensionsResolvers<ContextType>;
   CartsResult?: CartsResultResolvers<ContextType>;
   CheckoutState?: CheckoutStateResolvers<ContextType>;
   Collection?: CollectionResolvers<ContextType>;
@@ -3470,7 +3480,6 @@ export type Resolvers<ContextType = any> = {
   Currency?: CurrencyResolvers<ContextType>;
   Customer?: CustomerResolvers<ContextType>;
   CustomerAddress?: CustomerAddressResolvers<ContextType>;
-  DeleteResult?: DeleteResultResolvers<ContextType>;
   DeviatingOpeningTime?: DeviatingOpeningTimeResolvers<ContextType>;
   Discount?: DiscountResolvers<ContextType>;
   Error?: ErrorResolvers<ContextType>;

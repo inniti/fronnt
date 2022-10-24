@@ -169,14 +169,6 @@ type Shop {
 }
 
 """
-Result of a mutation which deletes objects
-"""
-type DeleteResult {
-  success: Boolean!
-  error: Error
-}
-
-"""
 Paging information
 """
 type Paging {
@@ -284,7 +276,7 @@ Total amounts of a Cart or a CartItem
 type Totals {
   net: Int!
   gross: Int!
-  taxes: [TaxValue]!
+  taxes: [TaxValue!]!
   discounts: [Discount!]!
   expenses: [Expense!]!
 }
@@ -310,13 +302,21 @@ type Cart {
 }
 
 """
+Cart item extensions
+"""
+type CartItemExtensions {
+  positionText: String
+}
+
+"""
 A cart line item
 """
 type CartItem {
   id: ID!
   cartId: ID!
   createdAt: String
-  articleId: ID!
+  updatedAt: String
+  sku: String!
   article: Article
   parentItemId: ID
   parent: CartItem
@@ -324,6 +324,7 @@ type CartItem {
   salesUnit: SalesUnit!
   children: [CartItem!]!
   totals: Totals!
+  extensions: CartItemExtensions
 }
 
 """
@@ -370,7 +371,7 @@ The product catalog consists of products. Products are made up of one or many ar
 type Product {
   id: ID!
   title: String!
-  articleIds: [String!]!
+  skus: [String!]!
   collectionIds: [ID!]!
   media(purpose: MediaPurpose, mediaType: MediaType): [Media!]!
   info: ProductInfo!
@@ -461,7 +462,6 @@ type ArticleInfo implements SellableInfo {
 An article is a concrete shape of a product
 """
 type Article {
-  id: ID!
   sku: String!
   title: String!
   productId: ID!
@@ -747,7 +747,7 @@ Order item
 """
 type OrderItem {
   id: ID!
-  sku: ID!
+  sku: String!
   title: String!
   quantity: Int!
   price: Int!
@@ -858,7 +858,7 @@ Wishlist item
 """
 type WishlistItem {
   id: ID!
-  articleId: ID!
+  sku: String!
   article: Article
   quantity: Int!
 }
@@ -960,7 +960,7 @@ A reserved article references an article in a specified quantity which is part o
 """
 type ReservedArticle {
   id: ID!
-  articleID: ID!
+  sku: String!
   article: Article
   quantity: Int!
 }
@@ -1016,9 +1016,9 @@ input PagingInput {
 }
 
 """
-Cart item data
+Cart item extensions data
 """
-input CartItemDataInput {
+input CartItemExtensionsInput {
   positionText: String
   customization: ScalarMap
 }
@@ -1029,18 +1029,18 @@ Update cart item data
 input UpdateCartItemInput {
   quantity: Int
   salesUnitId: ID
-  data: CartItemDataInput
+  extensions: CartItemExtensionsInput
 }
 
 """
 One item to be added to the cart
 """
 input AddToCartItemInput {
-  sku: ID!
+  sku: String!
   quantity: Int!
-  salesUnitId: ID
+  salesUnitId: ID!
   parentCartItemId: ID
-  data: CartItemDataInput
+  extensions: CartItemExtensionsInput
 }
 
 """
@@ -1122,7 +1122,7 @@ input ReservationContactDataInput {
 Data required to create a new reservation
 """
 input ReservationInput {
-  articleId: ID!
+  sku: String!
   quantity: Int!
   contactData: ReservationContactDataInput!
 }
@@ -1169,7 +1169,7 @@ type Query {
   collection(id: ID!): Collection
   collectionByField(field: String!, value: String!): Collection
 
-  carts: CartsResult
+  carts(paging: PagingInput): CartsResult
   cart(id: ID!): Cart
 
   wishlists(sort: [SortInput!]): WishlistsResult
@@ -1214,16 +1214,16 @@ type Query {
 
 type Mutation {
   createCart: Cart
-  deleteCart(id: ID!): DeleteResult
+  deleteCart(id: ID!): Boolean
   addToCart(cartId: ID!, items: [AddToCartItemInput!]!): AddToCartResult
   updateCartItem(id: ID!, data: UpdateCartItemInput): CartItem
-  removeFromCart(cartItemId: ID!): DeleteResult
+  removeFromCart(cartItemId: ID!): Boolean
   applyCoupon(cartId: ID!, coupon: String!): Cart
 
   createWishlist: Wishlist
-  deleteWishlist: DeleteResult
+  deleteWishlist: Boolean
   addToWishlist(wishlistId: ID!): Wishlist
-  removeFromWishlist(wishlistItemId: ID!): DeleteResult
+  removeFromWishlist(wishlistItemId: ID!): Boolean
 
   startCheckout(cartId: ID!, data: UpdateCheckoutInput!): CheckoutState
   updateCheckout(cartId: ID!, data: UpdateCheckoutInput!): CheckoutState
@@ -1237,14 +1237,14 @@ type Mutation {
     setDefaultBilling: Boolean
     setDefaultShipping: Boolean
   ): CustomerAddress
-  deleteCustomerAddress(id: ID!): DeleteResult
+  deleteCustomerAddress(id: ID!): Boolean
 
   createReservation(
-    articleId: ID!
+    sku: String!
     quantity: Int!
     reservationData: ReservationInput!
   ): Reservation
-  cancelReservation(reservationId: ID!): DeleteResult
+  cancelReservation(reservationId: ID!): Boolean
 
   startSession: Session
 }
