@@ -6,8 +6,13 @@ import shopResolvers from './resolvers/shop';
 import contentResolvers from './resolvers/content';
 import catalogResolvers from './resolvers/catalog';
 import cartsResolvers from './resolvers/carts';
+import { initializeDataStore } from './store';
 
 export default class Connector1 implements Connector<Context> {
+  constructor() {
+    initializeDataStore();
+  }
+
   getTypeDefs() {
     return [];
   }

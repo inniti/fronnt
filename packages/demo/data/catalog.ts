@@ -49,7 +49,7 @@ const brands: Brand[] = [
 const products: Product[] = [
   {
     id: '1',
-    articleIds: ['1', '2'],
+    skus: ['1', '2'],
     brandId: '1',
     attributes: [],
     info: {
@@ -82,7 +82,6 @@ const products: Product[] = [
 ];
 const articles: Article[] = [
   {
-    id: '1',
     title: 'Baustein 4x2 blau',
     attributes: [],
     availabilities: [],
@@ -114,7 +113,6 @@ const articles: Article[] = [
     taxClass: defaultTaxClass,
   },
   {
-    id: '2',
     title: 'Baustein 4x2 rot',
     attributes: [],
     availabilities: [],
