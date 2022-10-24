@@ -37,7 +37,7 @@ export declare function createFronntEnvelop(
   connectors: Connector[]
 ): GetEnvelopedFn<any>;
 
-export declare function extractPaging(paging: PagingInput | null): {
+export declare function extractPaging(paging?: PagingInput | null): {
   limit: number;
   page: number;
   start: number;
