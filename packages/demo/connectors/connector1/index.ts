@@ -8,6 +8,8 @@ import catalogResolvers from './resolvers/catalog';
 import cartsResolvers from './resolvers/carts';
 import { initializeDataStore } from './store';
 
+import { initializeDataStore } from './dataStore';
+
 export default class Connector1 implements Connector<Context> {
   constructor() {
     initializeDataStore();

@@ -1,8 +1,9 @@
-import type { Resolvers } from '@fronnt/core';
+import type { Menu, Resolvers } from '@fronnt/core';
 import {
   pages,
   contentBlocks,
   looseContentBlocks,
+  menus,
 } from '../../../data/content';
 import type { Context } from '../../../types';
 
@@ -38,6 +39,16 @@ const contentResolvers: Resolvers<Context> = {
     },
     looseContentBlocks() {
       return looseContentBlocks;
+    },
+
+    menu(_, args, ctx) {
+      const { id } = args;
+
+      return menus.find((m: Menu) => m.id === id) || null;
+    },
+    menusByPlace(_, args, ctx) {
+      const { place } = args;
+      return menus.filter((m: Menu) => m.place === place) || [];
     },
   },
 };

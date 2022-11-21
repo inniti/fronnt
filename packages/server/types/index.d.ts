@@ -1,6 +1,6 @@
 import type { Context as CoreContext, Connector } from '@fronnt/core';
 import type { Plugin } from '@envelop/core';
-import type { FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyReply, FastifyRequest, FastifyInstance } from 'fastify';
 
 export declare interface Context extends CoreContext {
   req: FastifyRequest;
@@ -17,10 +17,17 @@ export declare interface CorsConfig {
   allowCredentials?: boolean;
 }
 
+export declare type Server = {
+  listen(cb: (error: Error | null) => void): void;
+};
+
 export declare function createServer<TContext extends Context>(
   connectors: Connector<TContext>[],
   envelopPlugins: Plugin[] = [],
   cors?: CorsConfig
 ): {
-  listen: (port: number | string, cb: (error: Error | null) => void) => void;
+  listen: (
+    options: { port: string | number; host?: string },
+    cb: (error: Error | null) => void
+  ) => void;
 };

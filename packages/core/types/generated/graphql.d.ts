@@ -444,6 +444,15 @@ export interface FilterValue {
   label: Scalars['String'];
 }
 
+/** Links are the pendant to HTML anchors and are used in MenuItems */
+export interface Link {
+  __typename?: 'Link';
+  href: Scalars['String'];
+  label: Scalars['String'];
+  rel?: Maybe<Scalars['String']>;
+  target?: Maybe<Scalars['String']>;
+}
+
 /** Locale */
 export interface Locale {
   __typename?: 'Locale';
@@ -478,6 +487,22 @@ export type MediaPurpose = 'COVER';
 
 /** Type of a media object */
 export type MediaType = 'IMAGE' | 'VIDEO';
+
+/** A Menu is a list of links which can be placed at not predefined places in the storefront */
+export interface Menu {
+  __typename?: 'Menu';
+  id: Scalars['ID'];
+  items: Array<MenuItem>;
+  place?: Maybe<Scalars['String']>;
+}
+
+/** A Menuitem represents a Link and are hierarchically structured (may have child MenuItems) */
+export interface MenuItem {
+  __typename?: 'MenuItem';
+  children: Array<MenuItem>;
+  label: Scalars['String'];
+  link?: Maybe<Link>;
+}
 
 /** Meta data for SEO */
 export interface Meta {
@@ -818,6 +843,8 @@ export interface Query {
   manufacturer?: Maybe<Manufacturer>;
   manufacturerByField?: Maybe<Manufacturer>;
   manufacturers?: Maybe<ManufacturersResult>;
+  menu?: Maybe<Menu>;
+  menusByPlace: Array<Menu>;
   order?: Maybe<Order>;
   orders?: Maybe<OrdersResult>;
   page?: Maybe<Page>;
@@ -901,6 +928,14 @@ export interface QueryManufacturerArgs {
 export interface QueryManufacturerByFieldArgs {
   field: Scalars['String'];
   value: Scalars['String'];
+}
+
+export interface QueryMenuArgs {
+  id: Scalars['ID'];
+}
+
+export interface QueryMenusByPlaceArgs {
+  place: Scalars['String'];
 }
 
 export interface QueryOrderArgs {
@@ -1452,12 +1487,15 @@ export type ResolversTypes = {
   Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  Link: ResolverTypeWrapper<Link>;
   Locale: ResolverTypeWrapper<Locale>;
   Manufacturer: ResolverTypeWrapper<Manufacturer>;
   ManufacturersResult: ResolverTypeWrapper<ManufacturersResult>;
   Media: ResolverTypeWrapper<Media>;
   MediaPurpose: MediaPurpose;
   MediaType: MediaType;
+  Menu: ResolverTypeWrapper<Menu>;
+  MenuItem: ResolverTypeWrapper<MenuItem>;
   Meta: ResolverTypeWrapper<Meta>;
   Mutation: ResolverTypeWrapper<{}>;
   OpeningTime:
@@ -1619,10 +1657,13 @@ export type ResolversParentTypes = {
   Float: Scalars['Float'];
   ID: Scalars['ID'];
   Int: Scalars['Int'];
+  Link: Link;
   Locale: Locale;
   Manufacturer: Manufacturer;
   ManufacturersResult: ManufacturersResult;
   Media: Media;
+  Menu: Menu;
+  MenuItem: MenuItem;
   Meta: Meta;
   Mutation: {};
   OpeningTime:
@@ -2277,6 +2318,17 @@ export type FilterValueResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type LinkResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Link'] = ResolversParentTypes['Link']
+> = {
+  href?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  rel?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  target?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type LocaleResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Locale'] = ResolversParentTypes['Locale']
@@ -2319,6 +2371,30 @@ export type MediaResolvers<
     ContextType
   >;
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MenuResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Menu'] = ResolversParentTypes['Menu']
+> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  items?: Resolver<Array<ResolversTypes['MenuItem']>, ParentType, ContextType>;
+  place?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MenuItemResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['MenuItem'] = ResolversParentTypes['MenuItem']
+> = {
+  children?: Resolver<
+    Array<ResolversTypes['MenuItem']>,
+    ParentType,
+    ContextType
+  >;
+  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  link?: Resolver<Maybe<ResolversTypes['Link']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2903,6 +2979,18 @@ export type QueryResolvers<
     ParentType,
     ContextType
   >;
+  menu?: Resolver<
+    Maybe<ResolversTypes['Menu']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryMenuArgs, 'id'>
+  >;
+  menusByPlace?: Resolver<
+    Array<ResolversTypes['Menu']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryMenusByPlaceArgs, 'place'>
+  >;
   order?: Resolver<
     Maybe<ResolversTypes['Order']>,
     ParentType,
@@ -3486,10 +3574,13 @@ export type Resolvers<ContextType = any> = {
   Expense?: ExpenseResolvers<ContextType>;
   Features?: FeaturesResolvers<ContextType>;
   FilterValue?: FilterValueResolvers<ContextType>;
+  Link?: LinkResolvers<ContextType>;
   Locale?: LocaleResolvers<ContextType>;
   Manufacturer?: ManufacturerResolvers<ContextType>;
   ManufacturersResult?: ManufacturersResultResolvers<ContextType>;
   Media?: MediaResolvers<ContextType>;
+  Menu?: MenuResolvers<ContextType>;
+  MenuItem?: MenuItemResolvers<ContextType>;
   Meta?: MetaResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   OpeningTime?: OpeningTimeResolvers<ContextType>;

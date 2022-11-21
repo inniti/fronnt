@@ -937,6 +937,34 @@ type ContentBlock {
 }
 
 """
+A Menu is a list of links which can be placed at not predefined places in the storefront
+"""
+type Menu {
+  id: ID!
+  place: String
+  items: [MenuItem!]!
+}
+
+"""
+Links are the pendant to HTML anchors and are used in MenuItems
+"""
+type Link {
+  href: String!
+  label: String!
+  target: String
+  rel: String
+}
+
+"""
+A Menuitem represents a Link and are hierarchically structured (may have child MenuItems)
+"""
+type MenuItem {
+  label: String!
+  link: Link
+  children: [MenuItem!]!
+}
+
+"""
 A reservation of articles in specified quantites in a warehouse
 """
 type Reservation {
@@ -1188,6 +1216,9 @@ type Query {
   pageByField(field: String!, value: String!): Page
   looseContentBlocks(type: String, status: ContentBlockStatus): [ContentBlock!]!
   contentBlock(id: ID, key: String): ContentBlock
+
+  menu(id: ID!): Menu
+  menusByPlace(place: String!): [Menu!]!
 
   warehouses(aroundLocation: AroundLocationInput): WarehousesResult
   warehouse(id: ID!): Warehouse

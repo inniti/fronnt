@@ -1,4 +1,4 @@
-import { type ContentBlock, type Page } from '@fronnt/core';
+import { type Menu, type ContentBlock, type Page } from '@fronnt/core';
 import { nanoid } from 'nanoid';
 
 const contentBlocks: ContentBlock[] = [
@@ -97,4 +97,109 @@ const pages: Page[] = [
   },
 ];
 
-export { pages, contentBlocks, looseContentBlocks };
+const menus: Menu[] = [
+  {
+    id: 'main',
+    place: 'site-header',
+    items: [
+      {
+        label: 'Item 1',
+        link: { label: 'Item 1', href: '/collection-1' },
+        children: [
+          {
+            label: 'Item 1.1',
+            link: { label: 'Item 1.1', href: '/collection-1/collection-11' },
+            children: [
+              {
+                label: 'Item 1.1.1',
+                link: {
+                  label: 'Item 1.1.1',
+                  href: '/collection-1/collection-11/collection-111',
+                },
+                children: [],
+              },
+              {
+                label: 'Item 1.1.3',
+                link: {
+                  label: 'Item 1.1.3',
+                  href: '/collection-1/collection-11/collection-112',
+                },
+                children: [],
+              },
+              {
+                label: 'Item 1.1.3',
+                link: {
+                  label: 'Item 1.1.3',
+                  href: '/collection-1/collection-11/collection-113',
+                },
+                children: [],
+              },
+            ],
+          },
+          {
+            label: 'Item 1.2',
+            link: { label: 'Item 1.2', href: '/collection-1/collection-12' },
+            children: [
+              {
+                label: 'Item 1.2.1',
+                link: {
+                  label: 'Item 1.2.1',
+                  href: '/collection-1/collection-12/collection-121',
+                },
+                children: [],
+              },
+              {
+                label: 'Item 1.2.3',
+                link: {
+                  label: 'Item 1.2.3',
+                  href: '/collection-1/collection-12/collection-122',
+                },
+                children: [],
+              },
+              {
+                label: 'Item 1.2.3',
+                link: {
+                  label: 'Item 1.2.3',
+                  href: '/collection-1/collection-12/collection-123',
+                },
+                children: [],
+              },
+            ],
+          },
+          {
+            label: 'Item 1.3',
+            link: { label: 'Item 1.3', href: '/collection-1/collection-13' },
+            children: [
+              {
+                label: 'Item 1.3.1',
+                link: {
+                  label: 'Item 1.3.1',
+                  href: '/collection-1/collection-13/collection-131',
+                },
+                children: [],
+              },
+              {
+                label: 'Item 1.3.3',
+                link: {
+                  label: 'Item 1.3.3',
+                  href: '/collection-1/collection-13/collection-132',
+                },
+                children: [],
+              },
+              {
+                label: 'Item 1.3.3',
+                link: {
+                  label: 'Item 1.3.3',
+                  href: '/collection-1/collection-13/collection-133',
+                },
+                children: [],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
+
+export { pages, contentBlocks, looseContentBlocks, menus };
