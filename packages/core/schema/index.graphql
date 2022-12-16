@@ -462,6 +462,7 @@ type ArticleInfo implements SellableInfo {
 An article is a concrete shape of a product
 """
 type Article {
+  id: ID!
   sku: String!
   title: String!
   productId: ID!
@@ -548,9 +549,9 @@ Search Suggestion
 """
 type Suggestion {
   type: SuggestionType!
-  resultId: ID!
   title: String!
   slug: String
+  resultId: ID!
   result: SuggestionResult
 }
 

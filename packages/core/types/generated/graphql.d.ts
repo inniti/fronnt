@@ -109,6 +109,7 @@ export interface Article {
   baseUnit: BaseUnit;
   brand?: Maybe<Brand>;
   brandId: Scalars['ID'];
+  id: Scalars['ID'];
   info: ArticleInfo;
   isBuyable: Scalars['Boolean'];
   isMaster: Scalars['Boolean'];
@@ -1842,6 +1843,7 @@ export type ArticleResolvers<
   baseUnit?: Resolver<ResolversTypes['BaseUnit'], ParentType, ContextType>;
   brand?: Resolver<Maybe<ResolversTypes['Brand']>, ParentType, ContextType>;
   brandId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   info?: Resolver<ResolversTypes['ArticleInfo'], ParentType, ContextType>;
   isBuyable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isMaster?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
