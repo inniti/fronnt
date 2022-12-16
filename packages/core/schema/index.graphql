@@ -551,6 +551,7 @@ type Suggestion {
   type: SuggestionType!
   title: String!
   slug: String
+  image: String
   resultId: ID!
   result: SuggestionResult
 }

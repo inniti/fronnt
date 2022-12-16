@@ -1237,6 +1237,7 @@ export type SortValue = 'ASC' | 'DESC';
 /** Search Suggestion */
 export interface Suggestion {
   __typename?: 'Suggestion';
+  image?: Maybe<Scalars['String']>;
   result?: Maybe<SuggestionResult>;
   resultId: Scalars['ID'];
   slug?: Maybe<Scalars['String']>;
@@ -3417,6 +3418,7 @@ export type SuggestionResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Suggestion'] = ResolversParentTypes['Suggestion']
 > = {
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   result?: Resolver<
     Maybe<ResolversTypes['SuggestionResult']>,
     ParentType,
