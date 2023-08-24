@@ -7,7 +7,8 @@
 [![@fronnt/server on npm](https://img.shields.io/npm/v/@fronnt/server?style=flat-square&label=server)](https://www.npmjs.com/package/@fronnt/server)
 [![@fronnt/create-connector on npm](https://img.shields.io/npm/v/@fronnt/create-connector?style=flat-square&label=create-connector)](https://www.npmjs.com/package/@fronnt/create-connector)
 
-**🚧 This package is still under active development and should not yet be considered production ready. 🚧**
+> [!WARNING]
+> 🚧 This package is currently not maintained and should not be considered production ready. 🚧
 
 ## Links
 
